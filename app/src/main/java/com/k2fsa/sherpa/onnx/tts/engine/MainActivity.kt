@@ -4,7 +4,6 @@ package com.k2fsa.sherpa.onnx.tts.engine
 
 import PreferenceHelper
 import android.content.Intent
-import android.health.connect.datatypes.units.Length
 import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
@@ -12,7 +11,6 @@ import android.media.AudioTrack
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity

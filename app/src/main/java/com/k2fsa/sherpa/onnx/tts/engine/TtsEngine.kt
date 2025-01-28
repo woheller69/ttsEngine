@@ -21,7 +21,7 @@ object TtsEngine {
     // eng for English,
     // deu for German
     // cmn for Mandarin
-    var lang: String? = null
+    var lang: String? = "eng"
 
 
     val speedState: MutableState<Float> = mutableFloatStateOf(1.0F)
@@ -75,7 +75,7 @@ object TtsEngine {
         lexicon = null
         dataDir = "espeak-ng-data"
         dictDir = null
-        lang = null
+        lang = "eng"
 
         // Please enable one and only one of the examples below
 
