@@ -35,4 +35,23 @@ class DownloadActivity  : AppCompatActivity() {
         val lang ="eng"
         Downloader.downloadModels(this,binding,modelUrl,tokensUrl,lang)
     }
+
+    fun downloadFrench(view: View) {
+        val modelUrl = "https://huggingface.co/csukuangfj/vits-piper-fr_FR-tom-medium/resolve/main/fr_FR-tom-medium.onnx"
+        val tokensUrl = "https://huggingface.co/csukuangfj/vits-piper-fr_FR-tom-medium/resolve/main/tokens.txt"
+        val lang ="fra"
+        Downloader.downloadModels(this,binding,modelUrl,tokensUrl,lang)
+    }
+    fun downloadSpanish(view: View) {
+        val modelUrl = "https://huggingface.co/csukuangfj/vits-piper-es_ES-davefx-medium/resolve/main/es_ES-davefx-medium.onnx"
+        val tokensUrl = "https://huggingface.co/csukuangfj/vits-piper-es_ES-davefx-medium/resolve/main/tokens.txt"
+        val lang ="spa"
+        Downloader.downloadModels(this,binding,modelUrl,tokensUrl,lang)
+    }
+    fun downloadPortuguese(view: View) {
+        val modelUrl = "https://huggingface.co/csukuangfj/vits-piper-pt_PT-tugao-medium/resolve/main/pt_PT-tugao-medium.onnx"
+        val tokensUrl = "https://huggingface.co/csukuangfj/vits-piper-pt_PT-tugao-medium/resolve/main/tokens.txt"
+        val lang ="por"
+        Downloader.downloadModels(this,binding,modelUrl,tokensUrl,lang)
+    }
 }

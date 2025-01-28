@@ -75,7 +75,7 @@ object TtsEngine {
         lexicon = null
         dataDir = "espeak-ng-data"
         dictDir = null
-        lang = ""
+        lang = null
 
         // Please enable one and only one of the examples below
 
