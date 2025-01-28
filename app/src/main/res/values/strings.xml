@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TTS Engine: Next-gen Kaldi</string>
+    <string name="start">START</string>
+    <string name="error_download">Download error</string>
+</resources>

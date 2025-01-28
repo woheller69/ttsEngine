@@ -1,0 +1,101 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true"
+    android:background="@color/ic_launcher_background"
+    tools:context=".DownloadActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:foregroundGravity="top"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:src="@drawable/ic_launcher_foreground" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            android:layout_weight="4">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/rounded_button_frame"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="22dp"
+                    android:text="Download Model" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:text="from Hugging Face" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/grey"
+                    android:layout_marginBottom="5dp"
+                    android:text="Deutsch"
+                    android:onClick="downloadDeutsch"/>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white"
+                    android:backgroundTint="@color/grey"
+                    android:layout_marginBottom="10dp"
+                    android:text="English"
+                    android:onClick="downloadEnglish"/>
+            </LinearLayout>
+            <TextView
+                android:id="@+id/download_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/white"
+                android:textSize="18dp"
+                android:text="0 MB" />
+            <Button
+                android:id="@+id/button_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/start"
+                android:backgroundTint="@color/grey"
+                android:visibility="gone"
+                android:textColor="@color/white"
+                android:onClick="startMain"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
