@@ -50,78 +50,57 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     android:gravity="center"
                     android:textColor="@color/white"
                     android:textSize="18dp"
                     android:text="from Hugging Face" />
 
-                <Button
+                <TextView
+                    android:id="@+id/download_size"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_gravity="center_horizontal"
                     android:textColor="@color/white"
-                    android:backgroundTint="@color/grey"
-                    android:layout_marginBottom="5dp"
-                    android:text="Deutsch"
-                    android:onClick="downloadDeutsch"/>
+                    android:textSize="18dp"
+                    android:text="0 MB" />
 
                 <Button
+                    android:id="@+id/button_start"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/grey"
-                    android:layout_marginBottom="5dp"
-                    android:text="English"
-                    android:onClick="downloadEnglish"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/grey"
-                    android:layout_marginBottom="5dp"
-                    android:text="Français"
-                    android:onClick="downloadFrench"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/grey"
-                    android:layout_marginBottom="5dp"
-                    android:text="Español"
-                    android:onClick="downloadSpanish"/>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/white"
-                    android:backgroundTint="@color/grey"
                     android:layout_marginBottom="10dp"
-                    android:text="Português"
-                    android:onClick="downloadPortuguese"/>
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/start"
+                    android:visibility="gone"
+                    android:backgroundTint="@color/grey"
+                    android:textColor="@color/white"
+                    android:onClick="startMain"/>
+
             </LinearLayout>
-            <TextView
-                android:id="@+id/download_size"
-                android:layout_width="wrap_content"
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/white"
-                android:textSize="18dp"
-                android:text="0 MB" />
-            <Button
-                android:id="@+id/button_start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center_horizontal"
-                android:text="@string/start"
-                android:backgroundTint="@color/grey"
-                android:visibility="gone"
-                android:textColor="@color/white"
-                android:onClick="startMain"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
+
+
+
+                <ListView
+                    android:id="@+id/model_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>
