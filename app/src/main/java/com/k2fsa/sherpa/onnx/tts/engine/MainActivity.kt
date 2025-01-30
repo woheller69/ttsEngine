@@ -27,11 +27,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -40,9 +41,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.k2fsa.sherpa.onnx.tts.engine.ui.theme.SherpaOnnxTtsEngineTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -86,11 +87,9 @@ class MainActivity : ComponentActivity() {
 
         val preferenceHelper = PreferenceHelper(this)
         setContent {
-            SherpaOnnxTtsEngineTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(topBar = {
                         TopAppBar(title = { Text("SherpaTTS") })
@@ -106,7 +105,11 @@ class MainActivity : ComponentActivity() {
                                             preferenceHelper.setSpeed(it)
                                         },
                                         valueRange = 0.2F..3.0F,
-                                        modifier = Modifier.fillMaxWidth()
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = SliderDefaults.colors(
+                                                thumbColor = colorResource(R.color.primaryDark),
+                                                activeTrackColor = colorResource(R.color.primaryDark)
+                                        )
                                     )
                                 }
 
@@ -165,6 +168,10 @@ class MainActivity : ComponentActivity() {
                                     Button(
                                         enabled = startEnabled,
                                         modifier = Modifier.padding(5.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = colorResource(R.color.primaryDark),
+                                            contentColor = colorResource(R.color.white)
+                                        ),
                                         onClick = {
                                             Log.i(TAG, "Clicked, text: $testText")
                                             if (testText.isBlank() || testText.isEmpty()) {
@@ -253,6 +260,10 @@ class MainActivity : ComponentActivity() {
                                     Button(
                                         modifier = Modifier.padding(5.dp),
                                         enabled = playEnabled,
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = colorResource(R.color.primaryDark),
+                                            contentColor = colorResource(R.color.white)
+                                        ),
                                         onClick = {
                                             stopped = true
                                             track.pause()
@@ -264,6 +275,10 @@ class MainActivity : ComponentActivity() {
 
                                     Button(
                                         modifier = Modifier.padding(5.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = colorResource(R.color.primaryDark),
+                                            contentColor = colorResource(R.color.white)
+                                        ),
                                         onClick = {
                                             onClickStop()
                                             startEnabled = true
@@ -280,7 +295,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-            }
+
         }
     }
 

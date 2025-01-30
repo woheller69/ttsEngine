@@ -14,7 +14,7 @@
         <activity
             android:name=".GetSampleText"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            android:theme="@style/Theme.SherpaOnnxTtsEngine">
             <intent-filter>
                 <action android:name="android.speech.tts.engine.GET_SAMPLE_TEXT" />
 
