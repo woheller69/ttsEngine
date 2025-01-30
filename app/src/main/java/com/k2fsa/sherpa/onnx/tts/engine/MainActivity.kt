@@ -93,7 +93,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(topBar = {
-                        TopAppBar(title = { Text("Next-gen Kaldi: TTS Engine") })
+                        TopAppBar(title = { Text("SherpaTTS") })
                     }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {

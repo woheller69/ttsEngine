@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TTS Engine: Next-gen Kaldi</string>
+    <string name="app_name">SherpaTTS</string>
     <string name="start">START</string>
     <string name="error_download">Download error</string>
 </resources>
