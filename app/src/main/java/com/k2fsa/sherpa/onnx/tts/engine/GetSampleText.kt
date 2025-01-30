@@ -39,7 +39,7 @@ fun getSampleText(lang: String): String {
 
         "deu" -> {
             text =
-                "Dies ist eine Text-to-Speech-Engine, die Kaldi der nächsten Generation verwendet"
+                "Dies ist eine Sprachausgabe, die Kaldi der nächsten Generation verwendet"
         }
 
         "ell" -> {

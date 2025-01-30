@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Locale;
 import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityDownloadBinding;
 
 
@@ -26,7 +27,13 @@ public class Downloader {
     static boolean tokensFinished = false;
     static boolean langFinished = false;
 
-    public static void downloadModels(final Activity activity, ActivityDownloadBinding binding, String onnxModelUrl, String tokensUrl, String lang) {
+    public static void downloadModels(final Activity activity, ActivityDownloadBinding binding, String model) {
+
+        String twoLetterCode = model.split("piper-")[1].substring(0, 2);
+        String lang = new Locale(twoLetterCode).getISO3Language();
+        String modelName = model.split("piper-")[1]+".onnx";
+        String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ model + "/resolve/main/" + modelName;
+        String tokensUrl = "https://huggingface.co/csukuangfj/" + model + "/resolve/main/tokens.txt";
 
         File directory = new File(activity.getExternalFilesDir(null)+ "/modelDir/");
         if (!directory.exists() && !directory.mkdirs()) {
@@ -41,8 +48,7 @@ public class Downloader {
             try {
                 langFile.createNewFile();
                 FileOutputStream outStream = new FileOutputStream(langFile);
-                String data = lang;
-                outStream.write(data.getBytes());
+                outStream.write(lang.getBytes());
                 outStream.flush();
                 outStream.close();
                 langFinished = true;
