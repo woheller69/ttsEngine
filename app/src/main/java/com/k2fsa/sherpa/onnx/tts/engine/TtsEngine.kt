@@ -194,7 +194,7 @@ object TtsEngine {
         speed = PreferenceHelper(context).getSpeed()
         speakerId = PreferenceHelper(context).getSid()
 
-        tts = OfflineTts(assetManager = assets, config = config)
+        tts = OfflineTts(assetManager = null, config = config)
     }
 
     private fun copyDataDir(context: Context, dataDir: String): String {
