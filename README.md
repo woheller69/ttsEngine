@@ -18,10 +18,10 @@ Once the model is downloaded, text-to-speech works entirely offline, ensuring yo
 
 # License
 This work is licensed under GPLv3 license, © woheller69
-,
+
 - This app is based on the [Sherpa ONNX Project](https://github.com/k2-fsa/sherpa-onnx), published under Apache-2.0 license
 - It uses data from [eSpeak NG](https://github.com/espeak-ng/espeak-ng), published under GPLv3 license
-- At first start it downloads and installs a Piper voice models from Hugging Face. Voices can be tested [here](https://rhasspy.github.io/piper-samples/)
+- At first start it downloads and installs a Piper voice models from Hugging Face. Voices can be tested [here](https://rhasspy.github.io/piper-samples/).
 
 # OTHER APPS
 
