@@ -1,3 +1,11 @@
+## Donate
+<pre>Send a coffee to 
+woheller69@t-online.de 
+<a href= "https://www.paypal.com/signin"><img  align="left" src="https://www.paypalobjects.com/webstatic/de_DE/i/de-pp-logo-150px.png"></a>
+
+  
+Or via this link (with fees)
+<a href="https://www.paypal.com/donate?hosted_button_id=XVXQ54LBLZ4AA"><img  align="left" src="https://img.shields.io/badge/Donate%20with%20Debit%20or%20Credit%20Card-002991?style=plastic"></a></pre>
 # SherpaTTS
 
 SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses voices from [Piper Voices](https://rhasspy.github.io/piper-samples/).

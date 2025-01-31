@@ -297,6 +297,10 @@ class MainActivity : ComponentActivity() {
                 }
 
         }
+        if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
+            this,
+            "https://github.com/woheller69/ttsengine"
+        )
     }
 
     override fun onDestroy() {

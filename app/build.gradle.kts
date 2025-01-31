@@ -11,8 +11,8 @@ android {
         applicationId = "org.woheller69.ttsengine"
         minSdk = 29
         targetSdk = 34
-        versionCode = 11
-        versionName = "1.1"
+        versionCode = 12
+        versionName = "1.2"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -20,6 +20,8 @@ android {
 
         buildFeatures {
             viewBinding = true
+            buildConfig = true
+            compose = true
         }
     }
 
@@ -41,9 +43,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
