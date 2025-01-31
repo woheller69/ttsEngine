@@ -23,6 +23,8 @@ This work is licensed under GPLv3 license, © woheller69
 - It uses data from [eSpeak NG](https://github.com/espeak-ng/espeak-ng), published under GPLv3 license
 - At first start it downloads and installs a Piper voice models from Hugging Face. Voices can be tested [here](https://rhasspy.github.io/piper-samples/)
 
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/)
+
 # OTHER APPS
 
 | **RadarWeather** | **Gas Prices** | **Smart Eggtimer** |
