@@ -198,9 +198,12 @@ object TtsEngine {
     }
 
     private fun copyDataDir(context: Context, dataDir: String): String {
+        val preferenceHelper = PreferenceHelper(context)
         Log.i(TAG, "data dir is $dataDir")
-        copyAssets(context, dataDir)
-
+        if (!preferenceHelper.isInitFinished()){  //only copy at first startup
+            copyAssets(context, dataDir)
+            preferenceHelper.setInitFinished()
+        }
         val newDataDir = context.getExternalFilesDir(null)!!.absolutePath
         Log.i(TAG, "newDataDir: $newDataDir")
         return newDataDir
