@@ -24,11 +24,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -42,7 +46,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -125,30 +128,47 @@ class MainActivity : ComponentActivity() {
 
                                 val numSpeakers = TtsEngine.tts!!.numSpeakers()
                                 if (numSpeakers > 1) {
-                                    OutlinedTextField(
-                                        value = TtsEngine.speakerIdState.value.toString(),
-                                        onValueChange = {
-                                            if (it.isEmpty() || it.isBlank()) {
-                                                TtsEngine.speakerId = 0
-                                            } else {
-                                                try {
-                                                    TtsEngine.speakerId = it.toString().toInt()
-                                                } catch (ex: NumberFormatException) {
-                                                    Log.i(TAG, "Invalid input: $it")
-                                                    TtsEngine.speakerId = 0
+                                    var expanded by remember { mutableStateOf(false) }
+                                    val speakerList = (0 until numSpeakers).toList()
+                                    var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
+
+                                    Box(modifier = Modifier.fillMaxWidth()) {
+                                        ExposedDropdownMenuBox(
+                                            expanded = expanded,
+                                            onExpandedChange = { expanded = it }
+                                        ) {
+                                            OutlinedTextField(
+                                                value = selectedSpeaker.toString(),
+                                                onValueChange = {},
+                                                readOnly = true,
+                                                label = { Text("Speaker ID: (0-${numSpeakers - 1})") },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .menuAnchor(),
+                                                trailingIcon = {
+                                                    Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
+                                                }
+                                            )
+                                            ExposedDropdownMenu(
+                                                expanded = expanded,
+                                                onDismissRequest = { expanded = false }
+                                            ) {
+                                                speakerList.forEach { speakerId ->
+                                                    DropdownMenuItem(
+                                                        text = { Text(speakerId.toString()) },
+                                                        onClick = {
+                                                            selectedSpeaker = speakerId
+                                                            TtsEngine.speakerId = speakerId
+                                                            preferenceHelper.setSid(speakerId)
+                                                            expanded = false
+                                                            stopped = true
+                                                            playEnabled = false
+                                                        }
+                                                    )
                                                 }
                                             }
-                                            preferenceHelper.setSid(TtsEngine.speakerId)
-                                        },
-                                        label = {
-                                            Text("Speaker ID: (0-${numSpeakers - 1})")
-                                        },
-                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(bottom = 16.dp)
-                                            .wrapContentHeight(),
-                                    )
+                                        }
+                                    }
                                 }
 
                                 OutlinedTextField(
@@ -161,7 +181,7 @@ class MainActivity : ComponentActivity() {
                                         .padding(bottom = 16.dp)
                                         .verticalScroll(scrollState)
                                         .wrapContentHeight(),
-                                    singleLine = false,
+                                    singleLine = false
                                 )
 
                                 Row {
