@@ -44,7 +44,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
@@ -71,6 +74,7 @@ class MainActivity : ComponentActivity() {
 
     private var samplesChannel = Channel<FloatArray>()
 
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -100,7 +104,7 @@ class MainActivity : ComponentActivity() {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Column {
-                                    Text("Speed " + String.format("%.1f", TtsEngine.speed))
+                                    Text(getString(R.string.speed)+ " " + String.format("%.1f", TtsEngine.speed))
                                     Slider(
                                         value = TtsEngine.speedState.value,
                                         onValueChange = {
@@ -131,6 +135,7 @@ class MainActivity : ComponentActivity() {
                                     var expanded by remember { mutableStateOf(false) }
                                     val speakerList = (0 until numSpeakers).toList()
                                     var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
+                                    val keyboardController = LocalSoftwareKeyboardController.current
 
                                     Box(modifier = Modifier.fillMaxWidth()) {
                                         ExposedDropdownMenuBox(
@@ -141,10 +146,16 @@ class MainActivity : ComponentActivity() {
                                                 value = selectedSpeaker.toString(),
                                                 onValueChange = {},
                                                 readOnly = true,
-                                                label = { Text("Speaker ID: (0-${numSpeakers - 1})") },
+                                                label = { Text(getString(R.string.speaker_id) + " " +"(0-${numSpeakers - 1})") },
                                                 modifier = Modifier
                                                     .fillMaxWidth()
-                                                    .menuAnchor(),
+                                                    .menuAnchor()
+                                                    .onFocusChanged { focusState ->
+                                                        if (focusState.isFocused) {
+                                                            expanded = true
+                                                            keyboardController?.hide()
+                                                        }
+                                                    },
                                                 trailingIcon = {
                                                     Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
                                                 }
@@ -174,7 +185,7 @@ class MainActivity : ComponentActivity() {
                                 OutlinedTextField(
                                     value = testText,
                                     onValueChange = { testText = it },
-                                    label = { Text("Please input your text here") },
+                                    label = { Text(getString(R.string.input)) },
                                     maxLines = 10,
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -197,7 +208,7 @@ class MainActivity : ComponentActivity() {
                                             if (testText.isBlank() || testText.isEmpty()) {
                                                 Toast.makeText(
                                                     applicationContext,
-                                                    "Please input some text to generate",
+                                                    getString(R.string.input),
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             } else {
@@ -274,7 +285,7 @@ class MainActivity : ComponentActivity() {
                                                 }.start()
                                             }
                                         }) {
-                                        Text("Start")
+                                        Text(getString(R.string.start))
                                     }
 
                                     Button(
@@ -290,7 +301,7 @@ class MainActivity : ComponentActivity() {
                                             track.flush()
                                             onClickPlay()
                                         }) {
-                                        Text("Play")
+                                        Text(getString(R.string.play))
                                     }
 
                                     Button(
@@ -303,7 +314,7 @@ class MainActivity : ComponentActivity() {
                                             onClickStop()
                                             startEnabled = true
                                         }) {
-                                        Text("Stop")
+                                        Text(getString(R.string.stop))
                                     }
                                 }
                                 if (rtfText.isNotEmpty()) {
