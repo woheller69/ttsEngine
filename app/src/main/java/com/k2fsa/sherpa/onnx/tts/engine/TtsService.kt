@@ -1,5 +1,7 @@
 package com.k2fsa.sherpa.onnx.tts.engine
 
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.AudioFormat
 import android.speech.tts.SynthesisCallback
 import android.speech.tts.SynthesisRequest
@@ -86,21 +88,27 @@ class TtsService : TextToSpeechService() {
     override fun onLoadLanguage(_lang: String?, _country: String?, _variant: String?): Int {
         Log.i(TAG, "onLoadLanguage: $_lang, $_country")
         val lang = _lang ?: ""
-
-        return if (lang == TtsEngine.lang) {
-            Log.i(TAG, "creating tts, lang :$lang")
-            TtsEngine.createTts(application)
-            TextToSpeech.LANG_AVAILABLE
+        return if (!Utils.checkModel(this)){  //Download model first if no model is installed
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            TextToSpeech.LANG_MISSING_DATA
         } else {
-            Log.i(TAG, "lang $lang not supported, tts engine lang: ${TtsEngine.lang}")
-            TextToSpeech.LANG_NOT_SUPPORTED
+            if (lang == TtsEngine.lang) {
+                Log.i(TAG, "creating tts, lang :$lang")
+                TtsEngine.createTts(application)
+                TextToSpeech.LANG_AVAILABLE
+            } else {
+                Log.i(TAG, "lang $lang not supported, tts engine lang: ${TtsEngine.lang}")
+                TextToSpeech.LANG_NOT_SUPPORTED
+            }
         }
     }
 
     override fun onStop() {}
 
     override fun onSynthesizeText(request: SynthesisRequest?, callback: SynthesisCallback?) {
-        if (request == null || callback == null) {
+        if (TtsEngine.tts == null || request == null || callback == null) {
             return
         }
         val language = request.language
