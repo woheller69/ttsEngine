@@ -72,7 +72,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DownloadActivity"
+            android:name=".ManageLanguagesActivity"
             android:theme="@style/Theme.SherpaOnnxTtsEngine"
             android:screenOrientation="portrait"
             android:exported="true">

@@ -5,13 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityDownloadBinding
+import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLocationsBinding
 
-class DownloadActivity  : AppCompatActivity() {
-    private var binding: ActivityDownloadBinding? = null
+class ManageLanguagesActivity  : AppCompatActivity() {
+    private var binding: ActivityManageLocationsBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityDownloadBinding.inflate(layoutInflater)
+        binding = ActivityManageLocationsBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
         val mItems: Array<String> = resources.getStringArray(R.array.models)

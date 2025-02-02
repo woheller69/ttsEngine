@@ -13,7 +13,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Locale;
-import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityDownloadBinding;
+import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLocationsBinding;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -27,7 +27,7 @@ public class Downloader {
     static boolean tokensFinished = false;
     static boolean langFinished = false;
 
-    public static void downloadModels(final Activity activity, ActivityDownloadBinding binding, String model) {
+    public static void downloadModels(final Activity activity, ActivityManageLocationsBinding binding, String model) {
 
         String twoLetterCode = model.split("piper-")[1].substring(0, 2);
         String lang = new Locale(twoLetterCode).getISO3Language();

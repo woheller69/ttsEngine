@@ -87,7 +87,7 @@ class MainActivity : ComponentActivity() {
             initAudioTrack()
             Log.i(TAG, "Finish initializing AudioTrack")
         } else {
-            val intent = Intent(this, DownloadActivity::class.java)
+            val intent = Intent(this, ManageLanguagesActivity::class.java)
             startActivity(intent)
             finish()
        }
