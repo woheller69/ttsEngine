@@ -1,3 +1,4 @@
+package com.k2fsa.sherpa.onnx.tts.engine
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -7,6 +8,7 @@ class PreferenceHelper(context: Context) {
     private val SPEED_KEY = "speed"
     private val SID_KEY = "speaker_id"
     private val INIT_KEY = "init_espeak"
+    private val CURRENT_LANGUAGE = "current_language"
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -39,5 +41,15 @@ class PreferenceHelper(context: Context) {
 
     fun getSid(): Int {
         return sharedPreferences.getInt(SID_KEY, 0)
+    }
+
+    fun setCurrentLanguage(language: String){
+        val editor = sharedPreferences.edit()
+        editor.putString(CURRENT_LANGUAGE, language)
+        editor.apply()
+    }
+
+    fun getCurrentLanguage(): String? {
+        return sharedPreferences.getString(CURRENT_LANGUAGE, "")
     }
 }

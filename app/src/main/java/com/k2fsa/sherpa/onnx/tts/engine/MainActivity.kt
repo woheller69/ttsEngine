@@ -2,7 +2,6 @@
 
 package com.k2fsa.sherpa.onnx.tts.engine
 
-import PreferenceHelper
 import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioFormat
@@ -77,10 +76,11 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (Utils.checkModel(this)){
+        val preferenceHelper = PreferenceHelper(this)
+        Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
+        if (!preferenceHelper.getCurrentLanguage().equals("")){
             Log.i(TAG, "Start to initialize TTS")
-            TtsEngine.createTts(this)
+            TtsEngine.createTts(this, preferenceHelper.getCurrentLanguage()!!)
             Log.i(TAG, "Finish initializing TTS")
 
             Log.i(TAG, "Start to initialize AudioTrack")
@@ -92,7 +92,6 @@ class MainActivity : ComponentActivity() {
             finish()
        }
 
-        val preferenceHelper = PreferenceHelper(this)
         setContent {
                 // A surface container using the 'background' color from the theme
                 Surface(

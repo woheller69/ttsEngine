@@ -1,6 +1,5 @@
 package com.k2fsa.sherpa.onnx.tts.engine
 
-import PreferenceHelper
 import android.content.Context
 import android.content.res.AssetManager
 import android.util.Log
@@ -22,7 +21,6 @@ object TtsEngine {
     // deu for German
     // cmn for Mandarin
     var lang: String? = ""
-
 
     val speedState: MutableState<Float> = mutableFloatStateOf(1.0F)
     val speakerIdState: MutableState<Int> = mutableIntStateOf(0)
@@ -154,17 +152,23 @@ object TtsEngine {
         // lang = "eng"
     }
 
-    fun createTts(context: Context) {
-        Log.i(TAG, "Init Next-gen Kaldi TTS")
-        if (tts == null) {
-            initTts(context)
+    fun getAvailableLanguages(context: Context): ArrayList<String> {
+        val preferenceHelper = PreferenceHelper(context)
+        return arrayListOf(preferenceHelper.getCurrentLanguage()!!) //ToDo: get available languages from database in future
+    }
+
+    fun createTts(context: Context, language: String) {
+        if (tts == null || lang != language) {
+            initTts(context, language)
         }
     }
 
-    private fun initTts(context: Context) {
+    private fun initTts(context: Context, language: String) {
+        Log.i(TAG, "Init Next-gen Kaldi TTS: " + language)
+        lang = language
         val externalFilesDir = context.getExternalFilesDir(null)!!.absolutePath
-        modelDir = "$externalFilesDir/$modelDir"
-        lang = Utils.readLanguage(context)
+        modelDir = "$externalFilesDir/$lang"
+
         assets = context.assets
 
         if (dataDir != null) {

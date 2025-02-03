@@ -7,16 +7,24 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Utils {
-    public static boolean checkModel(Context context){
+//This class can be removed in future if migration from old structure is no longer needed, e.g. in 2026
+public class Migrate {
+
+    //Move model from old modelDir to new language based folder structure
+    public static void renameModelFolder(Context context){
         File sdcardDataFolder = context.getExternalFilesDir(null);
-        File model = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/model.onnx");
-        File tokens = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/tokens.txt");
         File lang = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/lang");
-        return model.exists() && tokens.exists() && lang.exists();
+        if (lang.exists()) { //move to new directory structure
+            String language = readLanguageFromFile(context);
+            File modelDirFolder = new File(sdcardDataFolder.getAbsolutePath(),"modelDir");
+            File langFolder = new File(sdcardDataFolder.getAbsolutePath(),language);
+            modelDirFolder.renameTo(langFolder);
+            PreferenceHelper preferenceHelper = new PreferenceHelper(context);
+            preferenceHelper.setCurrentLanguage(language);
+        }
     }
 
-    public static String readLanguage(Context context){
+    public static String readLanguageFromFile(Context context){
         StringBuilder text = new StringBuilder();
         File sdcardDataFolder = context.getExternalFilesDir(null);
         File langFile = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/lang");

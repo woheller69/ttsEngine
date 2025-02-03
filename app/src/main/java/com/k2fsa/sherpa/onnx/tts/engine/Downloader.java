@@ -18,14 +18,12 @@ import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLocationsBindi
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class Downloader {
-    static final String language = "lang";
     static final String onnxModel = "model.onnx";
     static final String tokens = "tokens.txt";
     static long onnxModelDownloadSize = 0L;
     static long tokensDownloadSize = 0L;
     static boolean onnxModelFinished = false;
     static boolean tokensFinished = false;
-    static boolean langFinished = false;
 
     public static void downloadModels(final Activity activity, ActivityManageLocationsBinding binding, String model) {
 
@@ -35,7 +33,7 @@ public class Downloader {
         String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ model + "/resolve/main/" + modelName;
         String tokensUrl = "https://huggingface.co/csukuangfj/" + model + "/resolve/main/tokens.txt";
 
-        File directory = new File(activity.getExternalFilesDir(null)+ "/modelDir/");
+        File directory = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/");
         if (!directory.exists() && !directory.mkdirs()) {
             Log.e("TTS Engine", "Failed to make directory: " + directory);
             return;
@@ -43,27 +41,7 @@ public class Downloader {
 
         activity.runOnUiThread(() -> binding.downloadSize.setVisibility(View.VISIBLE));
 
-        File langFile = new File(activity.getExternalFilesDir(null)+ "/modelDir/" + language);
-        if (langFile.exists()) langFile.delete();
-        langFinished = false;
-        Thread threadLang = new Thread(() -> {
-            try {
-                langFile.createNewFile();
-                FileOutputStream outStream = new FileOutputStream(langFile);
-                outStream.write(lang.getBytes());
-                outStream.flush();
-                outStream.close();
-                langFinished = true;
-                activity.runOnUiThread(() -> {
-                    if (tokensFinished && onnxModelFinished && langFinished) binding.buttonStart.setVisibility(View.VISIBLE);
-                });
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-        threadLang.start();
-
-        File onnxModelFile = new File(activity.getExternalFilesDir(null)+ "/modelDir/" + onnxModel);
+        File onnxModelFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + onnxModel);
         if (!onnxModelFile.exists()) {
             onnxModelFinished = false;
             Log.d("TTS Engine", "onnx model file does not exist");
@@ -105,7 +83,9 @@ public class Downloader {
 
                     onnxModelFinished = true;
                     activity.runOnUiThread(() -> {
-                        if (tokensFinished && onnxModelFinished && langFinished) binding.buttonStart.setVisibility(View.VISIBLE);
+                        if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
+                        PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
+                        preferenceHelper.setCurrentLanguage(lang);
                     });
                 } catch (IOException i) {
                     activity.runOnUiThread(() -> Toast.makeText(activity, activity.getResources().getString(R.string.error_download), Toast.LENGTH_SHORT).show());
@@ -118,10 +98,12 @@ public class Downloader {
             onnxModelFinished = true;
             activity.runOnUiThread(() -> {
                 if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
+                PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
+                preferenceHelper.setCurrentLanguage(lang);
             });
         }
 
-        File tokensFile = new File(activity.getExternalFilesDir(null) + "/modelDir/" + tokens);
+        File tokensFile = new File(activity.getExternalFilesDir(null) + "/" + lang + "/" + tokens);
         if (!tokensFile.exists()) {
             tokensFinished = false;
             Log.d("TTS Engine", "tokens file does not exist");
@@ -160,7 +142,7 @@ public class Downloader {
 
                     tokensFinished = true;
                     activity.runOnUiThread(() -> {
-                        if (tokensFinished && onnxModelFinished && langFinished) binding.buttonStart.setVisibility(View.VISIBLE);
+                        if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
                     });
 
                 } catch (IOException i) {

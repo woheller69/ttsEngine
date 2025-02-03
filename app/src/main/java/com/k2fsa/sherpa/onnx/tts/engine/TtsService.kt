@@ -73,14 +73,14 @@ class TtsService : TextToSpeechService() {
     override fun onIsLanguageAvailable(_lang: String?, _country: String?, _variant: String?): Int {
         val lang = _lang ?: ""
 
-        if (lang == TtsEngine.lang) {
+        if (TtsEngine.getAvailableLanguages(this).contains(lang)) {
             return TextToSpeech.LANG_AVAILABLE
         }
 
         return TextToSpeech.LANG_NOT_SUPPORTED
     }
 
-    override fun onGetLanguage(): Array<String> {
+    override fun onGetLanguage(): Array<String> {  //returns language currently being used
         return arrayOf(TtsEngine.lang!!, "", "")
     }
 
@@ -88,15 +88,17 @@ class TtsService : TextToSpeechService() {
     override fun onLoadLanguage(_lang: String?, _country: String?, _variant: String?): Int {
         Log.i(TAG, "onLoadLanguage: $_lang, $_country")
         val lang = _lang ?: ""
-        return if (!Utils.checkModel(this)){  //Download model first if no model is installed
+        Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
+        val preferenceHelper = PreferenceHelper(this)
+        return if (preferenceHelper.getCurrentLanguage().equals("")){  //Download model first if no model is installed
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
             TextToSpeech.LANG_MISSING_DATA
         } else {
-            if (lang == TtsEngine.lang) {
+            if (TtsEngine.getAvailableLanguages(this).contains(lang)) {
                 Log.i(TAG, "creating tts, lang :$lang")
-                TtsEngine.createTts(application)
+                TtsEngine.createTts(application, lang)
                 TextToSpeech.LANG_AVAILABLE
             } else {
                 Log.i(TAG, "lang $lang not supported, tts engine lang: ${TtsEngine.lang}")
