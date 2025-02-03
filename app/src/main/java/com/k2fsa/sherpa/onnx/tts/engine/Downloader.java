@@ -86,6 +86,8 @@ public class Downloader {
                         if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
                         PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
                         preferenceHelper.setCurrentLanguage(lang);
+                        LangDB langDB = LangDB.getInstance(activity);
+                        langDB.addLanguage(model.split("piper-")[1], lang, 0, 1.0f, "vits-piper");
                     });
                 } catch (IOException i) {
                     activity.runOnUiThread(() -> Toast.makeText(activity, activity.getResources().getString(R.string.error_download), Toast.LENGTH_SHORT).show());
@@ -100,6 +102,8 @@ public class Downloader {
                 if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
                 PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
                 preferenceHelper.setCurrentLanguage(lang);
+                LangDB langDB = LangDB.getInstance(activity);
+                langDB.addLanguage(model.split("piper-")[1], lang, 0, 1.0f, "vits-piper");
             });
         }
 

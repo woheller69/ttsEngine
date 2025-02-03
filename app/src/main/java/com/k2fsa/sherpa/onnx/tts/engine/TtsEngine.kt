@@ -153,8 +153,13 @@ object TtsEngine {
     }
 
     fun getAvailableLanguages(context: Context): ArrayList<String> {
-        val preferenceHelper = PreferenceHelper(context)
-        return arrayListOf(preferenceHelper.getCurrentLanguage()!!) //ToDo: get available languages from database in future
+        val langCodes = java.util.ArrayList<String>()
+        val db = LangDB.getInstance(context)
+        val languages = db.allInstalledLanguages
+        for (language in languages) {
+            langCodes.add(language.lang)
+        }
+        return langCodes
     }
 
     fun createTts(context: Context, language: String) {
@@ -166,14 +171,15 @@ object TtsEngine {
     private fun initTts(context: Context, language: String) {
         Log.i(TAG, "Init Next-gen Kaldi TTS: " + language)
         lang = language
+        PreferenceHelper(context).setCurrentLanguage(lang!!)
         val externalFilesDir = context.getExternalFilesDir(null)!!.absolutePath
         modelDir = "$externalFilesDir/$lang"
 
         assets = context.assets
 
+        var newDataDir = ""
         if (dataDir != null) {
-            val newDir = copyDataDir(context, dataDir!!)
-            dataDir = "$newDir/$dataDir"
+            newDataDir = copyDataDir(context, dataDir!!)
         }
 
         if (dictDir != null) {
@@ -189,26 +195,30 @@ object TtsEngine {
             vocoder = vocoder ?: "",
             voices = voices ?: "",
             lexicon = lexicon ?: "",
-            dataDir = dataDir ?: "",
+            dataDir = newDataDir ?: "",
             dictDir = dictDir ?: "",
             ruleFsts = ruleFsts ?: "",
             ruleFars = ruleFars ?: ""
         )
 
-        speed = PreferenceHelper(context).getSpeed()
-        speakerId = PreferenceHelper(context).getSid()
-
+        val db = LangDB.getInstance(context)
+        val languages = db.allInstalledLanguages
+        for (language in languages) {
+            if (language.lang == lang){
+                speed = language.speed
+                speakerId = language.sid
+            }
+        }
         tts = OfflineTts(assetManager = null, config = config)
     }
 
     private fun copyDataDir(context: Context, dataDir: String): String {
-        val preferenceHelper = PreferenceHelper(context)
         Log.i(TAG, "data dir is $dataDir")
-        if (!preferenceHelper.isInitFinished()){  //only copy at first startup
+        if (!PreferenceHelper(context).isInitFinished()){  //only copy at first startup
             copyAssets(context, dataDir)
-            preferenceHelper.setInitFinished()
+            PreferenceHelper(context).setInitFinished()
         }
-        val newDataDir = context.getExternalFilesDir(null)!!.absolutePath
+        val newDataDir = context.getExternalFilesDir(null)!!.absolutePath + "/" + dataDir
         Log.i(TAG, "newDataDir: $newDataDir")
         return newDataDir
     }

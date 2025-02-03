@@ -13,22 +13,13 @@ class PreferenceHelper(context: Context) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun setSpeed(value: Float) {
-        val editor = sharedPreferences.edit()
-        editor.putFloat(SPEED_KEY, value)
-        editor.apply()
-    }
-
-    fun getSpeed(): Float {
+    fun getSpeed(): Float { //ToDo: Remove later, only needed for migration
         return sharedPreferences.getFloat(SPEED_KEY, 1.0f)
     }
 
-    fun setSid(value: Int) {
-        val editor = sharedPreferences.edit()
-        editor.putInt(SID_KEY, value)
-        editor.apply()
+    fun getSid(): Int { //ToDo: Remove later, only needed for migration
+        return sharedPreferences.getInt(SID_KEY, 0)
     }
-
     fun setInitFinished() {
         val editor = sharedPreferences.edit()
         editor.putBoolean(INIT_KEY, true)
@@ -37,10 +28,6 @@ class PreferenceHelper(context: Context) {
 
     fun isInitFinished(): Boolean {
         return sharedPreferences.getBoolean(INIT_KEY, false)
-    }
-
-    fun getSid(): Int {
-        return sharedPreferences.getInt(SID_KEY, 0)
     }
 
     fun setCurrentLanguage(language: String){

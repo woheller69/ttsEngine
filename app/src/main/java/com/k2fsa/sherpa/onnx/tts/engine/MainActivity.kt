@@ -25,12 +25,14 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -51,6 +53,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -77,6 +80,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val preferenceHelper = PreferenceHelper(this)
+        val langDB = LangDB.getInstance(this)
         Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
         if (!preferenceHelper.getCurrentLanguage().equals("")){
             Log.i(TAG, "Start to initialize TTS")
@@ -93,28 +97,44 @@ class MainActivity : ComponentActivity() {
        }
 
         setContent {
+            Scaffold(
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = {
+                            val intent = Intent(this, ManageLanguagesActivity::class.java)
+                            startActivity(intent)
+                            finish() }
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = "Add")
+                    }
+                }
+            ) { padding ->
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Scaffold(topBar = {
-                        TopAppBar(title = { Text("SherpaTTS") })
-                    }) {
+                            TopAppBar(title = { Text("SherpaTTS") })
+                        }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Column {
-                                    Text(getString(R.string.speed)+ " " + String.format("%.1f", TtsEngine.speed))
+                                    Text(getString(R.string.speed) + " " + String.format("%.1f", TtsEngine.speed))
                                     Slider(
                                         value = TtsEngine.speedState.value,
                                         onValueChange = {
                                             TtsEngine.speed = it
-                                            preferenceHelper.setSpeed(it)
+                                            langDB.updateLang(
+                                                TtsEngine.lang,
+                                                TtsEngine.speakerId,
+                                                TtsEngine.speed
+                                            )
                                         },
                                         valueRange = 0.2F..3.0F,
                                         modifier = Modifier.fillMaxWidth(),
                                         colors = SliderDefaults.colors(
-                                                thumbColor = colorResource(R.color.primaryDark),
-                                                activeTrackColor = colorResource(R.color.primaryDark)
+                                            thumbColor = colorResource(R.color.primaryDark),
+                                            activeTrackColor = colorResource(R.color.primaryDark)
                                         )
                                     )
                                 }
@@ -145,7 +165,7 @@ class MainActivity : ComponentActivity() {
                                                 value = selectedSpeaker.toString(),
                                                 onValueChange = {},
                                                 readOnly = true,
-                                                label = { Text(getString(R.string.speaker_id) + " " +"(0-${numSpeakers - 1})") },
+                                                label = { Text(getString(R.string.speaker_id) + " " + "(0-${numSpeakers - 1})") },
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .menuAnchor()
@@ -169,7 +189,11 @@ class MainActivity : ComponentActivity() {
                                                         onClick = {
                                                             selectedSpeaker = speakerId
                                                             TtsEngine.speakerId = speakerId
-                                                            preferenceHelper.setSid(speakerId)
+                                                            langDB.updateLang(
+                                                                TtsEngine.lang,
+                                                                TtsEngine.speakerId,
+                                                                TtsEngine.speed
+                                                            )
                                                             expanded = false
                                                             stopped = true
                                                             playEnabled = false
@@ -203,7 +227,7 @@ class MainActivity : ComponentActivity() {
                                             contentColor = colorResource(R.color.white)
                                         ),
                                         onClick = {
-                                            Log.i(TAG, "Clicked, text: $testText")
+                                            //Log.i(TAG, "Clicked, text: $testText")
                                             if (testText.isBlank() || testText.isEmpty()) {
                                                 Toast.makeText(
                                                     applicationContext,
@@ -219,7 +243,7 @@ class MainActivity : ComponentActivity() {
                                                 track.flush()
                                                 track.play()
                                                 rtfText = ""
-                                                Log.i(TAG, "Started with text $testText")
+                                                //Log.i(TAG, "Started with text $testText")
 
                                                 samplesChannel = Channel<FloatArray>()
 
@@ -325,7 +349,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-
+            }
         }
         if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
             this,
@@ -363,11 +387,12 @@ class MainActivity : ComponentActivity() {
     }
 
     // this function is called from C++
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun callback(samples: FloatArray): Int {
         if (!stopped) {
             val samplesCopy = samples.copyOf()
             CoroutineScope(Dispatchers.IO).launch {
-                samplesChannel.send(samplesCopy)
+               if (!samplesChannel.isClosedForSend) samplesChannel.send(samplesCopy)
             }
             return 1
         } else {

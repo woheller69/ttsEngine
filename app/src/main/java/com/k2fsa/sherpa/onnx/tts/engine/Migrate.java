@@ -21,6 +21,8 @@ public class Migrate {
             modelDirFolder.renameTo(langFolder);
             PreferenceHelper preferenceHelper = new PreferenceHelper(context);
             preferenceHelper.setCurrentLanguage(language);
+            LangDB langDB = LangDB.getInstance(context);
+            langDB.addLanguage("???",language, preferenceHelper.getSid(), preferenceHelper.getSpeed(), "vits-piper");
         }
     }
 

@@ -1,0 +1,112 @@
+package com.k2fsa.sherpa.onnx.tts.engine;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class LangDB extends SQLiteOpenHelper {
+
+    // Database name and table columns
+    private static final String DB_NAME = "Languages.db";
+    private static final int DATABASE_VERSION = 1;
+    public static final String TABLE_NAME = "Languages";
+    private static final String COLUMN_ID = "ID";
+    private static final String COLUMN_NAME = "ModelName";
+    private static final String COLUMN_LANG = "Language";
+    private static final String COLUMN_SID = "SpeakerID";
+    private static final String COLUMN_SPEED = "Speed";
+    private static final String COLUMN_TYPE = "ModelType";
+    private static LangDB instance = null;
+
+    public LangDB(Context context) {
+        super(context, DB_NAME, null, DATABASE_VERSION);
+    }
+    
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // Create the table for bird observations with all columns and their data types.
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "+TABLE_NAME+" (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_NAME + " TEXT," +
+                COLUMN_LANG + " TEXT," +
+                COLUMN_SID + " INTEGER," +
+                COLUMN_SPEED + " FLOAT," +
+                COLUMN_TYPE + " TEXT);";
+        db.execSQL(CREATE_TABLE);
+    }
+    
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop the table and create it again if there's a version change in the database schema.
+        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
+        this.onCreate(db);
+    }
+    
+    public synchronized void addLanguage(String name, String lang, int sid, float speed, String type) {
+        // Insert a new row into the table with all columns and their values from parameters.
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_NAME, name);
+        cv.put(COLUMN_LANG, lang);
+        cv.put(COLUMN_SID, sid);
+        cv.put(COLUMN_SPEED, speed);
+        cv.put(COLUMN_TYPE, type);
+        
+        db.insert(TABLE_NAME, null, cv); // Insert the row into the table with all columns and their values from parameters.
+    }
+    
+    public synchronized void clearAllEntries() {
+        SQLiteDatabase db = getWritableDatabase();
+        String CLEAR_TABLE = "DELETE FROM "+ TABLE_NAME;
+        
+        db.execSQL(CLEAR_TABLE); // Delete all rows in the table, effectively clearing it out.
+    }
+    
+    public synchronized List<Language> getAllInstalledLanguages() {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String SELECT_ALL = "SELECT * FROM "+ TABLE_NAME;
+        Cursor cursor = db.rawQuery(SELECT_ALL, null); // Execute the query to select all rows from the table and store them in a cursor object for further processing.
+
+        List<Language> languages = new ArrayList<>();
+        if (cursor.moveToFirst()) {
+            do {
+                Language language = new Language();
+                language.setId(cursor.getInt(0));
+                language.setName(cursor.getString(1));
+                language.setLang(cursor.getString(2));
+                language.setSid(cursor.getInt(3));
+                language.setSpeed(cursor.getFloat(4));
+                language.setType(cursor.getString(5));
+
+                languages.add(language);
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return languages;
+    }
+
+    public synchronized void updateLang(String lang, int sid, float speed) {
+        SQLiteDatabase database = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_SID, sid);
+        values.put(COLUMN_SPEED, speed);
+
+        database.update(TABLE_NAME, values, COLUMN_LANG + " = ?", new String[]{lang});
+        database.close();
+    }
+
+    public static LangDB getInstance(Context context) {
+        if (instance == null && context != null) {
+            instance = new LangDB(context.getApplicationContext());
+        }
+        return instance;
+    }
+}

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLocationsBinding
+import java.util.Locale
 
 class ManageLanguagesActivity  : AppCompatActivity() {
     private var binding: ActivityManageLocationsBinding? = null
@@ -14,12 +15,27 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         binding = ActivityManageLocationsBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
 
-        val mItems: Array<String> = resources.getStringArray(R.array.models)
-        val mAdapter = ArrayAdapter(this, R.layout.list_item, R.id.text_view, mItems)
+        val allModels: Array<String> = resources.getStringArray(R.array.models)
+
+        val db = LangDB.getInstance(this)
+        val installedLanguages = db.allInstalledLanguages
+        val installedLangCodes = java.util.ArrayList<String>()
+        for (language in installedLanguages) {
+            installedLangCodes.add(language.lang)
+        }
+
+        val showModels = mutableListOf<String>()
+        for(model in allModels){
+            val twoLetterCode: String = model.split("_").get(0)
+            val lang = Locale(twoLetterCode).isO3Language
+            if (!installedLangCodes.contains(lang)) showModels.add(model)
+        }
+
+        val mAdapter = ArrayAdapter(this, R.layout.list_item, R.id.text_view, showModels)
 
         binding!!.modelList.adapter = mAdapter
         binding!!.modelList.setOnItemClickListener { parent, view, position, id ->
-            val model = "vits-piper-" + mItems.get(position)
+            val model = "vits-piper-" + showModels.get(position)
             binding!!.modelList.visibility = View.GONE
             Downloader.downloadModels(this, binding, model)
         }

@@ -123,7 +123,7 @@ class TtsService : TextToSpeechService() {
             callback.error()
             return
         }
-        Log.i(TAG, "text: $text")
+        //Log.i(TAG, "text: $text")
         val tts = TtsEngine.tts!!
 
         // Note that AudioFormat.ENCODING_PCM_FLOAT requires API level >= 24
@@ -152,7 +152,7 @@ class TtsService : TextToSpeechService() {
             return 1
         }
 
-        Log.i(TAG, "text: $text")
+        //Log.i(TAG, "text: $text")
         tts.generateWithCallback(
             text = text,
             sid = TtsEngine.speakerId,
