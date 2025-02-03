@@ -41,6 +41,8 @@ public class Downloader {
             return;
         }
 
+        activity.runOnUiThread(() -> binding.downloadSize.setVisibility(View.VISIBLE));
+
         File langFile = new File(activity.getExternalFilesDir(null)+ "/modelDir/" + language);
         if (langFile.exists()) langFile.delete();
         langFinished = false;
