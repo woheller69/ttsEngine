@@ -24,6 +24,8 @@ public class Downloader {
     static long tokensDownloadSize = 0L;
     static boolean onnxModelFinished = false;
     static boolean tokensFinished = false;
+    static int onnxModelSize = 0;
+    static int tokensSize = 0;
 
     public static void downloadModels(final Activity activity, ActivityManageLocationsBinding binding, String model) {
 
@@ -42,6 +44,7 @@ public class Downloader {
         activity.runOnUiThread(() -> binding.downloadSize.setVisibility(View.VISIBLE));
 
         File onnxModelFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + onnxModel);
+        if (onnxModelFile.exists()) onnxModelFile.delete();
         if (!onnxModelFile.exists()) {
             onnxModelFinished = false;
             Log.d("TTS Engine", "onnx model file does not exist");
@@ -56,31 +59,34 @@ public class Downloader {
                     URLConnection ucon = url.openConnection();
                     ucon.setReadTimeout(5000);
                     ucon.setConnectTimeout(10000);
+                    onnxModelSize = ucon.getContentLength();
 
                     InputStream is = ucon.getInputStream();
                     BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
 
-                    onnxModelFile.createNewFile();
+                    File tempOnnxFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + "model.tmp");
+                    if (tempOnnxFile.exists()) tempOnnxFile.delete();
 
-                    FileOutputStream outStream = new FileOutputStream(onnxModelFile);
+                    FileOutputStream outStream = new FileOutputStream(tempOnnxFile);
                     byte[] buff = new byte[5 * 1024];
 
                     int len;
                     while ((len = inStream.read(buff)) != -1) {
                         outStream.write(buff, 0, len);
-                        if (onnxModelFile.exists()) onnxModelDownloadSize = onnxModelFile.length();
+                        if (tempOnnxFile.exists()) onnxModelDownloadSize = tempOnnxFile.length();
                         activity.runOnUiThread(() -> {
-                            binding.downloadSize.setText((tokensDownloadSize + onnxModelDownloadSize)/1024/1024 + " MB");
+                            binding.downloadSize.setText((tokensDownloadSize + onnxModelDownloadSize)/1024/1024 + " MB / " + (onnxModelSize + tokensSize)/1024/1024 + " MB");
                         });
                     }
                     outStream.flush();
                     outStream.close();
                     inStream.close();
 
-                    if (!onnxModelFile.exists()) {
+                    if (!tempOnnxFile.exists()) {
                         throw new IOException();
                     }
 
+                    tempOnnxFile.renameTo(onnxModelFile);
                     onnxModelFinished = true;
                     activity.runOnUiThread(() -> {
                         if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
@@ -96,18 +102,10 @@ public class Downloader {
                 }
             });
             thread.start();
-        } else {
-            onnxModelFinished = true;
-            activity.runOnUiThread(() -> {
-                if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
-                PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
-                preferenceHelper.setCurrentLanguage(lang);
-                LangDB langDB = LangDB.getInstance(activity);
-                langDB.addLanguage(model.split("piper-")[1], lang, 0, 1.0f, "vits-piper");
-            });
         }
 
         File tokensFile = new File(activity.getExternalFilesDir(null) + "/" + lang + "/" + tokens);
+        if (tokensFile.exists()) tokensFile.delete();
         if (!tokensFile.exists()) {
             tokensFinished = false;
             Log.d("TTS Engine", "tokens file does not exist");
@@ -119,31 +117,34 @@ public class Downloader {
                     URLConnection ucon = url.openConnection();
                     ucon.setReadTimeout(5000);
                     ucon.setConnectTimeout(10000);
+                    tokensSize = ucon.getContentLength();
 
                     InputStream is = ucon.getInputStream();
                     BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
 
-                    tokensFile.createNewFile();
+                    File tempTokensFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + "tokens.tmp");
+                    if (tempTokensFile.exists()) tempTokensFile.delete();
 
-                    FileOutputStream outStream = new FileOutputStream(tokensFile);
+                    FileOutputStream outStream = new FileOutputStream(tempTokensFile);
                     byte[] buff = new byte[5 * 1024];
 
                     int len;
                     while ((len = inStream.read(buff)) != -1) {
                         outStream.write(buff, 0, len);
-                        if (tokensFile.exists()) tokensDownloadSize = tokensFile.length();
+                        if (tempTokensFile.exists()) tokensDownloadSize = tempTokensFile.length();
                         activity.runOnUiThread(() -> {
-                            binding.downloadSize.setText((tokensDownloadSize + onnxModelDownloadSize)/1024/1024 + " MB");
+                            binding.downloadSize.setText((tokensDownloadSize + onnxModelDownloadSize)/1024/1024 + " MB / " + (onnxModelSize + tokensSize)/1024/1024 + " MB");
                         });
                     }
                     outStream.flush();
                     outStream.close();
                     inStream.close();
 
-                    if (!tokensFile.exists()) {
+                    if (!tempTokensFile.exists()) {
                         throw new IOException();
                     }
 
+                    tempTokensFile.renameTo(tokensFile);
                     tokensFinished = true;
                     activity.runOnUiThread(() -> {
                         if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
@@ -156,11 +157,6 @@ public class Downloader {
                 }
             });
             thread.start();
-        } else {
-            tokensFinished = true;
-            activity.runOnUiThread(() -> {
-                if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
-            });
         }
     }
 }
