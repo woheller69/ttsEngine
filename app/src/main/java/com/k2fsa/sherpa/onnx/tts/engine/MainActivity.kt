@@ -75,27 +75,44 @@ class MainActivity : ComponentActivity() {
     private var stopped: Boolean = false
 
     private var samplesChannel = Channel<FloatArray>()
+    private lateinit var preferenceHelper: PreferenceHelper
+    private lateinit var langDB: LangDB
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val preferenceHelper = PreferenceHelper(this)
-        val langDB = LangDB.getInstance(this)
+        preferenceHelper = PreferenceHelper(this)
+        langDB = LangDB.getInstance(this)
         Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
         if (!preferenceHelper.getCurrentLanguage().equals("")){
-            Log.i(TAG, "Start to initialize TTS")
             TtsEngine.createTts(this, preferenceHelper.getCurrentLanguage()!!)
-            Log.i(TAG, "Finish initializing TTS")
-
-            Log.i(TAG, "Start to initialize AudioTrack")
             initAudioTrack()
-            Log.i(TAG, "Finish initializing AudioTrack")
+            setupDisplay(langDB, preferenceHelper)
+            if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
+                this,
+                "https://github.com/woheller69/ttsengine"
+            )
         } else {
             val intent = Intent(this, ManageLanguagesActivity::class.java)
             startActivity(intent)
             finish()
        }
 
+
+    }
+
+    private fun restart(){
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
+    }
+
+    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
+    private fun setupDisplay(
+        langDB: LangDB,
+        preferenceHelper: PreferenceHelper
+    ) {
         setContent {
             Scaffold(
                 floatingActionButton = {
@@ -103,7 +120,8 @@ class MainActivity : ComponentActivity() {
                         onClick = {
                             val intent = Intent(this, ManageLanguagesActivity::class.java)
                             startActivity(intent)
-                            finish() }
+                            finish()
+                        }
                     ) {
                         Icon(Icons.Filled.Add, contentDescription = "Add")
                     }
@@ -114,12 +132,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Scaffold(topBar = {
-                            TopAppBar(title = { Text("SherpaTTS") })
-                        }) {
+                        TopAppBar(title = { Text("SherpaTTS") })
+                    }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Column {
-                                    Text(getString(R.string.speed) + " " + String.format("%.1f", TtsEngine.speed))
+                                    Text(
+                                        getString(R.string.speed) + " " + String.format(
+                                            "%.1f",
+                                            TtsEngine.speed
+                                        )
+                                    )
                                     Slider(
                                         value = TtsEngine.speedState.value,
                                         onValueChange = {
@@ -148,6 +171,65 @@ class MainActivity : ComponentActivity() {
                                     mutableStateOf("")
                                 }
                                 val scrollState = rememberScrollState(0)
+
+
+                                val numLanguages = langDB.allInstalledLanguages.size
+                                if (numLanguages > 1) {
+                                    val languages = langDB.allInstalledLanguages
+                                    var selectedLang =
+                                        languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                                    var expanded by remember { mutableStateOf(false) }
+                                    val langList = (0 until numLanguages).toList()
+                                    val keyboardController = LocalSoftwareKeyboardController.current
+
+                                    Box(modifier = Modifier.fillMaxWidth()) {
+                                        ExposedDropdownMenuBox(
+                                            expanded = expanded,
+                                            onExpandedChange = { expanded = it }
+                                        ) {
+                                            OutlinedTextField(
+                                                value = languages.get(selectedLang).lang,
+                                                onValueChange = {},
+                                                readOnly = true,
+                                                label = { Text("Language" + " " + "(0-${numLanguages - 1})") },
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .menuAnchor()
+                                                    .onFocusChanged { focusState ->
+                                                        if (focusState.isFocused) {
+                                                            expanded = true
+                                                            keyboardController?.hide()
+                                                        }
+                                                    },
+                                                trailingIcon = {
+                                                    Icon(
+                                                        Icons.Default.ArrowDropDown,
+                                                        contentDescription = "Dropdown"
+                                                    )
+                                                }
+                                            )
+                                            ExposedDropdownMenu(
+                                                expanded = expanded,
+                                                onDismissRequest = { expanded = false }
+                                            ) {
+                                                langList.forEach { langId ->
+                                                    DropdownMenuItem(
+                                                        text = { Text(languages.get(langId).lang) },
+                                                        onClick = {
+                                                            selectedLang = langId
+                                                            preferenceHelper.setCurrentLanguage(
+                                                                languages.get(langId).lang
+                                                            )
+                                                            expanded = false
+                                                            restart()
+                                                        }
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
 
                                 val numSpeakers = TtsEngine.tts!!.numSpeakers()
                                 if (numSpeakers > 1) {
@@ -351,10 +433,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
-            this,
-            "https://github.com/woheller69/ttsengine"
-        )
     }
 
     override fun onDestroy() {

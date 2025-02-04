@@ -201,6 +201,10 @@ object TtsEngine {
             ruleFars = ruleFars ?: ""
         )
 
+        val configDebugOff = config.copy(  // create a new instance with debug switched off
+            model = config.model.copy(debug = false)
+        )
+
         val db = LangDB.getInstance(context)
         val languages = db.allInstalledLanguages
         for (language in languages) {
@@ -209,7 +213,7 @@ object TtsEngine {
                 speakerId = language.sid
             }
         }
-        tts = OfflineTts(assetManager = null, config = config)
+        tts = OfflineTts(assetManager = null, config = configDebugOff)
     }
 
     private fun copyDataDir(context: Context, dataDir: String): String {
