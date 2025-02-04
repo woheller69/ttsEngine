@@ -191,7 +191,7 @@ class MainActivity : ComponentActivity() {
                                                 value = languages.get(selectedLang).lang,
                                                 onValueChange = {},
                                                 readOnly = true,
-                                                label = { Text("Language" + " " + "(0-${numLanguages - 1})") },
+                                                label = { Text(getString(R.string.language_id))},
                                                 modifier = Modifier
                                                     .fillMaxWidth()
                                                     .menuAnchor()

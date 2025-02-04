@@ -9,6 +9,7 @@
     <string name="start">Start</string>
     <string name="speed">Speed</string>
     <string name="speaker_id">Speaker ID:</string>
+    <string name="language_id">Language\u2009</string>
     <string name="input">Please input some text to generate</string>
     <string name="download_language">Download Language</string>
 </resources>
