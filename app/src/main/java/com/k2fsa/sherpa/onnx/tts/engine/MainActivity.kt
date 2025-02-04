@@ -78,6 +78,11 @@ class MainActivity : ComponentActivity() {
     private lateinit var preferenceHelper: PreferenceHelper
     private lateinit var langDB: LangDB
 
+    override fun onPause() {
+        super.onPause()
+        samplesChannel.close()
+    }
+
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -337,9 +342,6 @@ class MainActivity : ComponentActivity() {
                                                             samples.size,
                                                             AudioTrack.WRITE_BLOCKING
                                                         )
-                                                        if (stopped) {
-                                                            break
-                                                        }
                                                     }
                                                 }
 
@@ -369,7 +371,6 @@ class MainActivity : ComponentActivity() {
                                                         audioDuration,
                                                         elapsed / audioDuration
                                                     )
-                                                    samplesChannel.close()
 
                                                     val filename =
                                                         application.filesDir.absolutePath + "/generated.wav"
