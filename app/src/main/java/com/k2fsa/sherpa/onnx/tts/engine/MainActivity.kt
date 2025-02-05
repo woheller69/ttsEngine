@@ -27,6 +27,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -34,6 +35,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
@@ -137,7 +140,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                 ) {
                     Scaffold(topBar = {
-                        TopAppBar(title = { Text("SherpaTTS") })
+                        TopAppBar(title = { Text("SherpaTTS") },
+                            actions = {
+                                IconButton(
+                                    onClick = {
+                                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/woheller69/ttsengine")))
+                                    },
+                                    colors = IconButtonDefaults.iconButtonColors(contentColor = colorResource(R.color.primaryDark))
+                                ) {
+                                    Icon(Icons.Filled.Info, contentDescription = "Info")
+                                }
+                            })
                     }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
