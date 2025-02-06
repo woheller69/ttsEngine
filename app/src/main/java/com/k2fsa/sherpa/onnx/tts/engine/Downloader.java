@@ -30,12 +30,13 @@ public class Downloader {
     public static void downloadModels(final Activity activity, ActivityManageLocationsBinding binding, String model) {
 
         String twoLetterCode = model.split("piper-")[1].substring(0, 2);
+        String country = model.split("_")[1].substring(0, 2);
         String lang = new Locale(twoLetterCode).getISO3Language();
         String modelName = model.split("piper-")[1]+".onnx";
         String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ model + "/resolve/main/" + modelName;
         String tokensUrl = "https://huggingface.co/csukuangfj/" + model + "/resolve/main/tokens.txt";
 
-        File directory = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/");
+        File directory = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/");
         if (!directory.exists() && !directory.mkdirs()) {
             Log.e("TTS Engine", "Failed to make directory: " + directory);
             return;
@@ -43,7 +44,7 @@ public class Downloader {
 
         activity.runOnUiThread(() -> binding.downloadSize.setVisibility(View.VISIBLE));
 
-        File onnxModelFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + onnxModel);
+        File onnxModelFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/" + onnxModel);
         if (onnxModelFile.exists()) onnxModelFile.delete();
         if (!onnxModelFile.exists()) {
             onnxModelFinished = false;
@@ -64,7 +65,7 @@ public class Downloader {
                     InputStream is = ucon.getInputStream();
                     BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
 
-                    File tempOnnxFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + "model.tmp");
+                    File tempOnnxFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/" + "model.tmp");
                     if (tempOnnxFile.exists()) tempOnnxFile.delete();
 
                     FileOutputStream outStream = new FileOutputStream(tempOnnxFile);
@@ -93,7 +94,7 @@ public class Downloader {
                         PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
                         preferenceHelper.setCurrentLanguage(lang);
                         LangDB langDB = LangDB.getInstance(activity);
-                        langDB.addLanguage(model.split("piper-")[1], lang, 0, 1.0f, "vits-piper");
+                        langDB.addLanguage(model.split("piper-")[1], lang, country, 0, 1.0f, "vits-piper");
                     });
                 } catch (IOException i) {
                     activity.runOnUiThread(() -> Toast.makeText(activity, activity.getResources().getString(R.string.error_download), Toast.LENGTH_SHORT).show());
@@ -104,7 +105,7 @@ public class Downloader {
             thread.start();
         }
 
-        File tokensFile = new File(activity.getExternalFilesDir(null) + "/" + lang + "/" + tokens);
+        File tokensFile = new File(activity.getExternalFilesDir(null) + "/" + lang + country + "/" + tokens);
         if (tokensFile.exists()) tokensFile.delete();
         if (!tokensFile.exists()) {
             tokensFinished = false;
@@ -122,7 +123,7 @@ public class Downloader {
                     InputStream is = ucon.getInputStream();
                     BufferedInputStream inStream = new BufferedInputStream(is, 1024 * 5);
 
-                    File tempTokensFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + "/" + "tokens.tmp");
+                    File tempTokensFile = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/" + "tokens.tmp");
                     if (tempTokensFile.exists()) tempTokensFile.delete();
 
                     FileOutputStream outStream = new FileOutputStream(tempTokensFile);

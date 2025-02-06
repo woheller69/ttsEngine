@@ -18,6 +18,7 @@ public class LangDB extends SQLiteOpenHelper {
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "ModelName";
     private static final String COLUMN_LANG = "Language";
+    private static final String COLUMN_COUNTRY = "Country";
     private static final String COLUMN_SID = "SpeakerID";
     private static final String COLUMN_SPEED = "Speed";
     private static final String COLUMN_TYPE = "ModelType";
@@ -34,6 +35,7 @@ public class LangDB extends SQLiteOpenHelper {
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 COLUMN_NAME + " TEXT," +
                 COLUMN_LANG + " TEXT," +
+                COLUMN_COUNTRY + " TEXT," +
                 COLUMN_SID + " INTEGER," +
                 COLUMN_SPEED + " FLOAT," +
                 COLUMN_TYPE + " TEXT);";
@@ -47,12 +49,13 @@ public class LangDB extends SQLiteOpenHelper {
         this.onCreate(db);
     }
     
-    public synchronized void addLanguage(String name, String lang, int sid, float speed, String type) {
+    public synchronized void addLanguage(String name, String lang, String country, int sid, float speed, String type) {
         // Insert a new row into the table with all columns and their values from parameters.
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_LANG, lang);
+        cv.put(COLUMN_COUNTRY, country);
         cv.put(COLUMN_SID, sid);
         cv.put(COLUMN_SPEED, speed);
         cv.put(COLUMN_TYPE, type);
@@ -80,9 +83,10 @@ public class LangDB extends SQLiteOpenHelper {
                 language.setId(cursor.getInt(0));
                 language.setName(cursor.getString(1));
                 language.setLang(cursor.getString(2));
-                language.setSid(cursor.getInt(3));
-                language.setSpeed(cursor.getFloat(4));
-                language.setType(cursor.getString(5));
+                language.setCountry(cursor.getString(3));
+                language.setSid(cursor.getInt(4));
+                language.setSpeed(cursor.getFloat(5));
+                language.setType(cursor.getString(6));
 
                 languages.add(language);
 

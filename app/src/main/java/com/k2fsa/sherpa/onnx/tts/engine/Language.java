@@ -4,14 +4,16 @@ public class Language {
     private int id;
     private String name;
     private String lang;
+    private String country;
     private int sid;
     private float speed;
     private String type;
 
-    public Language(int id, String name, String lang, int sid, float speed, String type) {
+    public Language(int id, String name, String lang, String country, int sid, float speed, String type) {
         this.id = id;
         this.name = name;
         this.lang = lang;
+        this.country = country;
         this.sid = sid;
         this.speed = speed;
         this.type = type;
@@ -40,6 +42,10 @@ public class Language {
     public void setLang(String lang) {this.lang = lang;}
 
     public String getLang() {return lang;}
+
+    public void setCountry(String country) {this.country = country;}
+
+    public String getCountry() {return country;}
 
     public void setSid(int sid) {this.sid = sid;}
 

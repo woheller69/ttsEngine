@@ -21,6 +21,7 @@ object TtsEngine {
     // deu for German
     // cmn for Mandarin
     var lang: String? = ""
+    var country: String? = ""
 
     val speedState: MutableState<Float> = mutableFloatStateOf(1.0F)
     val speakerIdState: MutableState<Int> = mutableIntStateOf(0)
@@ -173,7 +174,18 @@ object TtsEngine {
         lang = language
         PreferenceHelper(context).setCurrentLanguage(lang!!)
         val externalFilesDir = context.getExternalFilesDir(null)!!.absolutePath
-        modelDir = "$externalFilesDir/$lang"
+
+        val db = LangDB.getInstance(context)
+        val languages = db.allInstalledLanguages
+        for (language in languages) {
+            if (language.lang == lang){
+                speed = language.speed
+                speakerId = language.sid
+                country = language.country
+            }
+        }
+
+        modelDir = "$externalFilesDir/$lang$country"
 
         assets = context.assets
 
@@ -205,14 +217,6 @@ object TtsEngine {
             model = config.model.copy(debug = false)
         )
 
-        val db = LangDB.getInstance(context)
-        val languages = db.allInstalledLanguages
-        for (language in languages) {
-            if (language.lang == lang){
-                speed = language.speed
-                speakerId = language.sid
-            }
-        }
         tts = OfflineTts(assetManager = null, config = configDebugOff)
     }
 

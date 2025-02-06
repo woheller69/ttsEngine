@@ -22,7 +22,7 @@ public class Migrate {
             PreferenceHelper preferenceHelper = new PreferenceHelper(context);
             preferenceHelper.setCurrentLanguage(language);
             LangDB langDB = LangDB.getInstance(context);
-            langDB.addLanguage("???",language, preferenceHelper.getSid(), preferenceHelper.getSpeed(), "vits-piper");
+            langDB.addLanguage("???",language, "", preferenceHelper.getSid(), preferenceHelper.getSpeed(), "vits-piper");
         }
     }
 
