@@ -12,4 +12,7 @@
     <string name="language_id">Language\u2009</string>
     <string name="input">Please input some text to generate</string>
     <string name="download_language">Download Language</string>
+    <string name="test_languages">Try first</string>
+    <string name="add_language">Add language</string>
+    <string name="delete_language">Delete language</string>
 </resources>

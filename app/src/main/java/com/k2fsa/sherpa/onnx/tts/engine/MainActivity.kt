@@ -25,9 +25,9 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenuItem
@@ -126,12 +126,14 @@ class MainActivity : ComponentActivity() {
                 floatingActionButton = {
                     FloatingActionButton(
                         onClick = {
-                            val intent = Intent(this, ManageLanguagesActivity::class.java)
-                            startActivity(intent)
+                            intent = Intent()
+                            intent.setAction("com.android.settings.TTS_SETTINGS")
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            this.startActivity(intent)
                             finish()
                         }
                     ) {
-                        Icon(Icons.Filled.Add, contentDescription = "Add")
+                        Icon(Icons.Filled.Settings, contentDescription = "TTS Settings")
                     }
                 }
             ) { padding ->
@@ -185,9 +187,6 @@ class MainActivity : ComponentActivity() {
                                 var testText by remember { mutableStateOf(testTextContent) }
                                 var startEnabled by remember { mutableStateOf(true) }
                                 var playEnabled by remember { mutableStateOf(false) }
-                                var rtfText by remember {
-                                    mutableStateOf("")
-                                }
                                 val scrollState = rememberScrollState(0)
 
 
@@ -305,6 +304,34 @@ class MainActivity : ComponentActivity() {
                                     }
                                 }
 
+                                Row {
+                                    Button(
+                                        modifier = Modifier.padding(5.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = colorResource(R.color.primaryDark),
+                                            contentColor = colorResource(R.color.white)
+                                        ),
+                                        onClick = {
+                                            val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }) {
+                                        Text(getString(R.string.add_language))
+                                    }
+
+                                    Button(
+                                        modifier = Modifier.padding(5.dp),
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = colorResource(R.color.primaryDark),
+                                            contentColor = colorResource(R.color.white)
+                                        ),
+                                        onClick = {
+                                            deleteLang(preferenceHelper.getCurrentLanguage())
+                                        }) {
+                                        Text(getString(R.string.delete_language))
+                                    }
+                                }
+
                                 OutlinedTextField(
                                     value = testText,
                                     onValueChange = { testText = it },
@@ -342,7 +369,6 @@ class MainActivity : ComponentActivity() {
                                                 track.pause()
                                                 track.flush()
                                                 track.play()
-                                                rtfText = ""
                                                 //Log.i(TAG, "Started with text $testText")
 
                                                 samplesChannel = Channel<FloatArray>()
@@ -375,15 +401,6 @@ class MainActivity : ComponentActivity() {
                                                     val audioDuration =
                                                         audio.samples.size / TtsEngine.tts!!.sampleRate()
                                                             .toFloat()
-                                                    val RTF = String.format(
-                                                        "Number of threads: %d\nElapsed: %.3f s\nAudio duration: %.3f s\nRTF: %.3f/%.3f = %.3f",
-                                                        TtsEngine.tts!!.config.model.numThreads,
-                                                        audioDuration,
-                                                        elapsed,
-                                                        elapsed,
-                                                        audioDuration,
-                                                        elapsed / audioDuration
-                                                    )
 
                                                     val filename =
                                                         application.filesDir.absolutePath + "/generated.wav"
@@ -398,7 +415,6 @@ class MainActivity : ComponentActivity() {
                                                         withContext(Dispatchers.Main) {
                                                             startEnabled = true
                                                             playEnabled = true
-                                                            rtfText = RTF
                                                         }
                                                     }
                                                 }.start()
@@ -436,17 +452,40 @@ class MainActivity : ComponentActivity() {
                                         Text(getString(R.string.stop))
                                     }
                                 }
-                                if (rtfText.isNotEmpty()) {
-                                    Row {
-                                        Text(rtfText)
-                                    }
-                                }
                             }
                         }
                     }
                 }
             }
         }
+    }
+
+    private fun deleteLang(currentLanguage: String?) {
+        var country = ""
+        val languages = langDB.allInstalledLanguages
+        for (language in languages) {
+            if (language.lang == currentLanguage){
+                country = language.country
+            }
+        }
+        val subdirectoryName = currentLanguage + country
+        val subdirectory = File(getExternalFilesDir(null), subdirectoryName)
+
+        if (subdirectory.exists() && subdirectory.isDirectory) {
+            val files = subdirectory.listFiles()
+
+            files?.forEach { file ->
+                if (file.isFile) {
+                    file.delete()
+                }
+            }
+
+            subdirectory.delete()
+            langDB.removeLang(currentLanguage)
+            if (langDB.allInstalledLanguages.isEmpty()) preferenceHelper.setCurrentLanguage("")
+            else preferenceHelper.setCurrentLanguage(langDB.allInstalledLanguages.get(0).lang)
+        }
+        restart()
     }
 
     override fun onDestroy() {

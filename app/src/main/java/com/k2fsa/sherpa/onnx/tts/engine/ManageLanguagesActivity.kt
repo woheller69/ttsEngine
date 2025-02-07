@@ -1,6 +1,7 @@
 package com.k2fsa.sherpa.onnx.tts.engine
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
@@ -37,6 +38,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         binding!!.modelList.setOnItemClickListener { parent, view, position, id ->
             val model = "vits-piper-" + showModels.get(position)
             binding!!.modelList.visibility = View.GONE
+            binding!!.buttonTestVoices.visibility = View.GONE
             Downloader.downloadModels(this, binding, model)
         }
 
@@ -48,5 +50,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         startActivity(intent)
         finishAffinity()
     }
+
+    fun testVoices(view: View) {startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://rhasspy.github.io/piper-samples/")))}
 
 }

@@ -34,6 +34,18 @@
                     android:textSize="22dp"
                     android:text="@string/download_language" />
 
+                <Button
+                    android:id="@+id/button_test_voices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/test_languages"
+                    android:backgroundTint="@color/primaryDark"
+                    android:textColor="@color/white"
+                    android:onClick="testVoices"/>
+
                 <TextView
                     android:id="@+id/download_size"
                     android:layout_width="wrap_content"
