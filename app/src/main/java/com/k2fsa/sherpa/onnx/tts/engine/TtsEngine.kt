@@ -254,7 +254,7 @@ object TtsEngine {
     private fun copyFile(context: Context, filename: String) {
         try {
             val istream = context.assets.open(filename)
-            val newFilename = context.getExternalFilesDir(null).toString() + "/" + filename
+            val newFilename = context.getExternalFilesDir(null)!!.absolutePath + "/" + filename
             val file = File(newFilename)
             if (!file.exists()) {
                 val ostream = FileOutputStream(newFilename)
