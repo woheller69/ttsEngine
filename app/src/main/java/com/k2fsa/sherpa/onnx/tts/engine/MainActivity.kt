@@ -462,13 +462,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun deleteLang(currentLanguage: String?) {
-        var country = ""
+        val country: String
         val languages = langDB.allInstalledLanguages
-        for (language in languages) {
-            if (language.lang == currentLanguage){
-                country = language.country
-            }
-        }
+        val language = languages.first{it.lang == currentLanguage}
+        country = language.country
+
         val subdirectoryName = currentLanguage + country
         val subdirectory = File(getExternalFilesDir(null), subdirectoryName)
 

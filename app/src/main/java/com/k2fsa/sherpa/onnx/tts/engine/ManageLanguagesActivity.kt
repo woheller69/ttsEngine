@@ -20,10 +20,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
 
         val db = LangDB.getInstance(this)
         val installedLanguages = db.allInstalledLanguages
-        val installedLangCodes = java.util.ArrayList<String>()
-        for (language in installedLanguages) {
-            installedLangCodes.add(language.lang)
-        }
+        val installedLangCodes = installedLanguages.map { it.lang }
 
         val showModels = mutableListOf<String>()
         for(model in allModels){

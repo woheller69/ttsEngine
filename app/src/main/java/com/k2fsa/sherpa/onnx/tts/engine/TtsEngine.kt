@@ -177,13 +177,11 @@ object TtsEngine {
 
         val db = LangDB.getInstance(context)
         val languages = db.allInstalledLanguages
-        for (language in languages) {
-            if (language.lang == lang){
-                speed = language.speed
-                speakerId = language.sid
-                country = language.country
-            }
-        }
+        val language = languages.first{it.lang == lang}
+        speed = language.speed
+        speakerId = language.sid
+        country = language.country
+
 
         modelDir = "$externalFilesDir/$lang$country"
 
