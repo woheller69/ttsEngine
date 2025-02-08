@@ -204,8 +204,10 @@ class MainActivity : ComponentActivity() {
                                             expanded = expanded,
                                             onExpandedChange = { expanded = it }
                                         ) {
+                                            var displayText = languages[selectedLang].lang
+                                            if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
                                             OutlinedTextField(
-                                                value = languages.get(selectedLang).lang,
+                                                value = displayText,
                                                 onValueChange = {},
                                                 readOnly = true,
                                                 label = { Text(getString(R.string.language_id))},
@@ -231,11 +233,11 @@ class MainActivity : ComponentActivity() {
                                             ) {
                                                 langList.forEach { langId ->
                                                     DropdownMenuItem(
-                                                        text = { Text(languages.get(langId).lang) },
+                                                        text = { Text(languages[langId].lang) },
                                                         onClick = {
                                                             selectedLang = langId
                                                             preferenceHelper.setCurrentLanguage(
-                                                                languages.get(langId).lang
+                                                                languages[langId].lang
                                                             )
                                                             expanded = false
                                                             restart()
@@ -314,7 +316,6 @@ class MainActivity : ComponentActivity() {
                                         onClick = {
                                             val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
                                             startActivity(intent)
-                                            finish()
                                         }) {
                                         Text(getString(R.string.add_language))
                                     }
@@ -483,7 +484,7 @@ class MainActivity : ComponentActivity() {
             subdirectory.delete()
             langDB.removeLang(currentLanguage)
             if (langDB.allInstalledLanguages.isEmpty()) preferenceHelper.setCurrentLanguage("")
-            else preferenceHelper.setCurrentLanguage(langDB.allInstalledLanguages.get(0).lang)
+            else preferenceHelper.setCurrentLanguage(langDB.allInstalledLanguages[0].lang)
         }
         restart()
     }
