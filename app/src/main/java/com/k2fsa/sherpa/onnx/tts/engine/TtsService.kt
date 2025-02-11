@@ -116,6 +116,7 @@ class TtsService : TextToSpeechService() {
         val language = request.language
         val country = request.country
         val variant = request.variant
+        // request.speechRate could be used to set speed from system settings. But it does not memorize different speeds for different languages
         val text = request.charSequenceText.toString()
 
         val ret = onIsLanguageAvailable(language, country, variant)

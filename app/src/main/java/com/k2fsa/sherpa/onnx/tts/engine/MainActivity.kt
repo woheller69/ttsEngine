@@ -191,59 +191,60 @@ class MainActivity : ComponentActivity() {
 
 
                                 val numLanguages = langDB.allInstalledLanguages.size
-                                if (numLanguages > 1) {
-                                    val languages = langDB.allInstalledLanguages
-                                    var selectedLang =
-                                        languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
-                                    var expanded by remember { mutableStateOf(false) }
-                                    val langList = (0 until numLanguages).toList()
-                                    val keyboardController = LocalSoftwareKeyboardController.current
 
-                                    Box(modifier = Modifier.fillMaxWidth()) {
-                                        ExposedDropdownMenuBox(
+                                val languages = langDB.allInstalledLanguages
+                                var selectedLang =
+                                    languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                                var expanded by remember { mutableStateOf(false) }
+                                val langList = (0 until numLanguages).toList()
+                                val keyboardController = LocalSoftwareKeyboardController.current
+
+                                Box(modifier = Modifier.fillMaxWidth()) {
+                                    ExposedDropdownMenuBox(
+                                        expanded = expanded,
+                                        onExpandedChange = { expanded = it }
+                                    ) {
+                                        var displayText = languages[selectedLang].lang
+                                        if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
+                                        OutlinedTextField(
+                                            value = displayText,
+                                            onValueChange = {},
+                                            readOnly = true,
+                                            label = { Text(getString(R.string.language_id))},
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .menuAnchor()
+                                                .onFocusChanged { focusState ->
+                                                    if (focusState.isFocused) {
+                                                        expanded = true
+                                                        keyboardController?.hide()
+                                                    }
+                                                },
+                                            trailingIcon = {
+                                                Icon(
+                                                    Icons.Default.ArrowDropDown,
+                                                    contentDescription = "Dropdown"
+                                                )
+                                            }
+                                        )
+                                        ExposedDropdownMenu(
                                             expanded = expanded,
-                                            onExpandedChange = { expanded = it }
+                                            onDismissRequest = { expanded = false }
                                         ) {
-                                            var displayText = languages[selectedLang].lang
-                                            if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
-                                            OutlinedTextField(
-                                                value = displayText,
-                                                onValueChange = {},
-                                                readOnly = true,
-                                                label = { Text(getString(R.string.language_id))},
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .menuAnchor()
-                                                    .onFocusChanged { focusState ->
-                                                        if (focusState.isFocused) {
-                                                            expanded = true
-                                                            keyboardController?.hide()
-                                                        }
-                                                    },
-                                                trailingIcon = {
-                                                    Icon(
-                                                        Icons.Default.ArrowDropDown,
-                                                        contentDescription = "Dropdown"
-                                                    )
-                                                }
-                                            )
-                                            ExposedDropdownMenu(
-                                                expanded = expanded,
-                                                onDismissRequest = { expanded = false }
-                                            ) {
-                                                langList.forEach { langId ->
-                                                    DropdownMenuItem(
-                                                        text = { Text(languages[langId].lang) },
-                                                        onClick = {
-                                                            selectedLang = langId
-                                                            preferenceHelper.setCurrentLanguage(
-                                                                languages[langId].lang
-                                                            )
-                                                            expanded = false
-                                                            restart()
-                                                        }
-                                                    )
-                                                }
+                                            langList.forEach { langId ->
+                                                var dropdownText = languages[langId].lang
+                                                if (languages[langId].name.isNotEmpty()) dropdownText = "$dropdownText (${languages[langId].name})"
+                                                DropdownMenuItem(
+                                                    text = { Text(dropdownText)},
+                                                    onClick = {
+                                                        selectedLang = langId
+                                                        preferenceHelper.setCurrentLanguage(
+                                                            languages[langId].lang
+                                                        )
+                                                        expanded = false
+                                                        restart()
+                                                    }
+                                                )
                                             }
                                         }
                                     }

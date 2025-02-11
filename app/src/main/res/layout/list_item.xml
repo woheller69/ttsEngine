@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_button_frame_thin"
+    android:background="@drawable/rounded_frame_thin"
     android:paddingVertical="10dp">
         <TextView
             android:id="@+id/text_view"

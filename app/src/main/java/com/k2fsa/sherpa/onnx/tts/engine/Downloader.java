@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Locale;
-import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLocationsBinding;
+
+import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLanguagesBinding;
 
 
 @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -27,14 +27,13 @@ public class Downloader {
     static int onnxModelSize = 0;
     static int tokensSize = 0;
 
-    public static void downloadModels(final Activity activity, ActivityManageLocationsBinding binding, String model) {
+    public static void downloadModels(final Activity activity, ActivityManageLanguagesBinding binding, String model, String lang, String country, String type) {
+        String modelName="";
+        if (type.equals("vits-piper")) modelName = model + ".onnx";
+        else if (type.equals("vits-coqui")) modelName = "model.onnx";
 
-        String twoLetterCode = model.split("piper-")[1].substring(0, 2);
-        String country = model.split("_")[1].substring(0, 2);
-        String lang = new Locale(twoLetterCode).getISO3Language();
-        String modelName = model.split("piper-")[1]+".onnx";
-        String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ model + "/resolve/main/" + modelName;
-        String tokensUrl = "https://huggingface.co/csukuangfj/" + model + "/resolve/main/tokens.txt";
+        String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ type + "-" + model + "/resolve/main/" + modelName;
+        String tokensUrl = "https://huggingface.co/csukuangfj/" + type + "-" + model + "/resolve/main/tokens.txt";
 
         File directory = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/");
         if (!directory.exists() && !directory.mkdirs()) {
@@ -90,11 +89,13 @@ public class Downloader {
                     tempOnnxFile.renameTo(onnxModelFile);
                     onnxModelFinished = true;
                     activity.runOnUiThread(() -> {
-                        if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
-                        PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
-                        preferenceHelper.setCurrentLanguage(lang);
-                        LangDB langDB = LangDB.getInstance(activity);
-                        langDB.addLanguage(model.split("piper-")[1], lang, country, 0, 1.0f, "vits-piper");
+                        if (tokensFinished && onnxModelFinished && binding.buttonStart.getVisibility()==View.GONE){
+                            binding.buttonStart.setVisibility(View.VISIBLE);
+                            PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
+                            preferenceHelper.setCurrentLanguage(lang);
+                            LangDB langDB = LangDB.getInstance(activity);
+                            langDB.addLanguage(model, lang, country, 0, 1.0f, type);
+                        }
                     });
                 } catch (IOException i) {
                     activity.runOnUiThread(() -> Toast.makeText(activity, activity.getResources().getString(R.string.error_download), Toast.LENGTH_SHORT).show());
@@ -148,7 +149,13 @@ public class Downloader {
                     tempTokensFile.renameTo(tokensFile);
                     tokensFinished = true;
                     activity.runOnUiThread(() -> {
-                        if (tokensFinished && onnxModelFinished) binding.buttonStart.setVisibility(View.VISIBLE);
+                        if (tokensFinished && onnxModelFinished && binding.buttonStart.getVisibility()==View.GONE){
+                            binding.buttonStart.setVisibility(View.VISIBLE);
+                            PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
+                            preferenceHelper.setCurrentLanguage(lang);
+                            LangDB langDB = LangDB.getInstance(activity);
+                            langDB.addLanguage(model, lang, country, 0, 1.0f, type);
+                        }
                     });
 
                 } catch (IOException i) {

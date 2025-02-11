@@ -8,7 +8,7 @@ Or via this link (with fees)
 <a href="https://www.paypal.com/donate?hosted_button_id=XVXQ54LBLZ4AA"><img  align="left" src="https://img.shields.io/badge/Donate%20with%20Debit%20or%20Credit%20Card-002991?style=plastic"></a></pre>
 # SherpaTTS
 
-SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses voices from [Piper Voices](https://rhasspy.github.io/piper-samples/).
+SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses voices from [Piper Voices](https://rhasspy.github.io/piper-samples/) or [Coqui](https://github.com/coqui-ai/TTS/).
 
 ## Initial Setup
 
@@ -21,7 +21,7 @@ This work is licensed under GPLv3 license, © woheller69
 
 - This app is based on the [Sherpa ONNX Project](https://github.com/k2-fsa/sherpa-onnx), published under Apache-2.0 license
 - It uses data from [eSpeak NG](https://github.com/espeak-ng/espeak-ng), published under GPLv3 license
-- At first start it downloads and installs a Piper voice models from Hugging Face. Voices can be tested [here](https://rhasspy.github.io/piper-samples/).
+- At first start it downloads and installs a Piper or Coqui voice model from Hugging Face. Voices can be tested [here](https://huggingface.co/spaces/k2-fsa/text-to-speech/).
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/)
 

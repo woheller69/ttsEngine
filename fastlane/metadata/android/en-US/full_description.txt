@@ -1,4 +1,4 @@
-SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi using Piper voices.
+SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi using Piper or Coqui voices.
 Upon launching the app for the first time, it will download your preferred voice model from Hugging Face. 
 Please note that this is the only instance where internet permission is required. 
 Once the model is downloaded, text-to-speech works entirely offline, ensuring your privacy and convenience.

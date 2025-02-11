@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="models">
+    <string-array name="piper_models">
         <item>ar_JO-kareem-low</item>
         <item>ar_JO-kareem-medium</item>
         <item>ca_ES-upc_ona-medium</item>
@@ -119,5 +119,33 @@
         <item>vi_VN-vais1000-medium</item>
         <item>vi_VN-vivos-x_low</item>
         <item>zh_CN-huayan-medium</item>
+    </string-array>
+
+    <string-array name="coqui_models">
+        <item>bg-cv</item>
+        <item>bn-custom_female</item>
+        <item>cs-cv</item>
+        <item>da-cv</item>
+        <item>de-css10</item>
+        <item>en-ljspeech</item>
+        <item>en-ljspeech-neon</item>
+        <item>en-vctk</item>
+        <item>es-css10</item>
+        <item>et-cv</item>
+        <item>fi-css10</item>
+        <item>fr-css10</item>
+        <item>ga-cv</item>
+        <item>hr-cv</item>
+        <item>lt-cv</item>
+        <item>lv-cv</item>
+        <item>mt-cv</item>
+        <item>nl-css10</item>
+        <item>pl-mai_female</item>
+        <item>pt-cv</item>
+        <item>ro-cv</item>
+        <item>sk-cv</item>
+        <item>sl-cv</item>
+        <item>sv-cv</item>
+        <item>uk-mai</item>
     </string-array>
 </resources>

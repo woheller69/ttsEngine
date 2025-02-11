@@ -11,8 +11,10 @@
     <string name="speaker_id">Speaker ID:</string>
     <string name="language_id">Language\u2009</string>
     <string name="input">Please input some text to generate</string>
-    <string name="download_language">Download Language</string>
-    <string name="test_languages">Try first</string>
+    <string name="download_language">Download language</string>
+    <string name="test_languages">Try models</string>
     <string name="add_language">Add language</string>
     <string name="delete_language">Delete language</string>
+    <string name="piper_models">Piper models</string>
+    <string name="coqui_models">Coqui models</string>
 </resources>

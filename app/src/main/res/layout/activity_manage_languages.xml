@@ -27,10 +27,14 @@
 
                 <TextView
                     android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:textColor="@color/primaryDark"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:background="@drawable/rounded_solid"
+                    android:textColor="@color/white"
                     android:textSize="22dp"
                     android:text="@string/download_language" />
 
@@ -42,6 +46,7 @@
                     android:layout_marginBottom="10dp"
                     android:layout_gravity="center_horizontal"
                     android:text="@string/test_languages"
+                    android:textAllCaps="true"
                     android:backgroundTint="@color/primaryDark"
                     android:textColor="@color/white"
                     android:onClick="testVoices"/>
@@ -82,13 +87,44 @@
                 android:orientation="vertical"
                 android:gravity="center_horizontal">
 
-
-
+                <TextView
+                    android:id="@+id/piper_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:padding="10dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:background="@drawable/rounded_solid"
+                    android:textSize="18dp"
+                    android:text="@string/piper_models"/>
                 <ListView
-                    android:id="@+id/model_list"
+                    android:id="@+id/piper_model_list"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp" />
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="5dp" />
+                <TextView
+                    android:id="@+id/coqui_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:padding ="10dp"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:background="@drawable/rounded_solid"
+                    android:textSize="18dp"
+                    android:text="@string/coqui_models"/>
+                <ListView
+                    android:id="@+id/coqui_model_list"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginHorizontal="5dp" />
 
             </LinearLayout>
 
