@@ -1,0 +1,4 @@
+O SherpaTTS é um motor de texto-para-fala para Android baseado no Kaldi de próxima geração, usando vozes Piper ou Coqui.
+Ao abrir o app pela primeira vez, ele baixará seu modelo de voz preferido do Hugging Face.
+Note que essa é o único uso da permissão de internet.
+Quando o modelo for baixado, o texto-para-fala funcionará completamente off-line, garantindo sua privacidade e conveniência.

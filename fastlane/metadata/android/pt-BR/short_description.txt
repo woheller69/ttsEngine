@@ -1,0 +1,1 @@
+Motor de texto-para-fala baseado no Kaldi de próxima geração
