@@ -1,0 +1,1 @@
+Převodník textu na řeč založený na Kaldi nové generace

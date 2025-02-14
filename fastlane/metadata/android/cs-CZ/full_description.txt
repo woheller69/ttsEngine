@@ -1,0 +1,4 @@
+SherpaTTS je převodník textu na řeč pro systém Android založený na hlasech nové generace Kaldi používajících hlasy Piper a Coqui.
+Po prvním spuštění aplikace si budete moci stáhnout váš upřednostňovaný jazyk ze služby Hugging Face.
+Toto je jediná chvíle, kde je vyžadováno připojení k internetu.
+Jakmile bude model stažen, bude převod textu na řeč fungovat kompletně offline, čímž bude zajištěno vaše soukromí a pohodlí.
