@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="start_main">PORNEȘTE</string>
+    <string name="error_download">Eroare descărcare</string>
+    <string name="dialog_StarOnGitHub">Îți place această aplicație? Dă o stea pe Github sau cumpără dezvoltatorului o cafea prin PayPal.</string>
+    <string name="dialog_Later_button">Poate mai târziu</string>
+    <string name="play">Redă</string>
+    <string name="stop">Oprește</string>
+    <string name="start">Pornește</string>
+    <string name="speed">Viteză</string>
+    <string name="speaker_id">ID vorbitor:</string>
+    <string name="language_id">Limbă </string>
+    <string name="input">Introdu un text pentru a genera</string>
+    <string name="download_language">Descarcă limba</string>
+    <string name="test_languages">Încearcă modele</string>
+    <string name="add_language">Adaugă limbaj</string>
+    <string name="delete_language">Șterge limbajul</string>
+    <string name="piper_models">Modele Piper</string>
+    <string name="coqui_models">Modele Coqui</string>
+    <string name="app_name">Sintetizator vorbire SherpaTTS</string>
+</resources>
