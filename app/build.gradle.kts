@@ -69,4 +69,5 @@ dependencies {
     //noinspection GradleDependency: sherpa-onnx is based on 1.17.1
     implementation("com.microsoft.onnxruntime:onnxruntime-android:1.17.1")
     implementation("com.github.k2-fsa:sherpa-onnx:v1.10.42")
+    implementation("androidx.preference:preference:1.2.1")
 }
