@@ -1,0 +1,4 @@
+SherpaTTS este un motor Android text-în-vorbire bazat pe Kaldi de ultimă generație folosind vocile Piper sau Coqui.
+La lansarea aplicației pentru prima dată, acesta va descărca modelul vocii preferate de la Hugging Face.
+Reține că aceasta este singura instanță în care este necesară permisiunea de internet.
+Odată ce modelul este descărcat, text-în-vorbire funcționează complet offline, asigurându-ți confidențialitatea și comoditatea.

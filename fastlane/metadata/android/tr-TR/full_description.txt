@@ -1,0 +1,4 @@
+SherpaTTS, Piper veya Coqui seslerini kullanan Yeni Nesil Kaldi tabanlı bir Android Metinden Konuşmaya motorudur.
+Uygulamayı ilk kez başlattığınızda, Hugging Face'ten tercih ettiğiniz ses modelini indirecektir.
+Lütfen bunun internet izninin gerekli olduğu tek durum olduğunu unutmayın.
+Model indirildikten sonra, metinden konuşmaya tamamen çevrimdışı çalışır ve gizliliğinizi ve rahatlığınızı garanti eder.
