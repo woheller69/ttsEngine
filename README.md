@@ -10,9 +10,7 @@ Or via this link (with fees)
 
 SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses voices from [Piper Voices](https://rhasspy.github.io/piper-samples/) or [Coqui](https://github.com/coqui-ai/TTS/).
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/)
-
-[<img src="https://www.openapk.net/images/openapk-badge.png" height="75">]( https://www.openapk.net/ttsengine/org.woheller69.ttsengine/)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/) [<img src="https://www.openapk.net/images/openapk-badge.png" height="75">]( https://www.openapk.net/ttsengine/org.woheller69.ttsengine/)
 
 ## Initial Setup
 
