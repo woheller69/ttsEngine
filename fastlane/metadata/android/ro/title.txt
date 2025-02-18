@@ -1,1 +1,1 @@
-Sintetizator vorbire SherpaTTS
+SherpaTTS
