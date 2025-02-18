@@ -1,1 +1,2 @@
 Add Coqui models
+Translation for Russian, Czech, Portuguese (Brazil), Romanian, Turkish

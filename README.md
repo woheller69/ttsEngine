@@ -12,6 +12,7 @@ SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses v
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/)
 
+[<img src="https://www.openapk.net/images/openapk-badge.png" height="75">]( https://www.openapk.net/ttsengine/org.woheller69.ttsengine/)
 
 ## Initial Setup
 
