@@ -59,9 +59,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
-import kotlin.time.TimeSource
 
 const val TAG = "sherpa-onnx-tts-engine"
 
@@ -69,10 +67,6 @@ class MainActivity : ComponentActivity() {
     // TODO(fangjun): Save settings in ttsViewModel
     private val ttsViewModel: TtsViewModel by viewModels()
 
-    private var mediaPlayer: MediaPlayer? = null
-
-    // see
-    // https://developer.android.com/reference/kotlin/android/media/AudioTrack
     private lateinit var track: AudioTrack
 
     private var stopped: Boolean = false
@@ -86,7 +80,6 @@ class MainActivity : ComponentActivity() {
         samplesChannel.close()
     }
 
-    @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferenceHelper = PreferenceHelper(this)
@@ -105,8 +98,6 @@ class MainActivity : ComponentActivity() {
             startActivity(intent)
             finish()
        }
-
-
     }
 
     private fun restart(){
@@ -185,8 +176,6 @@ class MainActivity : ComponentActivity() {
                                 val testTextContent = getSampleText(TtsEngine.lang ?: "")
 
                                 var testText by remember { mutableStateOf(testTextContent) }
-                                var startEnabled by remember { mutableStateOf(true) }
-                                var playEnabled by remember { mutableStateOf(false) }
                                 val scrollState = rememberScrollState(0)
 
 
@@ -298,7 +287,6 @@ class MainActivity : ComponentActivity() {
                                                             )
                                                             expanded = false
                                                             stopped = true
-                                                            playEnabled = false
                                                         }
                                                     )
                                                 }
@@ -349,14 +337,13 @@ class MainActivity : ComponentActivity() {
 
                                 Row {
                                     Button(
-                                        enabled = startEnabled,
+                                        enabled = true,
                                         modifier = Modifier.padding(5.dp),
                                         colors = ButtonDefaults.buttonColors(
                                             containerColor = colorResource(R.color.primaryDark),
                                             contentColor = colorResource(R.color.white)
                                         ),
                                         onClick = {
-                                            //Log.i(TAG, "Clicked, text: $testText")
                                             if (testText.isBlank() || testText.isEmpty()) {
                                                 Toast.makeText(
                                                     applicationContext,
@@ -364,14 +351,11 @@ class MainActivity : ComponentActivity() {
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             } else {
-                                                startEnabled = false
-                                                playEnabled = false
                                                 stopped = false
 
                                                 track.pause()
                                                 track.flush()
                                                 track.play()
-                                                //Log.i(TAG, "Started with text $testText")
 
                                                 samplesChannel = Channel<FloatArray>()
 
@@ -387,56 +371,14 @@ class MainActivity : ComponentActivity() {
                                                 }
 
                                                 CoroutineScope(Dispatchers.Default).launch {
-                                                    val timeSource = TimeSource.Monotonic
-                                                    val startTime = timeSource.markNow()
-
-                                                    val audio =
-                                                        TtsEngine.tts!!.generateWithCallback(
-                                                            text = testText,
-                                                            sid = TtsEngine.speakerId,
-                                                            speed = TtsEngine.speed,
-                                                            callback = ::callback,
-                                                        )
-
-                                                    val elapsed =
-                                                        startTime.elapsedNow().inWholeMilliseconds.toFloat() / 1000;
-                                                    val audioDuration =
-                                                        audio.samples.size / TtsEngine.tts!!.sampleRate()
-                                                            .toFloat()
-
-                                                    val filename =
-                                                        application.filesDir.absolutePath + "/generated.wav"
-
-
-                                                    val ok =
-                                                        audio.samples.isNotEmpty() && audio.save(
-                                                            filename
-                                                        )
-
-                                                    if (ok) {
-                                                        withContext(Dispatchers.Main) {
-                                                            startEnabled = true
-                                                            playEnabled = true
-                                                        }
-                                                    }
+                                                    TtsEngine.tts!!.generateWithCallback(
+                                                        text = testText,
+                                                        sid = TtsEngine.speakerId,
+                                                        speed = TtsEngine.speed,
+                                                        callback = ::callback,
+                                                    )
                                                 }.start()
                                             }
-                                        }) {
-                                        Text(getString(R.string.start))
-                                    }
-
-                                    Button(
-                                        modifier = Modifier.padding(5.dp),
-                                        enabled = playEnabled,
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.primaryDark),
-                                            contentColor = colorResource(R.color.white)
-                                        ),
-                                        onClick = {
-                                            stopped = true
-                                            track.pause()
-                                            track.flush()
-                                            onClickPlay()
                                         }) {
                                         Text(getString(R.string.play))
                                     }
@@ -448,8 +390,9 @@ class MainActivity : ComponentActivity() {
                                             contentColor = colorResource(R.color.white)
                                         ),
                                         onClick = {
-                                            onClickStop()
-                                            startEnabled = true
+                                            stopped = true
+                                            track.pause()
+                                            track.flush()
                                         }) {
                                         Text(getString(R.string.stop))
                                     }
@@ -489,32 +432,8 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        stopMediaPlayer()
+        track.release()
         super.onDestroy()
-    }
-
-    private fun stopMediaPlayer() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
-    }
-
-    private fun onClickPlay() {
-        val filename = application.filesDir.absolutePath + "/generated.wav"
-        stopMediaPlayer()
-        mediaPlayer = MediaPlayer.create(
-            applicationContext,
-            Uri.fromFile(File(filename))
-        )
-        mediaPlayer?.start()
-    }
-
-    private fun onClickStop() {
-        stopped = true
-        track.pause()
-        track.flush()
-
-        stopMediaPlayer()
     }
 
     // this function is called from C++

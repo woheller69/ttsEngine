@@ -7,7 +7,6 @@
     <string name="dialog_Later_button">Может быть попозже</string>
     <string name="play">Воспроизвести</string>
     <string name="stop">Остановить</string>
-    <string name="start">Начать</string>
     <string name="speed">Скорость</string>
     <string name="language_id">Язык </string>
     <string name="input">Пожалуйста, введите текст для генерации</string>
