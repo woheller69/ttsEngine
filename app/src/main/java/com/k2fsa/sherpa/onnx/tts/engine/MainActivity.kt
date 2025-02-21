@@ -432,7 +432,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
-        track.release()
+        if (this::track.isInitialized) track.release()
         super.onDestroy()
     }
 
