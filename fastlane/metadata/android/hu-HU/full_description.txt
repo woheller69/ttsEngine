@@ -1,0 +1,4 @@
+A SherpaTTS egy Androidos szövegfelolvasó motor, amely az újgenerációs Kaldin alapul, valamint a Piper vagy Coqui hangokat használja.
+Az alkalmazás első indításakor a program letölti a kívánt hangmodellt az Hugging Face-ről. 
+Felhívjuk figyelmét, hogy ez az egyetlen eset, amikor internet-hozzáférésre van szükség. 
+A modell letöltése után a szövegfelolvasó funkció teljesen offline működik, így biztosítva az Ön magánéletét és kényelmét.
