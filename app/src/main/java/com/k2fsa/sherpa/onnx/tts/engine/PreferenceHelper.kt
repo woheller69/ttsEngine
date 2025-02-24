@@ -8,6 +8,7 @@ class PreferenceHelper(context: Context) {
     private val SPEED_KEY = "speed"
     private val SID_KEY = "speaker_id"
     private val INIT_KEY = "init_espeak"
+    private val USE_SYSTEM_SPEED = "apply_system_speed"
     private val CURRENT_LANGUAGE = "current_language"
 
     private val sharedPreferences: SharedPreferences =
@@ -38,5 +39,15 @@ class PreferenceHelper(context: Context) {
 
     fun getCurrentLanguage(): String? {
         return sharedPreferences.getString(CURRENT_LANGUAGE, "")
+    }
+
+    fun setApplySystemSpeed(useSystem: Boolean){
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(USE_SYSTEM_SPEED, useSystem)
+        editor.apply()
+    }
+
+    fun applySystemSpeed(): Boolean {
+        return sharedPreferences.getBoolean(USE_SYSTEM_SPEED, false)
     }
 }

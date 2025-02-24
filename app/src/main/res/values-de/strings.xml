@@ -1,0 +1,19 @@
+<resources>
+    <string name="start_main">LOS GEHT\'S</string>
+    <string name="error_download">Fehler beim Herunterladen</string>
+    <string name="dialog_StarOnGitHub">Mögen Sie diese App? Bitte vergeben Sie einen Stern auf GitHub oder spendieren Sie dem Entwickler einen Kaffee über PayPal.</string>
+    <string name="dialog_Later_button">Vielleicht später</string>
+    <string name="play">Abspielen</string>
+    <string name="stop">Anhalten</string>
+    <string name="speed">Geschwindigkeit</string>
+    <string name="speaker_id">Sprecher ID:</string>
+    <string name="language_id">Sprache\u2009</string>
+    <string name="input">Bitte geben Sie den Text für die Sprachausgabe ein</string>
+    <string name="download_language">Sprache herunterladen</string>
+    <string name="test_languages">Modelle testen</string>
+    <string name="add_language">Sprache hinzufügen</string>
+    <string name="delete_language">Sprache löschen</string>
+    <string name="piper_models">Piper Modelle</string>
+    <string name="coqui_models">Coqui Modelle</string>
+    <string name="apply_system_speed">Geschwindigkeitseinstellung des Systems bei Verwendung als systemweite Sprachausgabe anwenden</string>
+</resources>

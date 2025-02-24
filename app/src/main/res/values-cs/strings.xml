@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialog_StarOnGitHub">Líbí se vám tato aplikace? Přidejte si ji do oblíbených na GitHubu nebo kupte vývojáři kafe pomocí PayPalu.</string>
-    <string name="app_name">SherpaTTS</string>
     <string name="download_language">Stáhnout jazyk</string>
     <string name="start_main">SPUSTIT</string>
     <string name="error_download">Chyba při stahování</string>

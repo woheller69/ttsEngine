@@ -2,7 +2,6 @@
 <resources>
     <string name="dialog_StarOnGitHub">Вам нравится это приложение? Пожалуйста, поставьте звездочку на GitHub или купите кофе разработчику через PayPal.</string>
     <string name="download_language">Скачать язык</string>
-    <string name="app_name">SherpaTTS Синтез Речи</string>
     <string name="speaker_id">ID говорящего:</string>
     <string name="dialog_Later_button">Может быть попозже</string>
     <string name="play">Воспроизвести</string>

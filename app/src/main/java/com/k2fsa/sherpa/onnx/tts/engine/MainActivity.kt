@@ -7,7 +7,6 @@ import android.media.AudioAttributes
 import android.media.AudioFormat
 import android.media.AudioManager
 import android.media.AudioTrack
-import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -18,8 +17,10 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -30,6 +31,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
@@ -48,6 +51,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -78,6 +82,15 @@ class MainActivity : ComponentActivity() {
     override fun onPause() {
         super.onPause()
         samplesChannel.close()
+    }
+
+    override fun onResume() {
+        //Reset speed in case it has been changed by TtsService
+        val db = LangDB.getInstance(this)
+        val languages = db.allInstalledLanguages
+        val language = languages.first{it.lang == TtsEngine.lang}
+        TtsEngine.speed = language.speed
+        super.onResume()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -158,6 +171,8 @@ class MainActivity : ComponentActivity() {
                                         value = TtsEngine.speedState.value,
                                         onValueChange = {
                                             TtsEngine.speed = it
+                                        },
+                                        onValueChangeFinished = {
                                             langDB.updateLang(
                                                 TtsEngine.lang,
                                                 TtsEngine.speakerId,
@@ -171,6 +186,27 @@ class MainActivity : ComponentActivity() {
                                             activeTrackColor = colorResource(R.color.primaryDark)
                                         )
                                     )
+
+                                    var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
+
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                    ) {
+                                        Checkbox(
+                                            checked = applySystemSpeed,
+                                            onCheckedChange = { isChecked ->
+                                                preferenceHelper.setApplySystemSpeed(isChecked)
+                                                applySystemSpeed = isChecked
+                                            },
+                                            colors = CheckboxDefaults.colors(
+                                                checkedColor = colorResource(R.color.primaryDark)
+                                            )
+                                        )
+                                        Text(
+                                            getString(R.string.apply_system_speed)
+                                        )
+                                    }
+                                    Spacer(modifier = Modifier.height(10.dp))
                                 }
 
                                 val testTextContent = getSampleText(TtsEngine.lang ?: "")

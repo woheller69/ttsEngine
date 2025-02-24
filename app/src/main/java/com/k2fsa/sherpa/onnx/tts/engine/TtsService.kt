@@ -9,51 +9,6 @@ import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeechService
 import android.util.Log
 
-/*
-https://developer.android.com/reference/java/util/Locale#getISO3Language()
-https://developer.android.com/reference/java/util/Locale#getISO3Country()
-
-eng, USA,
-eng, USA, POSIX
-eng,
-eng, GBR
-afr,
-afr, NAM
-afr, ZAF
-agq
-agq, CMR
-aka,
-aka, GHA
-amh,
-amh, ETH
-ara,
-ara, 001
-ara, ARE
-ara, BHR,
-deu
-deu, AUT
-deu, BEL
-deu, CHE
-deu, ITA
-deu, ITA
-deu, LIE
-deu, LUX
-spa,
-spa, 419
-spa, ARG,
-spa, BRA
-fra,
-fra, BEL,
-fra, FRA,
-
-E  Failed to check TTS data, no activity found for Intent
-{ act=android.speech.tts.engine.CHECK_TTS_DATA pkg=com.k2fsa.sherpa.chapter5 })
-
-E Failed to get default language from engine com.k2fsa.sherpa.chapter5
-Engine failed voice data integrity check (null return)com.k2fsa.sherpa.chapter5
-Failed to get default language from engine com.k2fsa.sherpa.chapter5
-
-*/
 
 class TtsService : TextToSpeechService() {
     override fun onCreate() {
@@ -116,7 +71,10 @@ class TtsService : TextToSpeechService() {
         val language = request.language
         val country = request.country
         val variant = request.variant
-        // request.speechRate could be used to set speed from system settings. But it does not memorize different speeds for different languages
+
+        val preferenceHelper = PreferenceHelper(this)
+        if (preferenceHelper.applySystemSpeed()) TtsEngine.speed = request.speechRate/100f         // request.speechRate could be used to set speed from system settings. But it does not memorize different speeds for different languages
+
         val text = request.charSequenceText.toString()
 
         val ret = onIsLanguageAvailable(language, country, variant)

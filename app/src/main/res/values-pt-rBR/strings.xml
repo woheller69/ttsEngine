@@ -16,5 +16,4 @@
     <string name="delete_language">Excluir idioma</string>
     <string name="piper_models">Modelos Piper</string>
     <string name="coqui_models">Modelos Coqui</string>
-    <string name="app_name">SherpaTTS</string>
 </resources>
