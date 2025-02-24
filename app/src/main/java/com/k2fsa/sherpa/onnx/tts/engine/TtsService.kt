@@ -71,9 +71,13 @@ class TtsService : TextToSpeechService() {
         val language = request.language
         val country = request.country
         val variant = request.variant
+        var pitch = 100f
 
         val preferenceHelper = PreferenceHelper(this)
-        if (preferenceHelper.applySystemSpeed()) TtsEngine.speed = request.speechRate/100f         // request.speechRate could be used to set speed from system settings. But it does not memorize different speeds for different languages
+        if (preferenceHelper.applySystemSpeed()){
+            pitch = request.pitch * 1.0f
+            TtsEngine.speed = request.speechRate / pitch  //divide by pitch to compensate for pitch adjustment performed in ttsCallback
+        }         // request.speechRate: System does not memorize different speeds for different languages
 
         val text = request.charSequenceText.toString()
 
@@ -82,11 +86,8 @@ class TtsService : TextToSpeechService() {
             callback.error()
             return
         }
-        //Log.i(TAG, "text: $text")
-        val tts = TtsEngine.tts!!
 
-        // Note that AudioFormat.ENCODING_PCM_FLOAT requires API level >= 24
-        // callback.start(tts.sampleRate(), AudioFormat.ENCODING_PCM_FLOAT, 1)
+        val tts = TtsEngine.tts!!
 
         callback.start(tts.sampleRate(), AudioFormat.ENCODING_PCM_16BIT, 1)
 
@@ -96,8 +97,23 @@ class TtsService : TextToSpeechService() {
         }
 
         val ttsCallback: (FloatArray) -> Int = fun(floatSamples): Int {
-            // convert FloatArray to ByteArray
-            val samples = floatArrayToByteArray(floatSamples)
+            val samples: ByteArray
+
+            if (pitch != 100f){  //if not default pitch, play samples faster or slower. Speed has already been compensated before generation, see above
+                val speedFactor = pitch / 100f
+                val newSampleCount = (floatSamples.size / speedFactor).toInt()
+                val newSamples = FloatArray(newSampleCount)
+
+                for (i in 0 until newSampleCount) {
+                    newSamples[i] = floatSamples[(i * speedFactor).toInt()]
+                }
+                // Convert the modified FloatArray to ByteArray
+                samples = floatArrayToByteArray(newSamples)
+            } else {
+                // Convert FloatArray to ByteArray
+                samples = floatArrayToByteArray(floatSamples)
+            }
+
             val maxBufferSize: Int = callback.maxBufferSize
             var offset = 0
             while (offset < samples.size) {

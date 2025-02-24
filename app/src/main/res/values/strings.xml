@@ -16,5 +16,5 @@
     <string name="delete_language">Delete language</string>
     <string name="piper_models">Piper models</string>
     <string name="coqui_models">Coqui models</string>
-    <string name="apply_system_speed">Apply system speed settings for use as system-wide TTS engine</string>
+    <string name="apply_system_speed">Apply system settings (speed / pitch) for use as system-wide TTS engine</string>
 </resources>

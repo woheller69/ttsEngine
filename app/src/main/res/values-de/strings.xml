@@ -15,5 +15,5 @@
     <string name="delete_language">Sprache löschen</string>
     <string name="piper_models">Piper Modelle</string>
     <string name="coqui_models">Coqui Modelle</string>
-    <string name="apply_system_speed">Geschwindigkeitseinstellung des Systems bei Verwendung als systemweite Sprachausgabe anwenden</string>
+    <string name="apply_system_speed">Einstellungen des Systems (Geschwindigkeit / Tonlage) bei Verwendung als systemweite Sprachausgabe anwenden</string>
 </resources>
