@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name" translatable="false">SherpaTTS</string>
     <string name="start_main">AVVIA</string>
     <string name="error_download">Errore durante lo scaricamento</string>
     <string name="dialog_StarOnGitHub">Ti piace questa app? Perfavore dai una stella su GitHub o offri un caffè allo sviluppatore tramite PayPal.</string>
@@ -16,5 +15,5 @@
     <string name="delete_language">Elimina lingua</string>
     <string name="piper_models">Modelli Piper</string>
     <string name="coqui_models">Modelli Coqui</string>
-    <string name="apply_system_speed">Applicare le impostazioni di sistema (velocità/tono) per l'utilizzo come motore TTS a livello di sistema</string>
+    <string name="apply_system_speed">Applicare le impostazioni di sistema (velocità/tono) per l\'utilizzo come motore TTS a livello di sistema</string>
 </resources>
