@@ -1,0 +1,2 @@
+Option speed/pitch from system settings
+Translations
