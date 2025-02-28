@@ -1,2 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="start_main">INDÍTÁS</string>
+    <string name="error_download">Letöltési hiba</string>
+    <string name="dialog_StarOnGitHub">Tetszik ez az alkalmazás? Adjon egy csillagot a GitHub-on, vagy vegyen a fejlesztőnek egy kávét a PayPal-on keresztül.</string>
+    <string name="dialog_Later_button">Talán később</string>
+    <string name="play">Lejátszás</string>
+    <string name="stop">Leállítás</string>
+    <string name="speed">Sebesség</string>
+    <string name="language_id">Nyelv </string>
+    <string name="input">Adjon meg néhány szöveget a generáláshoz</string>
+    <string name="download_language">Nyelv letöltése</string>
+    <string name="test_languages">Próbáljon ki modelleket</string>
+    <string name="add_language">Nyelv hozzáadása</string>
+    <string name="delete_language">Nyelv törlése</string>
+    <string name="piper_models">Piper modellek</string>
+    <string name="coqui_models">Coqui modellek</string>
+    <string name="apply_system_speed">Rendszerbeállítások (sebesség / hangmagasság) alkalmazása a rendszer egészére kiterjedő TTS-motorként való használathoz</string>
+    <string name="speaker_id">Hangszóró azonosító:</string>
+</resources>
