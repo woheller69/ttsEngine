@@ -16,4 +16,5 @@
     <string name="delete_language">Odstranit jazyk</string>
     <string name="piper_models">Modely Piper</string>
     <string name="coqui_models">Modely Coqui</string>
+    <string name="apply_system_speed">Použít systémová nastavení (rychlost / výška) pro použití jako systémový modul TTS</string>
 </resources>
