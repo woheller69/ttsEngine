@@ -16,4 +16,5 @@
     <string name="piper_models">Piper Modelle</string>
     <string name="coqui_models">Coqui Modelle</string>
     <string name="apply_system_speed">Einstellungen des Systems (Geschwindigkeit / Tonlage) bei Verwendung als systemweite Sprachausgabe anwenden</string>
+    <string name="volume">Lautstärke</string>
 </resources>

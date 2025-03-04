@@ -78,6 +78,7 @@ class MainActivity : ComponentActivity() {
     private var samplesChannel = Channel<FloatArray>()
     private lateinit var preferenceHelper: PreferenceHelper
     private lateinit var langDB: LangDB
+    private var volume: Float = 1.0f
 
     override fun onPause() {
         super.onPause()
@@ -371,6 +372,34 @@ class MainActivity : ComponentActivity() {
                                     singleLine = false
                                 )
 
+                                Column {
+                                    volume = preferenceHelper.getVolume()
+                                    var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
+                                    Text(
+                                        getString(R.string.volume) + " " + String.format(
+                                            "%.1f",
+                                            displayVol
+                                        )
+                                    )
+
+                                    Slider(
+                                        value = displayVol,
+                                        onValueChange = {
+                                            displayVol = it
+                                            volume = it
+                                        },
+                                        onValueChangeFinished = {
+                                            preferenceHelper.setVolume(volume)
+                                        },
+                                        valueRange = 0.2F..5.0F,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        colors = SliderDefaults.colors(
+                                            thumbColor = colorResource(R.color.primaryDark),
+                                            activeTrackColor = colorResource(R.color.primaryDark)
+                                        )
+                                    )
+                                }
+
                                 Row {
                                     Button(
                                         enabled = true,
@@ -397,6 +426,9 @@ class MainActivity : ComponentActivity() {
 
                                                 CoroutineScope(Dispatchers.IO).launch {
                                                     for (samples in samplesChannel) {
+                                                        for (i in samples.indices) {
+                                                            samples[i] *= volume
+                                                        }
                                                         track.write(
                                                             samples,
                                                             0,

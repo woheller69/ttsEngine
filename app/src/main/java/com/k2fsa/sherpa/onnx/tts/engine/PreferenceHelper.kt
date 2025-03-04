@@ -10,6 +10,7 @@ class PreferenceHelper(context: Context) {
     private val INIT_KEY = "init_espeak"
     private val USE_SYSTEM_SPEED = "apply_system_speed"
     private val CURRENT_LANGUAGE = "current_language"
+    private val VOLUME = "volume"
 
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -49,5 +50,15 @@ class PreferenceHelper(context: Context) {
 
     fun applySystemSpeed(): Boolean {
         return sharedPreferences.getBoolean(USE_SYSTEM_SPEED, false)
+    }
+
+    fun setVolume(volume: Float){
+        val editor = sharedPreferences.edit()
+        editor.putFloat(VOLUME, volume)
+        editor.apply()
+    }
+
+    fun getVolume(): Float{
+        return sharedPreferences.getFloat(VOLUME,1.0f)
     }
 }
