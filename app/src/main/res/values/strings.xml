@@ -17,4 +17,5 @@
     <string name="piper_models">Piper models</string>
     <string name="coqui_models">Coqui models</string>
     <string name="apply_system_speed">Apply system settings (speed / pitch) for use as system-wide TTS engine</string>
+    <string name="volume">Volume</string>
 </resources>

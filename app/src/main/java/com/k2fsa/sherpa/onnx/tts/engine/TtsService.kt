@@ -74,6 +74,8 @@ class TtsService : TextToSpeechService() {
         var pitch = 100f
 
         val preferenceHelper = PreferenceHelper(this)
+        val volume = preferenceHelper.getVolume()
+
         if (preferenceHelper.applySystemSpeed()){
             pitch = request.pitch * 1.0f
             TtsEngine.speed = request.speechRate / pitch  //divide by pitch to compensate for pitch adjustment performed in ttsCallback
@@ -105,12 +107,15 @@ class TtsService : TextToSpeechService() {
                 val newSamples = FloatArray(newSampleCount)
 
                 for (i in 0 until newSampleCount) {
-                    newSamples[i] = floatSamples[(i * speedFactor).toInt()]
+                    newSamples[i] = floatSamples[(i * speedFactor).toInt()] * volume
                 }
                 // Convert the modified FloatArray to ByteArray
                 samples = floatArrayToByteArray(newSamples)
             } else {
                 // Convert FloatArray to ByteArray
+                for (i in floatSamples.indices) {
+                    floatSamples[i] *= volume
+                }
                 samples = floatArrayToByteArray(floatSamples)
             }
 
