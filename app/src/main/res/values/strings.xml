@@ -9,7 +9,7 @@
     <string name="speed">Speed</string>
     <string name="speaker_id">Speaker ID:</string>
     <string name="language_id">Language\u2009</string>
-    <string name="input">Please input some text to generate</string>
+    <string name="input">Text to generate</string>
     <string name="download_language">Download language</string>
     <string name="test_languages">Try models</string>
     <string name="add_language">Add language</string>

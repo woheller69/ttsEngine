@@ -10,7 +10,7 @@
     <string name="speed">Rychlost</string>
     <string name="speaker_id">ID mluvčího:</string>
     <string name="language_id">Jazyk </string>
-    <string name="input">Zadejte text k vygenerování</string>
+    <string name="input">Text k vytvoření</string>
     <string name="test_languages">Vyzkoušet modely</string>
     <string name="add_language">Přidat jazyk</string>
     <string name="delete_language">Odstranit jazyk</string>

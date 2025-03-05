@@ -8,7 +8,7 @@
     <string name="speed">Geschwindigkeit</string>
     <string name="speaker_id">Sprecher ID:</string>
     <string name="language_id">Sprache\u2009</string>
-    <string name="input">Bitte geben Sie den Text für die Sprachausgabe ein</string>
+    <string name="input">Text für die Sprachausgabe</string>
     <string name="download_language">Sprache herunterladen</string>
     <string name="test_languages">Modelle testen</string>
     <string name="add_language">Sprache hinzufügen</string>

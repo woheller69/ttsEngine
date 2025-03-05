@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,6 +58,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -161,54 +164,53 @@ class MainActivity : ComponentActivity() {
                     }) {
                         Box(modifier = Modifier.padding(it)) {
                             Column(modifier = Modifier.padding(16.dp)) {
-                                Column {
-                                    Text(
-                                        getString(R.string.speed) + " " + String.format(
-                                            "%.1f",
+                                Text(
+                                    getString(R.string.speed) + " " + String.format(
+                                        "%.1f",
+                                        TtsEngine.speed
+                                    )
+                                )
+                                Slider(
+                                    value = TtsEngine.speedState.value,
+                                    onValueChange = {
+                                        TtsEngine.speed = it
+                                    },
+                                    onValueChangeFinished = {
+                                        langDB.updateLang(
+                                            TtsEngine.lang,
+                                            TtsEngine.speakerId,
                                             TtsEngine.speed
                                         )
+                                    },
+                                    valueRange = 0.2F..3.0F,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = SliderDefaults.colors(
+                                        thumbColor = colorResource(R.color.primaryDark),
+                                        activeTrackColor = colorResource(R.color.primaryDark)
                                     )
-                                    Slider(
-                                        value = TtsEngine.speedState.value,
-                                        onValueChange = {
-                                            TtsEngine.speed = it
+                                )
+
+                                var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    Checkbox(
+                                        checked = applySystemSpeed,
+                                        onCheckedChange = { isChecked ->
+                                            preferenceHelper.setApplySystemSpeed(isChecked)
+                                            applySystemSpeed = isChecked
                                         },
-                                        onValueChangeFinished = {
-                                            langDB.updateLang(
-                                                TtsEngine.lang,
-                                                TtsEngine.speakerId,
-                                                TtsEngine.speed
-                                            )
-                                        },
-                                        valueRange = 0.2F..3.0F,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        colors = SliderDefaults.colors(
-                                            thumbColor = colorResource(R.color.primaryDark),
-                                            activeTrackColor = colorResource(R.color.primaryDark)
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = colorResource(R.color.primaryDark)
                                         )
                                     )
-
-                                    var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
-
-                                    Row(
-                                        verticalAlignment = Alignment.CenterVertically,
-                                    ) {
-                                        Checkbox(
-                                            checked = applySystemSpeed,
-                                            onCheckedChange = { isChecked ->
-                                                preferenceHelper.setApplySystemSpeed(isChecked)
-                                                applySystemSpeed = isChecked
-                                            },
-                                            colors = CheckboxDefaults.colors(
-                                                checkedColor = colorResource(R.color.primaryDark)
-                                            )
-                                        )
-                                        Text(
-                                            getString(R.string.apply_system_speed)
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(10.dp))
+                                    Text(
+                                        getString(R.string.apply_system_speed)
+                                    )
                                 }
+
+                                Spacer(modifier = Modifier.height(10.dp))
 
                                 val testTextContent = getSampleText(TtsEngine.lang ?: "")
 
@@ -343,7 +345,10 @@ class MainActivity : ComponentActivity() {
                                             val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
                                             startActivity(intent)
                                         }) {
-                                        Text(getString(R.string.add_language))
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_add_24dp),
+                                            contentDescription = stringResource(id = R.string.add_language)
+                                        )
                                     }
 
                                     Button(
@@ -355,7 +360,10 @@ class MainActivity : ComponentActivity() {
                                         onClick = {
                                             deleteLang(preferenceHelper.getCurrentLanguage())
                                         }) {
-                                        Text(getString(R.string.delete_language))
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_delete_24dp),
+                                            contentDescription = stringResource(id = R.string.delete_language)
+                                        )
                                     }
                                 }
 
@@ -372,33 +380,31 @@ class MainActivity : ComponentActivity() {
                                     singleLine = false
                                 )
 
-                                Column {
-                                    volume = preferenceHelper.getVolume()
-                                    var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
-                                    Text(
-                                        getString(R.string.volume) + " " + String.format(
-                                            "%.1f",
-                                            displayVol
-                                        )
+                                volume = preferenceHelper.getVolume()
+                                var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
+                                Text(
+                                    getString(R.string.volume) + " " + String.format(
+                                        "%.1f",
+                                        displayVol
                                     )
+                                )
 
-                                    Slider(
-                                        value = displayVol,
-                                        onValueChange = {
-                                            displayVol = it
-                                            volume = it
-                                        },
-                                        onValueChangeFinished = {
-                                            preferenceHelper.setVolume(volume)
-                                        },
-                                        valueRange = 0.2F..5.0F,
-                                        modifier = Modifier.fillMaxWidth(),
-                                        colors = SliderDefaults.colors(
-                                            thumbColor = colorResource(R.color.primaryDark),
-                                            activeTrackColor = colorResource(R.color.primaryDark)
-                                        )
+                                Slider(
+                                    value = displayVol,
+                                    onValueChange = {
+                                        displayVol = it
+                                        volume = it
+                                    },
+                                    onValueChangeFinished = {
+                                        preferenceHelper.setVolume(volume)
+                                    },
+                                    valueRange = 0.2F..5.0F,
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = SliderDefaults.colors(
+                                        thumbColor = colorResource(R.color.primaryDark),
+                                        activeTrackColor = colorResource(R.color.primaryDark)
                                     )
-                                }
+                                )
 
                                 Row {
                                     Button(
@@ -448,7 +454,10 @@ class MainActivity : ComponentActivity() {
                                                 }.start()
                                             }
                                         }) {
-                                        Text(getString(R.string.play))
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_play_24dp),
+                                            contentDescription = stringResource(id = R.string.play)
+                                        )
                                     }
 
                                     Button(
@@ -462,7 +471,10 @@ class MainActivity : ComponentActivity() {
                                             track.pause()
                                             track.flush()
                                         }) {
-                                        Text(getString(R.string.stop))
+                                        Image(
+                                            painter = painterResource(id = R.drawable.ic_stop_24dp),
+                                            contentDescription = stringResource(id = R.string.stop)
+                                        )
                                     }
                                 }
                             }
