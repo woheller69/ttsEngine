@@ -8,7 +8,7 @@
     <string name="speed">Velocità</string>
     <string name="speaker_id">Speaker ID:</string>
     <string name="language_id">Lingua\u2009</string>
-    <string name="input">Inserisci del testo per generare</string>
+    <string name="input">Testo per generare</string>
     <string name="download_language">Scarica lingua</string>
     <string name="test_languages">Prova i modelli</string>
     <string name="add_language">Aggiungi lingua</string>

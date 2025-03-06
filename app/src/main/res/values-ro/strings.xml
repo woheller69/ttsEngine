@@ -9,7 +9,7 @@
     <string name="speed">Ritmul vorbirii</string>
     <string name="speaker_id">ID vorbitor:</string>
     <string name="language_id">Limbă </string>
-    <string name="input">Introdu un text pentru generare</string>
+    <string name="input">Text pentru a genera</string>
     <string name="download_language">Descarcă limba</string>
     <string name="test_languages">Încearcă modele</string>
     <string name="add_language">Adaugă limba</string>

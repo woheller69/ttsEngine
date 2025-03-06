@@ -7,7 +7,7 @@
     <string name="speed">Konuşma hızı</string>
     <string name="speaker_id">Konuşmacı Kimliği:</string>
     <string name="language_id">Dil </string>
-    <string name="input">Lütfen oluşturmak için biraz metin girin</string>
+    <string name="input">Oluşturulacak metin</string>
     <string name="download_language">Dil İndir</string>
     <string name="test_languages">Model örneklerine göz atın</string>
     <string name="add_language">Dil ekle</string>
