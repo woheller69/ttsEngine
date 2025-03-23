@@ -130,26 +130,11 @@ class MainActivity : ComponentActivity() {
         preferenceHelper: PreferenceHelper
     ) {
         setContent {
-            Scaffold(
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {
-                            intent = Intent()
-                            intent.setAction("com.android.settings.TTS_SETTINGS")
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            this.startActivity(intent)
-                            finish()
-                        }
-                    ) {
-                        Icon(Icons.Filled.Settings, contentDescription = "TTS Settings")
-                    }
-                }
-            ) { padding ->
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Scaffold(topBar = {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Scaffold(
+                    topBar = {
                         TopAppBar(title = { Text("SherpaTTS") },
                             actions = {
                                 IconButton(
@@ -160,71 +145,144 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     Icon(Icons.Filled.Info, contentDescription = "Info")
                                 }
-                            })
+                            }
+                        )
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = {
+                                intent = Intent()
+                                intent.setAction("com.android.settings.TTS_SETTINGS")
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                this.startActivity(intent)
+                                finish()
+                            }
+                        ) {
+                            Icon(Icons.Filled.Settings, contentDescription = "TTS Settings")
+                        }
                     }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            Column(modifier = Modifier.padding(16.dp)) {
-                                Text(
-                                    getString(R.string.speed) + " " + String.format(
-                                        "%.1f",
+                    Box(modifier = Modifier.padding(it)) {
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                getString(R.string.speed) + " " + String.format(
+                                    "%.1f",
+                                    TtsEngine.speed
+                                )
+                            )
+                            Slider(
+                                value = TtsEngine.speedState.value,
+                                onValueChange = {
+                                    TtsEngine.speed = it
+                                },
+                                onValueChangeFinished = {
+                                    langDB.updateLang(
+                                        TtsEngine.lang,
+                                        TtsEngine.speakerId,
                                         TtsEngine.speed
                                     )
+                                },
+                                valueRange = 0.2F..3.0F,
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = SliderDefaults.colors(
+                                    thumbColor = colorResource(R.color.primaryDark),
+                                    activeTrackColor = colorResource(R.color.primaryDark)
                                 )
-                                Slider(
-                                    value = TtsEngine.speedState.value,
-                                    onValueChange = {
-                                        TtsEngine.speed = it
+                            )
+
+                            var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Checkbox(
+                                    checked = applySystemSpeed,
+                                    onCheckedChange = { isChecked ->
+                                        preferenceHelper.setApplySystemSpeed(isChecked)
+                                        applySystemSpeed = isChecked
                                     },
-                                    onValueChangeFinished = {
-                                        langDB.updateLang(
-                                            TtsEngine.lang,
-                                            TtsEngine.speakerId,
-                                            TtsEngine.speed
-                                        )
-                                    },
-                                    valueRange = 0.2F..3.0F,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = SliderDefaults.colors(
-                                        thumbColor = colorResource(R.color.primaryDark),
-                                        activeTrackColor = colorResource(R.color.primaryDark)
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = colorResource(R.color.primaryDark)
                                     )
                                 )
+                                Text(
+                                    getString(R.string.apply_system_speed)
+                                )
+                            }
 
-                                var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
+                            Spacer(modifier = Modifier.height(10.dp))
 
-                                Row(
-                                    verticalAlignment = Alignment.CenterVertically,
+                            val testTextContent = getSampleText(TtsEngine.lang ?: "")
+
+                            var testText by remember { mutableStateOf(testTextContent) }
+                            val scrollState = rememberScrollState(0)
+
+
+                            val numLanguages = langDB.allInstalledLanguages.size
+
+                            val languages = langDB.allInstalledLanguages
+                            var selectedLang =
+                                languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                            var expanded by remember { mutableStateOf(false) }
+                            val langList = (0 until numLanguages).toList()
+                            val keyboardController = LocalSoftwareKeyboardController.current
+
+                            Box(modifier = Modifier.fillMaxWidth()) {
+                                ExposedDropdownMenuBox(
+                                    expanded = expanded,
+                                    onExpandedChange = { expanded = it }
                                 ) {
-                                    Checkbox(
-                                        checked = applySystemSpeed,
-                                        onCheckedChange = { isChecked ->
-                                            preferenceHelper.setApplySystemSpeed(isChecked)
-                                            applySystemSpeed = isChecked
-                                        },
-                                        colors = CheckboxDefaults.colors(
-                                            checkedColor = colorResource(R.color.primaryDark)
-                                        )
+                                    var displayText = languages[selectedLang].lang
+                                    if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
+                                    OutlinedTextField(
+                                        value = displayText,
+                                        onValueChange = {},
+                                        readOnly = true,
+                                        label = { Text(getString(R.string.language_id))},
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .menuAnchor()
+                                            .onFocusChanged { focusState ->
+                                                if (focusState.isFocused) {
+                                                    expanded = true
+                                                    keyboardController?.hide()
+                                                }
+                                            },
+                                        trailingIcon = {
+                                            Icon(
+                                                Icons.Default.ArrowDropDown,
+                                                contentDescription = "Dropdown"
+                                            )
+                                        }
                                     )
-                                    Text(
-                                        getString(R.string.apply_system_speed)
-                                    )
+                                    ExposedDropdownMenu(
+                                        expanded = expanded,
+                                        onDismissRequest = { expanded = false }
+                                    ) {
+                                        langList.forEach { langId ->
+                                            var dropdownText = languages[langId].lang
+                                            if (languages[langId].name.isNotEmpty()) dropdownText = "$dropdownText (${languages[langId].name})"
+                                            DropdownMenuItem(
+                                                text = { Text(dropdownText)},
+                                                onClick = {
+                                                    selectedLang = langId
+                                                    preferenceHelper.setCurrentLanguage(
+                                                        languages[langId].lang
+                                                    )
+                                                    expanded = false
+                                                    restart()
+                                                }
+                                            )
+                                        }
+                                    }
                                 }
-
-                                Spacer(modifier = Modifier.height(10.dp))
-
-                                val testTextContent = getSampleText(TtsEngine.lang ?: "")
-
-                                var testText by remember { mutableStateOf(testTextContent) }
-                                val scrollState = rememberScrollState(0)
+                            }
 
 
-                                val numLanguages = langDB.allInstalledLanguages.size
-
-                                val languages = langDB.allInstalledLanguages
-                                var selectedLang =
-                                    languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                            val numSpeakers = TtsEngine.tts!!.numSpeakers()
+                            if (numSpeakers > 1) {
                                 var expanded by remember { mutableStateOf(false) }
-                                val langList = (0 until numLanguages).toList()
+                                val speakerList = (0 until numSpeakers).toList()
+                                var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
                                 val keyboardController = LocalSoftwareKeyboardController.current
 
                                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -232,13 +290,11 @@ class MainActivity : ComponentActivity() {
                                         expanded = expanded,
                                         onExpandedChange = { expanded = it }
                                     ) {
-                                        var displayText = languages[selectedLang].lang
-                                        if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
                                         OutlinedTextField(
-                                            value = displayText,
+                                            value = selectedSpeaker.toString(),
                                             onValueChange = {},
                                             readOnly = true,
-                                            label = { Text(getString(R.string.language_id))},
+                                            label = { Text(getString(R.string.speaker_id) + " " + "(0-${numSpeakers - 1})") },
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .menuAnchor()
@@ -249,233 +305,175 @@ class MainActivity : ComponentActivity() {
                                                     }
                                                 },
                                             trailingIcon = {
-                                                Icon(
-                                                    Icons.Default.ArrowDropDown,
-                                                    contentDescription = "Dropdown"
-                                                )
+                                                Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
                                             }
                                         )
                                         ExposedDropdownMenu(
                                             expanded = expanded,
                                             onDismissRequest = { expanded = false }
                                         ) {
-                                            langList.forEach { langId ->
-                                                var dropdownText = languages[langId].lang
-                                                if (languages[langId].name.isNotEmpty()) dropdownText = "$dropdownText (${languages[langId].name})"
+                                            speakerList.forEach { speakerId ->
                                                 DropdownMenuItem(
-                                                    text = { Text(dropdownText)},
+                                                    text = { Text(speakerId.toString()) },
                                                     onClick = {
-                                                        selectedLang = langId
-                                                        preferenceHelper.setCurrentLanguage(
-                                                            languages[langId].lang
+                                                        selectedSpeaker = speakerId
+                                                        TtsEngine.speakerId = speakerId
+                                                        langDB.updateLang(
+                                                            TtsEngine.lang,
+                                                            TtsEngine.speakerId,
+                                                            TtsEngine.speed
                                                         )
                                                         expanded = false
-                                                        restart()
+                                                        stopped = true
                                                     }
                                                 )
                                             }
                                         }
                                     }
                                 }
+                            }
 
-
-                                val numSpeakers = TtsEngine.tts!!.numSpeakers()
-                                if (numSpeakers > 1) {
-                                    var expanded by remember { mutableStateOf(false) }
-                                    val speakerList = (0 until numSpeakers).toList()
-                                    var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
-                                    val keyboardController = LocalSoftwareKeyboardController.current
-
-                                    Box(modifier = Modifier.fillMaxWidth()) {
-                                        ExposedDropdownMenuBox(
-                                            expanded = expanded,
-                                            onExpandedChange = { expanded = it }
-                                        ) {
-                                            OutlinedTextField(
-                                                value = selectedSpeaker.toString(),
-                                                onValueChange = {},
-                                                readOnly = true,
-                                                label = { Text(getString(R.string.speaker_id) + " " + "(0-${numSpeakers - 1})") },
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .menuAnchor()
-                                                    .onFocusChanged { focusState ->
-                                                        if (focusState.isFocused) {
-                                                            expanded = true
-                                                            keyboardController?.hide()
-                                                        }
-                                                    },
-                                                trailingIcon = {
-                                                    Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
-                                                }
-                                            )
-                                            ExposedDropdownMenu(
-                                                expanded = expanded,
-                                                onDismissRequest = { expanded = false }
-                                            ) {
-                                                speakerList.forEach { speakerId ->
-                                                    DropdownMenuItem(
-                                                        text = { Text(speakerId.toString()) },
-                                                        onClick = {
-                                                            selectedSpeaker = speakerId
-                                                            TtsEngine.speakerId = speakerId
-                                                            langDB.updateLang(
-                                                                TtsEngine.lang,
-                                                                TtsEngine.speakerId,
-                                                                TtsEngine.speed
-                                                            )
-                                                            expanded = false
-                                                            stopped = true
-                                                        }
-                                                    )
-                                                }
-                                            }
-                                        }
-                                    }
+                            Row {
+                                Button(
+                                    modifier = Modifier.padding(5.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = colorResource(R.color.primaryDark),
+                                        contentColor = colorResource(R.color.white)
+                                    ),
+                                    onClick = {
+                                        val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
+                                        startActivity(intent)
+                                    }) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_add_24dp),
+                                        contentDescription = stringResource(id = R.string.add_language)
+                                    )
                                 }
 
-                                Row {
-                                    Button(
-                                        modifier = Modifier.padding(5.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.primaryDark),
-                                            contentColor = colorResource(R.color.white)
-                                        ),
-                                        onClick = {
-                                            val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
-                                            startActivity(intent)
-                                        }) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_add_24dp),
-                                            contentDescription = stringResource(id = R.string.add_language)
-                                        )
-                                    }
-
-                                    Button(
-                                        modifier = Modifier.padding(5.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.primaryDark),
-                                            contentColor = colorResource(R.color.white)
-                                        ),
-                                        onClick = {
-                                            deleteLang(preferenceHelper.getCurrentLanguage())
-                                        }) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_delete_24dp),
-                                            contentDescription = stringResource(id = R.string.delete_language)
-                                        )
-                                    }
+                                Button(
+                                    modifier = Modifier.padding(5.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = colorResource(R.color.primaryDark),
+                                        contentColor = colorResource(R.color.white)
+                                    ),
+                                    onClick = {
+                                        deleteLang(preferenceHelper.getCurrentLanguage())
+                                    }) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_delete_24dp),
+                                        contentDescription = stringResource(id = R.string.delete_language)
+                                    )
                                 }
+                            }
 
-                                OutlinedTextField(
-                                    value = testText,
-                                    onValueChange = { testText = it },
-                                    label = { Text(getString(R.string.input)) },
-                                    maxLines = 10,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(bottom = 16.dp)
-                                        .verticalScroll(scrollState)
-                                        .wrapContentHeight(),
-                                    singleLine = false
+                            OutlinedTextField(
+                                value = testText,
+                                onValueChange = { testText = it },
+                                label = { Text(getString(R.string.input)) },
+                                maxLines = 10,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 16.dp)
+                                    .verticalScroll(scrollState)
+                                    .wrapContentHeight(),
+                                singleLine = false
+                            )
+
+                            volume = preferenceHelper.getVolume()
+                            var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
+                            Text(
+                                getString(R.string.volume) + " " + String.format(
+                                    "%.1f",
+                                    displayVol
                                 )
+                            )
 
-                                volume = preferenceHelper.getVolume()
-                                var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
-                                Text(
-                                    getString(R.string.volume) + " " + String.format(
-                                        "%.1f",
-                                        displayVol
-                                    )
+                            Slider(
+                                value = displayVol,
+                                onValueChange = {
+                                    displayVol = it
+                                    volume = it
+                                },
+                                onValueChangeFinished = {
+                                    preferenceHelper.setVolume(volume)
+                                },
+                                valueRange = 0.2F..5.0F,
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = SliderDefaults.colors(
+                                    thumbColor = colorResource(R.color.primaryDark),
+                                    activeTrackColor = colorResource(R.color.primaryDark)
                                 )
+                            )
 
-                                Slider(
-                                    value = displayVol,
-                                    onValueChange = {
-                                        displayVol = it
-                                        volume = it
-                                    },
-                                    onValueChangeFinished = {
-                                        preferenceHelper.setVolume(volume)
-                                    },
-                                    valueRange = 0.2F..5.0F,
-                                    modifier = Modifier.fillMaxWidth(),
-                                    colors = SliderDefaults.colors(
-                                        thumbColor = colorResource(R.color.primaryDark),
-                                        activeTrackColor = colorResource(R.color.primaryDark)
-                                    )
-                                )
+                            Row {
+                                Button(
+                                    enabled = true,
+                                    modifier = Modifier.padding(5.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = colorResource(R.color.primaryDark),
+                                        contentColor = colorResource(R.color.white)
+                                    ),
+                                    onClick = {
+                                        if (testText.isBlank() || testText.isEmpty()) {
+                                            Toast.makeText(
+                                                applicationContext,
+                                                getString(R.string.input),
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            stopped = false
 
-                                Row {
-                                    Button(
-                                        enabled = true,
-                                        modifier = Modifier.padding(5.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.primaryDark),
-                                            contentColor = colorResource(R.color.white)
-                                        ),
-                                        onClick = {
-                                            if (testText.isBlank() || testText.isEmpty()) {
-                                                Toast.makeText(
-                                                    applicationContext,
-                                                    getString(R.string.input),
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            } else {
-                                                stopped = false
-
-                                                track.pause()
-                                                track.flush()
-                                                track.play()
-
-                                                samplesChannel = Channel<FloatArray>()
-
-                                                CoroutineScope(Dispatchers.IO).launch {
-                                                    for (samples in samplesChannel) {
-                                                        for (i in samples.indices) {
-                                                            samples[i] *= volume
-                                                        }
-                                                        track.write(
-                                                            samples,
-                                                            0,
-                                                            samples.size,
-                                                            AudioTrack.WRITE_BLOCKING
-                                                        )
-                                                    }
-                                                }
-
-                                                CoroutineScope(Dispatchers.Default).launch {
-                                                    TtsEngine.tts!!.generateWithCallback(
-                                                        text = testText,
-                                                        sid = TtsEngine.speakerId,
-                                                        speed = TtsEngine.speed,
-                                                        callback = ::callback,
-                                                    )
-                                                }.start()
-                                            }
-                                        }) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_play_24dp),
-                                            contentDescription = stringResource(id = R.string.play)
-                                        )
-                                    }
-
-                                    Button(
-                                        modifier = Modifier.padding(5.dp),
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = colorResource(R.color.primaryDark),
-                                            contentColor = colorResource(R.color.white)
-                                        ),
-                                        onClick = {
-                                            stopped = true
                                             track.pause()
                                             track.flush()
-                                        }) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.ic_stop_24dp),
-                                            contentDescription = stringResource(id = R.string.stop)
-                                        )
-                                    }
+                                            track.play()
+
+                                            samplesChannel = Channel<FloatArray>()
+
+                                            CoroutineScope(Dispatchers.IO).launch {
+                                                for (samples in samplesChannel) {
+                                                    for (i in samples.indices) {
+                                                        samples[i] *= volume
+                                                    }
+                                                    track.write(
+                                                        samples,
+                                                        0,
+                                                        samples.size,
+                                                        AudioTrack.WRITE_BLOCKING
+                                                    )
+                                                }
+                                            }
+
+                                            CoroutineScope(Dispatchers.Default).launch {
+                                                TtsEngine.tts!!.generateWithCallback(
+                                                    text = testText,
+                                                    sid = TtsEngine.speakerId,
+                                                    speed = TtsEngine.speed,
+                                                    callback = ::callback,
+                                                )
+                                            }.start()
+                                        }
+                                    }) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_play_24dp),
+                                        contentDescription = stringResource(id = R.string.play)
+                                    )
+                                }
+
+                                Button(
+                                    modifier = Modifier.padding(5.dp),
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = colorResource(R.color.primaryDark),
+                                        contentColor = colorResource(R.color.white)
+                                    ),
+                                    onClick = {
+                                        stopped = true
+                                        track.pause()
+                                        track.flush()
+                                    }) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_stop_24dp),
+                                        contentDescription = stringResource(id = R.string.stop)
+                                    )
                                 }
                             }
                         }
