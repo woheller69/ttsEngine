@@ -16,4 +16,5 @@
     <string name="delete_language">Excluir idioma</string>
     <string name="piper_models">Modelos Piper</string>
     <string name="coqui_models">Modelos Coqui</string>
+    <string name="apply_system_speed">Aplicar configurações do sistema (velocidade / timbre) para uso do motor de TTS no sistema inteiro</string>
 </resources>
