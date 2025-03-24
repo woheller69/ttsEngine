@@ -16,7 +16,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +23,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Info
@@ -92,7 +90,7 @@ class MainActivity : ComponentActivity() {
         //Reset speed in case it has been changed by TtsService
         val db = LangDB.getInstance(this)
         val languages = db.allInstalledLanguages
-        val language = languages.first{it.lang == TtsEngine.lang}
+        val language = languages.first { it.lang == TtsEngine.lang }
         TtsEngine.speed = language.speed
         super.onResume()
     }
@@ -101,8 +99,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         preferenceHelper = PreferenceHelper(this)
         langDB = LangDB.getInstance(this)
+        volume = preferenceHelper.getVolume()
         Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
-        if (!preferenceHelper.getCurrentLanguage().equals("")){
+        if (!preferenceHelper.getCurrentLanguage().equals("")) {
             TtsEngine.createTts(this, preferenceHelper.getCurrentLanguage()!!)
             initAudioTrack()
             setupDisplay(langDB, preferenceHelper)
@@ -114,10 +113,10 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(this, ManageLanguagesActivity::class.java)
             startActivity(intent)
             finish()
-       }
+        }
     }
 
-    private fun restart(){
+    private fun restart() {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
@@ -130,46 +129,68 @@ class MainActivity : ComponentActivity() {
         preferenceHelper: PreferenceHelper
     ) {
         setContent {
-            Scaffold(
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = {
-                            intent = Intent()
-                            intent.setAction("com.android.settings.TTS_SETTINGS")
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-                            this.startActivity(intent)
-                            finish()
-                        }
-                    ) {
-                        Icon(Icons.Filled.Settings, contentDescription = "TTS Settings")
-                    }
-                }
-            ) { padding ->
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    Scaffold(topBar = {
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Scaffold(
+                    topBar = {
                         TopAppBar(title = { Text("SherpaTTS") },
                             actions = {
                                 IconButton(
                                     onClick = {
-                                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/woheller69/ttsengine")))
+                                        startActivity(
+                                            Intent(
+                                                Intent.ACTION_VIEW,
+                                                Uri.parse("https://github.com/woheller69/ttsengine")
+                                            )
+                                        )
                                     },
-                                    colors = IconButtonDefaults.iconButtonColors(contentColor = colorResource(R.color.primaryDark))
+                                    colors = IconButtonDefaults.iconButtonColors(
+                                        contentColor = colorResource(
+                                            R.color.primaryDark
+                                        )
+                                    )
                                 ) {
                                     Icon(Icons.Filled.Info, contentDescription = "Info")
                                 }
-                            })
+                            }
+                        )
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = {
+                                intent = Intent()
+                                intent.setAction("com.android.settings.TTS_SETTINGS")
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                                this.startActivity(intent)
+                                finish()
+                            }
+                        ) {
+                            Icon(Icons.Filled.Settings, contentDescription = "TTS Settings")
+                        }
                     }) {
-                        Box(modifier = Modifier.padding(it)) {
-                            Column(modifier = Modifier.padding(16.dp)) {
+                    Box(modifier = Modifier.padding(it)) {
+                        var sampleText by remember { mutableStateOf(getSampleText(TtsEngine.lang ?: "")) }
+                        val numLanguages = langDB.allInstalledLanguages.size
+                        val languages = langDB.allInstalledLanguages
+                        var selectedLang = languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                        val numSpeakers = TtsEngine.tts!!.numSpeakers()
+                        var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
+
+                        LazyColumn( // ✅ LazyColumn replaces Column
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp)
+                        ) {
+                            item {
                                 Text(
                                     getString(R.string.speed) + " " + String.format(
                                         "%.1f",
                                         TtsEngine.speed
                                     )
                                 )
+                            }
+                            item {
                                 Slider(
                                     value = TtsEngine.speedState.value,
                                     onValueChange = {
@@ -189,12 +210,17 @@ class MainActivity : ComponentActivity() {
                                         activeTrackColor = colorResource(R.color.primaryDark)
                                     )
                                 )
+                            }
 
-                                var applySystemSpeed by remember { mutableStateOf(preferenceHelper.applySystemSpeed()) }
-
+                            item {
                                 Row(
                                     verticalAlignment = Alignment.CenterVertically,
                                 ) {
+                                    var applySystemSpeed by remember {
+                                        mutableStateOf(
+                                            preferenceHelper.applySystemSpeed()
+                                        )
+                                    }
                                     Checkbox(
                                         checked = applySystemSpeed,
                                         onCheckedChange = { isChecked ->
@@ -209,36 +235,27 @@ class MainActivity : ComponentActivity() {
                                         getString(R.string.apply_system_speed)
                                     )
                                 }
+                            }
 
-                                Spacer(modifier = Modifier.height(10.dp))
+                            item { Spacer(modifier = Modifier.height(10.dp)) }
 
-                                val testTextContent = getSampleText(TtsEngine.lang ?: "")
-
-                                var testText by remember { mutableStateOf(testTextContent) }
-                                val scrollState = rememberScrollState(0)
-
-
-                                val numLanguages = langDB.allInstalledLanguages.size
-
-                                val languages = langDB.allInstalledLanguages
-                                var selectedLang =
-                                    languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
-                                var expanded by remember { mutableStateOf(false) }
-                                val langList = (0 until numLanguages).toList()
-                                val keyboardController = LocalSoftwareKeyboardController.current
-
+                            item {
                                 Box(modifier = Modifier.fillMaxWidth()) {
+                                    var expanded by remember { mutableStateOf(false) }
                                     ExposedDropdownMenuBox(
                                         expanded = expanded,
                                         onExpandedChange = { expanded = it }
                                     ) {
+                                        val keyboardController =
+                                            LocalSoftwareKeyboardController.current
                                         var displayText = languages[selectedLang].lang
-                                        if (languages[selectedLang].name.isNotEmpty()) displayText = "$displayText (${languages[selectedLang].name})"
+                                        if (languages[selectedLang].name.isNotEmpty()) displayText =
+                                            "$displayText (${languages[selectedLang].name})"
                                         OutlinedTextField(
                                             value = displayText,
                                             onValueChange = {},
                                             readOnly = true,
-                                            label = { Text(getString(R.string.language_id))},
+                                            label = { Text(getString(R.string.language_id)) },
                                             modifier = Modifier
                                                 .fillMaxWidth()
                                                 .menuAnchor()
@@ -259,11 +276,13 @@ class MainActivity : ComponentActivity() {
                                             expanded = expanded,
                                             onDismissRequest = { expanded = false }
                                         ) {
+                                            val langList = (0 until numLanguages).toList()
                                             langList.forEach { langId ->
                                                 var dropdownText = languages[langId].lang
-                                                if (languages[langId].name.isNotEmpty()) dropdownText = "$dropdownText (${languages[langId].name})"
+                                                if (languages[langId].name.isNotEmpty()) dropdownText =
+                                                    "$dropdownText (${languages[langId].name})"
                                                 DropdownMenuItem(
-                                                    text = { Text(dropdownText)},
+                                                    text = { Text(dropdownText) },
                                                     onClick = {
                                                         selectedLang = langId
                                                         preferenceHelper.setCurrentLanguage(
@@ -277,16 +296,17 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
+                            }
 
-
-                                val numSpeakers = TtsEngine.tts!!.numSpeakers()
-                                if (numSpeakers > 1) {
-                                    var expanded by remember { mutableStateOf(false) }
-                                    val speakerList = (0 until numSpeakers).toList()
-                                    var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
-                                    val keyboardController = LocalSoftwareKeyboardController.current
-
+                            if (numSpeakers > 1) {
+                                item {
                                     Box(modifier = Modifier.fillMaxWidth()) {
+                                        var expanded by remember { mutableStateOf(false) }
+                                        val speakerList = (0 until numSpeakers).toList()
+                                        var selectedSpeaker by remember { mutableStateOf(TtsEngine.speakerId) }
+                                        val keyboardController =
+                                            LocalSoftwareKeyboardController.current
+
                                         ExposedDropdownMenuBox(
                                             expanded = expanded,
                                             onExpandedChange = { expanded = it }
@@ -306,7 +326,10 @@ class MainActivity : ComponentActivity() {
                                                         }
                                                     },
                                                 trailingIcon = {
-                                                    Icon(Icons.Default.ArrowDropDown, contentDescription = "Dropdown")
+                                                    Icon(
+                                                        Icons.Default.ArrowDropDown,
+                                                        contentDescription = "Dropdown"
+                                                    )
                                                 }
                                             )
                                             ExposedDropdownMenu(
@@ -333,7 +356,9 @@ class MainActivity : ComponentActivity() {
                                         }
                                     }
                                 }
+                            }
 
+                            item {
                                 Row {
                                     Button(
                                         modifier = Modifier.padding(5.dp),
@@ -342,7 +367,10 @@ class MainActivity : ComponentActivity() {
                                             contentColor = colorResource(R.color.white)
                                         ),
                                         onClick = {
-                                            val intent = Intent(applicationContext, ManageLanguagesActivity::class.java)
+                                            val intent = Intent(
+                                                applicationContext,
+                                                ManageLanguagesActivity::class.java
+                                            )
                                             startActivity(intent)
                                         }) {
                                         Image(
@@ -366,29 +394,33 @@ class MainActivity : ComponentActivity() {
                                         )
                                     }
                                 }
+                            }
 
+                            item {
                                 OutlinedTextField(
-                                    value = testText,
-                                    onValueChange = { testText = it },
+                                    value = sampleText,
+                                    onValueChange = { sampleText = it },
                                     label = { Text(getString(R.string.input)) },
                                     maxLines = 10,
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(bottom = 16.dp)
-                                        .verticalScroll(scrollState)
                                         .wrapContentHeight(),
                                     singleLine = false
                                 )
+                            }
 
-                                volume = preferenceHelper.getVolume()
-                                var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
+
+                            item {
                                 Text(
                                     getString(R.string.volume) + " " + String.format(
                                         "%.1f",
                                         displayVol
                                     )
                                 )
+                            }
 
+                            item {
                                 Slider(
                                     value = displayVol,
                                     onValueChange = {
@@ -405,7 +437,9 @@ class MainActivity : ComponentActivity() {
                                         activeTrackColor = colorResource(R.color.primaryDark)
                                     )
                                 )
+                            }
 
+                            item {
                                 Row {
                                     Button(
                                         enabled = true,
@@ -415,7 +449,7 @@ class MainActivity : ComponentActivity() {
                                             contentColor = colorResource(R.color.white)
                                         ),
                                         onClick = {
-                                            if (testText.isBlank() || testText.isEmpty()) {
+                                            if (sampleText.isBlank() || sampleText.isEmpty()) {
                                                 Toast.makeText(
                                                     applicationContext,
                                                     getString(R.string.input),
@@ -446,7 +480,7 @@ class MainActivity : ComponentActivity() {
 
                                                 CoroutineScope(Dispatchers.Default).launch {
                                                     TtsEngine.tts!!.generateWithCallback(
-                                                        text = testText,
+                                                        text = sampleText,
                                                         sid = TtsEngine.speakerId,
                                                         speed = TtsEngine.speed,
                                                         callback = ::callback,
@@ -489,7 +523,7 @@ class MainActivity : ComponentActivity() {
         TtsEngine.tts = null //reset TtsEngine to make sure a new voice is loaded at next start
         val country: String
         val languages = langDB.allInstalledLanguages
-        val language = languages.first{it.lang == currentLanguage}
+        val language = languages.first { it.lang == currentLanguage }
         country = language.country
 
         val subdirectoryName = currentLanguage + country
@@ -523,7 +557,7 @@ class MainActivity : ComponentActivity() {
         if (!stopped) {
             val samplesCopy = samples.copyOf()
             CoroutineScope(Dispatchers.IO).launch {
-               if (!samplesChannel.isClosedForSend) samplesChannel.send(samplesCopy)
+                if (!samplesChannel.isClosedForSend) samplesChannel.send(samplesCopy)
             }
             return 1
         } else {
