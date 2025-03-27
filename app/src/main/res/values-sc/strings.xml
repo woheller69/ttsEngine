@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="dialog_Later_button">Mancari prus a tardu</string>
+    <string name="play">Reprodue</string>
+    <string name="stop">Firma</string>
+    <string name="speed">Velotzidade</string>
+    <string name="speaker_id">ID chistionadore:</string>
+    <string name="language_id">Limba\\2009 </string>
+    <string name="input">Testu de ingendrare</string>
+    <string name="download_language">Iscàrriga limba</string>
+    <string name="test_languages">Proa sos modellos</string>
+    <string name="add_language">Annanghe limba</string>
+    <string name="delete_language">Iscantzella limba</string>
+    <string name="piper_models">Modellos de Piper</string>
+    <string name="coqui_models">Modellos de Coqui</string>
+    <string name="apply_system_speed">Àplica sas impostatziones de sistema (lestresa/tonu) pro s\'impreu comente motore TTS in totu su sistema</string>
+    <string name="volume">Volùmene</string>
+    <string name="start_main">INCUMINTZA</string>
+    <string name="error_download">Errore de iscarrigamentu</string>
+    <string name="dialog_StarOnGitHub">T\'agradat custa aplicatzione? Dae·nos un\'isteddu in GitHub o cùmbida unu cafè a s\'isvilupadore pro mèdiu de PayPal.</string>
+</resources>
