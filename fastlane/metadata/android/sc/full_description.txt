@@ -1,0 +1,4 @@
+SherpaTTS est unu motore de sìntesi vocale pro Android basadu subra de su Kaldi de generatzione noa chi impreat sas boghes Piper o Coqui.
+In su primu allughìngiu de s'aplicatzione, at a iscarrigare su modellu vocale preferidu dae Hugging Face.
+Tene in contu chi cussu est s'ùnicu momentu in ue bisòngiat s'autorizzazione pro ìnternet.
+A pustis de àere iscarrigadu su modellu, sa sìntesi vocale funtzionat totu chene lìnia, garantenende sa riservadesa tua e su discansu tuo.
