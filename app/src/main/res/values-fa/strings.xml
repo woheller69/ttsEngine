@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="speaker_id">شناسه گوینده:</string>
+    <string name="language_id">زبان </string>
+    <string name="input">متن برای تولید</string>
+    <string name="download_language">دانلود زبان</string>
+    <string name="test_languages">امتحان مدل‌ها</string>
+    <string name="add_language">افزودن زبان</string>
+    <string name="delete_language">حذف زبان</string>
+    <string name="piper_models">مدل‌های Piper</string>
+    <string name="apply_system_speed">اعمال تنظیمات سیستم (سرعت / زیر و بمی) برای استفاده به عنوان موتور TTS در کل سیستم</string>
+    <string name="volume">صدا</string>
+    <string name="coqui_models">مدل‌های Coqui</string>
+    <string name="start_main">شروع</string>
+    <string name="error_download">خطا در دانلود</string>
+    <string name="dialog_StarOnGitHub">آیا این برنامه را دوست دارید؟ لطفاً در GitHub یک ستاره بدهید یا از طریق PayPal برای توسعه‌دهنده یک قهوه بخرید.</string>
+    <string name="dialog_Later_button">شاید بعداً</string>
+    <string name="play">پخش</string>
+    <string name="stop">توقف</string>
+    <string name="speed">سرعت</string>
+</resources>
