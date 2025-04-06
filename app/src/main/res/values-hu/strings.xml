@@ -17,5 +17,5 @@
     <string name="coqui_models">Coqui modellek</string>
     <string name="apply_system_speed">Rendszerbeállítások (sebesség / hangmagasság) alkalmazása a rendszer egészére kiterjedő TTS-motorként való használathoz</string>
     <string name="speaker_id">Hangszóró azonosító:</string>
-    <string name="volume">Térfogat</string>
+    <string name="volume">Hangerő</string>
 </resources>
