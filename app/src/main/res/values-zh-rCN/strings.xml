@@ -1,2 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="download_language">下载语言</string>
+    <string name="start_main">开始</string>
+    <string name="error_download">下载错误</string>
+    <string name="dialog_StarOnGitHub">您喜欢这个应用吗？请在 GitHub 上给它一个星标，或者通过 PayPal 为开发者买杯咖啡。</string>
+    <string name="dialog_Later_button">以后再说</string>
+    <string name="play">播放</string>
+    <string name="stop">停止</string>
+    <string name="speed">速度</string>
+    <string name="speaker_id">发言者ID:</string>
+    <string name="language_id">语言 </string>
+    <string name="input">生成文本</string>
+    <string name="test_languages">尝试模型</string>
+    <string name="add_language">添加语言</string>
+    <string name="delete_language">删除语言</string>
+    <string name="piper_models">Piper 模型</string>
+    <string name="coqui_models">Coqui 模型</string>
+    <string name="apply_system_speed">将系统设置（速度/语调）应用于整个系统的文本转语音引擎</string>
+    <string name="volume">音量</string>
+</resources>
