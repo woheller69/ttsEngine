@@ -1,1 +1,1 @@
-Yeni nesil Kaldi tabanlı Metinden Konuşmaya motoru
+Yeni nesil Kaldi tabanlı yazıdan ses üreten motor
