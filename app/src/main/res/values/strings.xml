@@ -18,4 +18,5 @@
     <string name="coqui_models">Coqui models</string>
     <string name="apply_system_speed">Apply system settings (speed / pitch) for use as system-wide TTS engine</string>
     <string name="volume">Volume</string>
+    <string name="one_model_per_language">Only 1 model per language!</string>
 </resources>
