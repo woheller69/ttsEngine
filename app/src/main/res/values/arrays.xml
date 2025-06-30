@@ -7,10 +7,18 @@
         <item>ca_ES-upc_ona-x_low</item>
         <item>ca_ES-upc_pau-x_low</item>
         <item>ca_ES-upc_pau-x_low</item>
+        <item>cs_CZ-jirka-low</item>
         <item>cs_CZ-jirka-medium</item>
+        <item>cy_GB-bu_tts-medium</item>
         <item>cy_GB-gwryw_gogleddol-medium</item>
         <item>da_DK-talesyntese-medium</item>
         <item>de_DE-eva_k-x_low</item>
+        <item>de_DE-glados-low</item>
+        <item>de_DE-glados-medium</item>
+        <item>de_DE-glados-high</item>
+        <item>de_DE-glados_turret-low</item>
+        <item>de_DE-glados_turret-medium</item>
+        <item>de_DE-glados_turret-high</item>
         <item>de_DE-karlsson-low</item>
         <item>de_DE-kerstin-low</item>
         <item>de_DE-pavoque-low</item>
@@ -40,6 +48,7 @@
         <item>en_US-bryce-medium</item>
         <item>en_US-danny-low</item>
         <item>en_US-glados</item>
+        <item>en_US-glados-high</item>
         <item>en_US-hfc_female-medium</item>
         <item>en_US-hfc_male-medium</item>
         <item>en_US-joe-medium</item>
@@ -61,13 +70,18 @@
         <item>en_US-ryan-medium</item>
         <item>es_ES-carlfm-x_low</item>
         <item>es_ES-davefx-medium</item>
+        <item>es_ES-glados-medium</item>
         <item>es_ES-sharvard-medium</item>
         <item>es_MX-ald-medium</item>
         <item>es_MX-claude-high</item>
         <item>fa_IR-amir-medium</item>
+        <item>fa_IR-ganji-medium</item>
+        <item>fa_IR-ganji_adabi-medium</item>
         <item>fa_IR-gyro-medium</item>
+        <item>fa_IR-reza_ibrahim-medium</item>
         <item>fi_FI-harri-low</item>
         <item>fi_FI-harri-medium</item>
+        <item>fr_FR-gilles-low</item>
         <item>fr_FR-siwis-low</item>
         <item>fr_FR-siwis-medium</item>
         <item>fr_FR-tom-medium</item>
@@ -87,6 +101,7 @@
         <item>kk_KZ-raya-x_low</item>
         <item>lv_LV-aivars-medium</item>
         <item>lb_LU-marylux-medium</item>
+        <item>ne_NP-chitwan-medium</item>
         <item>ne_NP-google-medium</item>
         <item>ne_NP-google-x_low</item>
         <item>nl_BE-nathalie-medium</item>
@@ -97,8 +112,10 @@
         <item>pl_PL-darkman-medium</item>
         <item>pl_PL-gosia-medium</item>
         <item>pl_PL-mc_speech-medium</item>
+        <item>pt_BR-cadu-medium</item>
         <item>pt_BR-edresson-low</item>
         <item>pt_BR-faber-medium</item>
+        <item>pt_BR-jeff-medium</item>
         <item>pt_PT-tugao-medium</item>
         <item>ro_RO-mihai-medium</item>
         <item>ru_RU-denis-medium</item>
@@ -108,6 +125,7 @@
         <item>sk_SK-lili-medium</item>
         <item>sl_SI-artur-medium</item>
         <item>sr_RS-serbski_institut-medium</item>
+        <item>sv_SE-lisa-medium</item>
         <item>sv_SE-nst-medium</item>
         <item>sw_CD-lanfrica-medium</item>
         <item>tr_TR-dfki-medium</item>
