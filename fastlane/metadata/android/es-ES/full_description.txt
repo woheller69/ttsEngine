@@ -1,0 +1,4 @@
+ShepaTTS es un motor de texto a voz que usa Next-gen Kaldi con las voces de los proyectos Piper y Coqui.
+Cuando ejecute la aplicación por primera vez, se descargará tu modelo de voz predilecto en Hugging Face.
+Por favor, tenga en cuenta que es la única vez en la que se necesite conexión a internet.
+Una vez el modelo esté descargado, la aplicación funcionará sin necesidad de acceder a la red, mateniendo su seguridad y brindándole comodidad.
