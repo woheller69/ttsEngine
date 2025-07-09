@@ -1,3 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="start_main">INICIAR</string>
+    <string name="error_download">Error de descarga</string>
+    <string name="dialog_StarOnGitHub">¿Te gusta esta aplicación? Por favor, deje una estrella en Github o cómprele un café al desarrollador a través de PayPal.</string>
+    <string name="dialog_Later_button">Quizás más tarde</string>
+    <string name="play">Reproducir</string>
+    <string name="stop">Detener</string>
+    <string name="speed">Velocidad</string>
+    <string name="speaker_id">ID del parlante:</string>
+    <string name="language_id">Idioma </string>
+    <string name="input">Texto a generar</string>
+    <string name="download_language">Descargar idioma</string>
+    <string name="test_languages">Probar modelos</string>
+    <string name="delete_language">Quitar idioma</string>
+    <string name="add_language">Añadir idioma</string>
+    <string name="piper_models">Modelos Piper</string>
+    <string name="coqui_models">Modelos Coqui</string>
+    <string name="apply_system_speed">Cambiar la configuración (velocidad/tono) para usarlo como motor de texto a voz en todo el sistema.</string>
+    <string name="volume">Volumen</string>
+    <string name="one_model_per_language">¡Sólo se permite un modelo por idioma!</string>
 </resources>
