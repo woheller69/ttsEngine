@@ -11,8 +11,8 @@ android {
         applicationId = "org.woheller69.ttsengine"
         minSdk = 29
         targetSdk = 34
-        versionCode = 20
-        versionName = "2.0"
+        versionCode = 21
+        versionName = "2.1"
 
         vectorDrawables {
             useSupportLibrary = true
