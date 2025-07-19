@@ -18,4 +18,5 @@
     <string name="coqui_models">Coqui 模型</string>
     <string name="apply_system_speed">将系统设置（速度/语调）应用于整个系统的文本转语音引擎</string>
     <string name="volume">音量</string>
+    <string name="one_model_per_language">每种语言仅适用 1 个模型！</string>
 </resources>
