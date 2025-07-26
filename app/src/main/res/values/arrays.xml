@@ -79,11 +79,15 @@
         <item>fa_IR-ganji_adabi-medium</item>
         <item>fa_IR-gyro-medium</item>
         <item>fa_IR-reza_ibrahim-medium</item>
+        <item>fa_en-rezahedayatfar-ibrahimwalk-medium</item>
         <item>fi_FI-harri-low</item>
         <item>fi_FI-harri-medium</item>
         <item>fr_FR-gilles-low</item>
         <item>fr_FR-siwis-low</item>
         <item>fr_FR-siwis-medium</item>
+        <item>fr_FR-tjiho-model1</item>
+        <item>fr_FR-tjiho-model2</item>
+        <item>fr_FR-tjiho-model3</item>
         <item>fr_FR-tom-medium</item>
         <item>fr_FR-upmc-medium</item>
         <item>hu_HU-anna-medium</item>
