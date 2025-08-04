@@ -13,7 +13,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -69,8 +68,6 @@ import java.io.File
 const val TAG = "sherpa-onnx-tts-engine"
 
 class MainActivity : ComponentActivity() {
-    // TODO(fangjun): Save settings in ttsViewModel
-    private val ttsViewModel: TtsViewModel by viewModels()
 
     private lateinit var track: AudioTrack
 
@@ -105,6 +102,7 @@ class MainActivity : ComponentActivity() {
             TtsEngine.createTts(this, preferenceHelper.getCurrentLanguage()!!)
             initAudioTrack()
             setupDisplay(langDB, preferenceHelper)
+            ThemeUtil.setStatusBarAppearance(this)
             if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
                 this,
                 "https://github.com/woheller69/ttsengine"

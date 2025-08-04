@@ -15,7 +15,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityManageLanguagesBinding.inflate(layoutInflater)
         setContentView(binding!!.root)
-
+        ThemeUtil.setStatusBarAppearance(this)
         val allPiperModels: Array<String> = resources.getStringArray(R.array.piper_models)
         val allCoquiModels: Array<String> = resources.getStringArray(R.array.coqui_models)
 

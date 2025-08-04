@@ -68,6 +68,7 @@
         <item>en_US-ryan-high</item>
         <item>en_US-ryan-low</item>
         <item>en_US-ryan-medium</item>
+        <item>es_AR-daniela-high</item>
         <item>es_ES-carlfm-x_low</item>
         <item>es_ES-davefx-medium</item>
         <item>es_ES-glados-medium</item>
@@ -90,6 +91,8 @@
         <item>fr_FR-tjiho-model3</item>
         <item>fr_FR-tom-medium</item>
         <item>fr_FR-upmc-medium</item>
+        <item>hi_IN-pratham-medium</item>
+        <item>hi_IN-priyamvada-medium</item>
         <item>hu_HU-anna-medium</item>
         <item>hu_HU-berta-medium</item>
         <item>hu_HU-imre-medium</item>
