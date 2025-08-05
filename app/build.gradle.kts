@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace = "com.k2fsa.sherpa.onnx.tts.engine"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "org.woheller69.ttsengine"
         minSdk = 29
-        targetSdk = 34
-        versionCode = 22
-        versionName = "2.2"
+        targetSdk = 35
+        versionCode = 23
+        versionName = "2.3"
 
         vectorDrawables {
             useSupportLibrary = true
