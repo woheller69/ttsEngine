@@ -21,6 +21,7 @@
         <item>de_DE-glados_turret-high</item>
         <item>de_DE-karlsson-low</item>
         <item>de_DE-kerstin-low</item>
+        <item>de_DE-miro-high</item>
         <item>de_DE-pavoque-low</item>
         <item>de_DE-ramona-low</item>
         <item>de_DE-thorsten-high</item>
@@ -34,7 +35,9 @@
         <item>en_GB-aru-medium</item>
         <item>en_GB-cori-high</item>
         <item>en_GB-cori-medium</item>
+        <item>en_GB-dii-high</item>
         <item>en_GB-jenny_dioco-medium</item>
+        <item>en_GB-miro-high</item>
         <item>en_GB-northern_english_male-medium</item>
         <item>en_GB-semaine-medium</item>
         <item>en_GB-southern_english_female-low</item>
@@ -64,6 +67,7 @@
         <item>en_US-libritts_r-medium</item>
         <item>en_US-ljspeech-high</item>
         <item>en_US-ljspeech-medium</item>
+        <item>en_US-miro-high</item>
         <item>en_US-norman-medium</item>
         <item>en_US-ryan-high</item>
         <item>en_US-ryan-low</item>
@@ -72,6 +76,7 @@
         <item>es_ES-carlfm-x_low</item>
         <item>es_ES-davefx-medium</item>
         <item>es_ES-glados-medium</item>
+        <item>es_ES-miro-high</item>
         <item>es_ES-sharvard-medium</item>
         <item>es_MX-ald-medium</item>
         <item>es_MX-claude-high</item>
@@ -84,6 +89,7 @@
         <item>fi_FI-harri-low</item>
         <item>fi_FI-harri-medium</item>
         <item>fr_FR-gilles-low</item>
+        <item>fr_FR-miro-high</item>
         <item>fr_FR-siwis-low</item>
         <item>fr_FR-siwis-medium</item>
         <item>fr_FR-tjiho-model1</item>
@@ -100,6 +106,8 @@
         <item>is_IS-salka-medium</item>
         <item>is_IS-steinn-medium</item>
         <item>is_IS-ugla-medium</item>
+        <item>it_IT-dii-high</item>
+        <item>it_IT-miro-high</item>
         <item>it_IT-paola-medium</item>
         <item>it_IT-riccardo-x_low</item>
         <item>ka_GE-natia-medium</item>
@@ -115,6 +123,8 @@
         <item>nl_BE-nathalie-x_low</item>
         <item>nl_BE-rdh-medium</item>
         <item>nl_BE-rdh-x_low</item>
+        <item>nl_NL-dii-high</item>
+        <item>nl_NL-miro-high</item>
         <item>no_NO-talesyntese-medium</item>
         <item>pl_PL-darkman-medium</item>
         <item>pl_PL-gosia-medium</item>
@@ -125,8 +135,12 @@
         <item>pl_PL-zenski_wg_glos-medium</item>
         <item>pt_BR-cadu-medium</item>
         <item>pt_BR-edresson-low</item>
+        <item>pt_BR-dii-high</item>
         <item>pt_BR-faber-medium</item>
         <item>pt_BR-jeff-medium</item>
+        <item>pt_BR-miro-high</item>
+        <item>pt_PT-dii-high</item>
+        <item>pt_PT-miro-high</item>
         <item>pt_PT-tugao-medium</item>
         <item>ro_RO-mihai-medium</item>
         <item>ru_RU-denis-medium</item>
