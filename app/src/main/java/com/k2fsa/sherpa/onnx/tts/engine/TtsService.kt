@@ -74,7 +74,7 @@ class TtsService : TextToSpeechService() {
         var pitch = 100f
 
         val preferenceHelper = PreferenceHelper(this)
-        val volume = preferenceHelper.getVolume()
+        val volume = TtsEngine.volume
 
         if (preferenceHelper.applySystemSpeed()){
             pitch = request.pitch * 1.0f

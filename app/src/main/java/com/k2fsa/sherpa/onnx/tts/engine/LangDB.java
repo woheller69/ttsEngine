@@ -13,7 +13,7 @@ public class LangDB extends SQLiteOpenHelper {
 
     // Database name and table columns
     private static final String DB_NAME = "Languages.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     public static final String TABLE_NAME = "Languages";
     private static final String COLUMN_ID = "ID";
     private static final String COLUMN_NAME = "ModelName";
@@ -22,10 +22,13 @@ public class LangDB extends SQLiteOpenHelper {
     private static final String COLUMN_SID = "SpeakerID";
     private static final String COLUMN_SPEED = "Speed";
     private static final String COLUMN_TYPE = "ModelType";
+    private static final String COLUMN_VOLUME = "Volume";
     private static LangDB instance = null;
+    private final Context mContext;
 
     public LangDB(Context context) {
         super(context, DB_NAME, null, DATABASE_VERSION);
+        mContext = context.getApplicationContext();  //mContext = context creates memory leak
     }
     
     @Override
@@ -38,18 +41,22 @@ public class LangDB extends SQLiteOpenHelper {
                 COLUMN_COUNTRY + " TEXT," +
                 COLUMN_SID + " INTEGER," +
                 COLUMN_SPEED + " FLOAT," +
-                COLUMN_TYPE + " TEXT);";
+                COLUMN_TYPE + " TEXT," +
+                COLUMN_VOLUME + " FLOAT);";
         db.execSQL(CREATE_TABLE);
     }
     
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop the table and create it again if there's a version change in the database schema.
-        db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
-        this.onCreate(db);
+        PreferenceHelper preferenceHelper = new PreferenceHelper(mContext);
+        switch(oldVersion) {
+            case 1:
+                db.execSQL("ALTER TABLE "+TABLE_NAME+" ADD COLUMN "+ COLUMN_VOLUME +" REAL DEFAULT " + preferenceHelper.getVolume());
+                // we want both updates, so no break statement here...
+        }
     }
     
-    public synchronized void addLanguage(String name, String lang, String country, int sid, float speed, String type) {
+    public synchronized void addLanguage(String name, String lang, String country, int sid, float speed, float volume, String type) {
         // Insert a new row into the table with all columns and their values from parameters.
         SQLiteDatabase db = getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -59,6 +66,7 @@ public class LangDB extends SQLiteOpenHelper {
         cv.put(COLUMN_SID, sid);
         cv.put(COLUMN_SPEED, speed);
         cv.put(COLUMN_TYPE, type);
+        cv.put(COLUMN_VOLUME, volume);
         
         db.insert(TABLE_NAME, null, cv); // Insert the row into the table with all columns and their values from parameters.
     }
@@ -72,7 +80,6 @@ public class LangDB extends SQLiteOpenHelper {
     
     public synchronized List<Language> getAllInstalledLanguages() {
         SQLiteDatabase db = this.getReadableDatabase();
-
         String SELECT_ALL = "SELECT * FROM "+ TABLE_NAME;
         Cursor cursor = db.rawQuery(SELECT_ALL, null); // Execute the query to select all rows from the table and store them in a cursor object for further processing.
 
@@ -87,7 +94,7 @@ public class LangDB extends SQLiteOpenHelper {
                 language.setSid(cursor.getInt(4));
                 language.setSpeed(cursor.getFloat(5));
                 language.setType(cursor.getString(6));
-
+                language.setVolume(cursor.getFloat(7));
                 languages.add(language);
 
             } while (cursor.moveToNext());
@@ -96,13 +103,13 @@ public class LangDB extends SQLiteOpenHelper {
         return languages;
     }
 
-    public synchronized void updateLang(String lang, int sid, float speed) {
+    public synchronized void updateLang(String lang, int sid, float speed, float volume) {
         SQLiteDatabase database = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_SID, sid);
         values.put(COLUMN_SPEED, speed);
-
+        values.put(COLUMN_VOLUME, volume);
         database.update(TABLE_NAME, values, COLUMN_LANG + " = ?", new String[]{lang});
         database.close();
     }

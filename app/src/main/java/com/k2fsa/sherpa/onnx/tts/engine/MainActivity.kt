@@ -76,7 +76,6 @@ class MainActivity : ComponentActivity() {
     private var samplesChannel = Channel<FloatArray>()
     private lateinit var preferenceHelper: PreferenceHelper
     private lateinit var langDB: LangDB
-    private var volume: Float = 1.0f
 
     override fun onPause() {
         super.onPause()
@@ -96,7 +95,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         preferenceHelper = PreferenceHelper(this)
         langDB = LangDB.getInstance(this)
-        volume = preferenceHelper.getVolume()
         Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
         if (!preferenceHelper.getCurrentLanguage().equals("")) {
             TtsEngine.createTts(this, preferenceHelper.getCurrentLanguage()!!)
@@ -173,7 +171,6 @@ class MainActivity : ComponentActivity() {
                         val languages = langDB.allInstalledLanguages
                         var selectedLang = languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
                         val numSpeakers = TtsEngine.tts!!.numSpeakers()
-                        var displayVol by remember { mutableStateOf(preferenceHelper.getVolume()) }
 
                         LazyColumn( // ✅ LazyColumn replaces Column
                             modifier = Modifier
@@ -198,7 +195,8 @@ class MainActivity : ComponentActivity() {
                                         langDB.updateLang(
                                             TtsEngine.lang,
                                             TtsEngine.speakerId,
-                                            TtsEngine.speed
+                                            TtsEngine.speed,
+                                            TtsEngine.volume
                                         )
                                     },
                                     valueRange = 0.2F..3.0F,
@@ -343,7 +341,8 @@ class MainActivity : ComponentActivity() {
                                                             langDB.updateLang(
                                                                 TtsEngine.lang,
                                                                 TtsEngine.speakerId,
-                                                                TtsEngine.speed
+                                                                TtsEngine.speed,
+                                                                TtsEngine.volume
                                                             )
                                                             expanded = false
                                                             stopped = true
@@ -413,20 +412,24 @@ class MainActivity : ComponentActivity() {
                                 Text(
                                     getString(R.string.volume) + " " + String.format(
                                         "%.1f",
-                                        displayVol
+                                        TtsEngine.volume
                                     )
                                 )
                             }
 
                             item {
                                 Slider(
-                                    value = displayVol,
+                                    value = TtsEngine.volumeState.value,
                                     onValueChange = {
-                                        displayVol = it
-                                        volume = it
+                                        TtsEngine.volume = it
                                     },
                                     onValueChangeFinished = {
-                                        preferenceHelper.setVolume(volume)
+                                        langDB.updateLang(
+                                            TtsEngine.lang,
+                                            TtsEngine.speakerId,
+                                            TtsEngine.speed,
+                                            TtsEngine.volume
+                                        )
                                     },
                                     valueRange = 0.2F..5.0F,
                                     modifier = Modifier.fillMaxWidth(),
@@ -465,7 +468,7 @@ class MainActivity : ComponentActivity() {
                                                 CoroutineScope(Dispatchers.IO).launch {
                                                     for (samples in samplesChannel) {
                                                         for (i in samples.indices) {
-                                                            samples[i] *= volume
+                                                            samples[i] *= TtsEngine.volume
                                                         }
                                                         track.write(
                                                             samples,
