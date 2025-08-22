@@ -15,13 +15,6 @@ class PreferenceHelper(context: Context) {
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun getSpeed(): Float { //ToDo: Remove later, only needed for migration
-        return sharedPreferences.getFloat(SPEED_KEY, 1.0f)
-    }
-
-    fun getSid(): Int { //ToDo: Remove later, only needed for migration
-        return sharedPreferences.getInt(SID_KEY, 0)
-    }
     fun setInitFinished() {
         val editor = sharedPreferences.edit()
         editor.putBoolean(INIT_KEY, true)
@@ -50,12 +43,6 @@ class PreferenceHelper(context: Context) {
 
     fun applySystemSpeed(): Boolean {
         return sharedPreferences.getBoolean(USE_SYSTEM_SPEED, false)
-    }
-
-    fun setVolume(volume: Float){
-        val editor = sharedPreferences.edit()
-        editor.putFloat(VOLUME, volume)
-        editor.apply()
     }
 
     fun getVolume(): Float{

@@ -7,21 +7,10 @@ public class Language {
     private String country;
     private int sid;
     private float speed;
+    private float volume;
     private String type;
 
-    public Language(int id, String name, String lang, String country, int sid, float speed, String type) {
-        this.id = id;
-        this.name = name;
-        this.lang = lang;
-        this.country = country;
-        this.sid = sid;
-        this.speed = speed;
-        this.type = type;
-    }
-
-    public Language() {
-
-    }
+    public Language() {}
 
     public int getId() {
         return id;
@@ -58,4 +47,8 @@ public class Language {
     public void setType(String type) {this.type = type;}
 
     public String getType() {return type;}
+
+    public void setVolume(float volume) {this.volume = volume;}
+
+    public float getVolume() {return this.volume;}
 }

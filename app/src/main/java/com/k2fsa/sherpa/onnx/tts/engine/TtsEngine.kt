@@ -23,8 +23,15 @@ object TtsEngine {
     var lang: String? = ""
     var country: String? = ""
 
+    val volumeState: MutableState<Float> = mutableFloatStateOf(1.0F)
     val speedState: MutableState<Float> = mutableFloatStateOf(1.0F)
     val speakerIdState: MutableState<Int> = mutableIntStateOf(0)
+
+    var volume: Float
+        get() = volumeState.value
+        set(value) {
+            volumeState.value = value
+        }
 
     var speed: Float
         get() = speedState.value
@@ -181,6 +188,7 @@ object TtsEngine {
         speed = language.speed
         speakerId = language.sid
         country = language.country
+        volume = language.volume
 
 
         modelDir = "$externalFilesDir/$lang$country"

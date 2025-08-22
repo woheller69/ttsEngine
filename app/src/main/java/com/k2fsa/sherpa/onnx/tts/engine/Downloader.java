@@ -94,7 +94,7 @@ public class Downloader {
                             PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
                             preferenceHelper.setCurrentLanguage(lang);
                             LangDB langDB = LangDB.getInstance(activity);
-                            langDB.addLanguage(model, lang, country, 0, 1.0f, type);
+                            langDB.addLanguage(model, lang, country, 0, 1.0f, 1.0f, type);
                         }
                     });
                 } catch (IOException i) {
@@ -154,7 +154,7 @@ public class Downloader {
                             PreferenceHelper preferenceHelper = new PreferenceHelper(activity);
                             preferenceHelper.setCurrentLanguage(lang);
                             LangDB langDB = LangDB.getInstance(activity);
-                            langDB.addLanguage(model, lang, country, 0, 1.0f, type);
+                            langDB.addLanguage(model, lang, country, 0, 1.0f, 1.0f, type);
                         }
                     });
 
