@@ -1,0 +1,2 @@
+Adjust volume for each language
+Bugfix
