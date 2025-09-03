@@ -85,9 +85,9 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         //Reset speed in case it has been changed by TtsService
         val db = LangDB.getInstance(this)
-        val languages = db.allInstalledLanguages
-        val language = languages.first { it.lang == TtsEngine.lang }
-        TtsEngine.speed = language.speed
+        val allLanguages = db.allInstalledLanguages
+        val currentLanguage = allLanguages.first { it.lang == TtsEngine.lang }
+        TtsEngine.speed.value = currentLanguage.speed
         super.onResume()
     }
 
@@ -168,8 +168,8 @@ class MainActivity : ComponentActivity() {
                     Box(modifier = Modifier.padding(it)) {
                         var sampleText by remember { mutableStateOf(getSampleText(TtsEngine.lang ?: "")) }
                         val numLanguages = langDB.allInstalledLanguages.size
-                        val languages = langDB.allInstalledLanguages
-                        var selectedLang = languages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
+                        val allLanguages = langDB.allInstalledLanguages
+                        var currentLanguage = allLanguages.indexOfFirst { it.lang == preferenceHelper.getCurrentLanguage()!! }
                         val numSpeakers = TtsEngine.tts!!.numSpeakers()
 
                         LazyColumn( // ✅ LazyColumn replaces Column
@@ -181,22 +181,22 @@ class MainActivity : ComponentActivity() {
                                 Text(
                                     getString(R.string.speed) + " " + String.format(
                                         "%.1f",
-                                        TtsEngine.speed
+                                        TtsEngine.speed.value
                                     )
                                 )
                             }
                             item {
                                 Slider(
-                                    value = TtsEngine.speedState.value,
+                                    value = TtsEngine.speed.value,
                                     onValueChange = {
-                                        TtsEngine.speed = it
+                                        TtsEngine.speed.value = it
                                     },
                                     onValueChangeFinished = {
                                         langDB.updateLang(
                                             TtsEngine.lang,
-                                            TtsEngine.speakerId,
-                                            TtsEngine.speed,
-                                            TtsEngine.volume
+                                            TtsEngine.speakerId.value,
+                                            TtsEngine.speed.value,
+                                            TtsEngine.volume.value
                                         )
                                     },
                                     valueRange = 0.2F..3.0F,
@@ -244,9 +244,9 @@ class MainActivity : ComponentActivity() {
                                     ) {
                                         val keyboardController =
                                             LocalSoftwareKeyboardController.current
-                                        var displayText = languages[selectedLang].lang
-                                        if (languages[selectedLang].name.isNotEmpty()) displayText =
-                                            "$displayText (${languages[selectedLang].name})"
+                                        var displayText = allLanguages[currentLanguage].lang
+                                        if (allLanguages[currentLanguage].name.isNotEmpty()) displayText =
+                                            "$displayText (${allLanguages[currentLanguage].name})"
                                         OutlinedTextField(
                                             value = displayText,
                                             onValueChange = {},
@@ -274,15 +274,15 @@ class MainActivity : ComponentActivity() {
                                         ) {
                                             val langList = (0 until numLanguages).toList()
                                             langList.forEach { langId ->
-                                                var dropdownText = languages[langId].lang
-                                                if (languages[langId].name.isNotEmpty()) dropdownText =
-                                                    "$dropdownText (${languages[langId].name})"
+                                                var dropdownText = allLanguages[langId].lang
+                                                if (allLanguages[langId].name.isNotEmpty()) dropdownText =
+                                                    "$dropdownText (${allLanguages[langId].name})"
                                                 DropdownMenuItem(
                                                     text = { Text(dropdownText) },
                                                     onClick = {
-                                                        selectedLang = langId
+                                                        currentLanguage = langId
                                                         preferenceHelper.setCurrentLanguage(
-                                                            languages[langId].lang
+                                                            allLanguages[langId].lang
                                                         )
                                                         expanded = false
                                                         restart()
@@ -336,13 +336,13 @@ class MainActivity : ComponentActivity() {
                                                     DropdownMenuItem(
                                                         text = { Text(speakerId.toString()) },
                                                         onClick = {
-                                                            selectedSpeaker = speakerId
-                                                            TtsEngine.speakerId = speakerId
+                                                            selectedSpeaker.value = speakerId
+                                                            TtsEngine.speakerId.value = speakerId
                                                             langDB.updateLang(
                                                                 TtsEngine.lang,
-                                                                TtsEngine.speakerId,
-                                                                TtsEngine.speed,
-                                                                TtsEngine.volume
+                                                                TtsEngine.speakerId.value,
+                                                                TtsEngine.speed.value,
+                                                                TtsEngine.volume.value
                                                             )
                                                             expanded = false
                                                             stopped = true
@@ -412,23 +412,23 @@ class MainActivity : ComponentActivity() {
                                 Text(
                                     getString(R.string.volume) + " " + String.format(
                                         "%.1f",
-                                        TtsEngine.volume
+                                        TtsEngine.volume.value
                                     )
                                 )
                             }
 
                             item {
                                 Slider(
-                                    value = TtsEngine.volumeState.value,
+                                    value = TtsEngine.volume.value,
                                     onValueChange = {
-                                        TtsEngine.volume = it
+                                        TtsEngine.volume.value = it
                                     },
                                     onValueChangeFinished = {
                                         langDB.updateLang(
                                             TtsEngine.lang,
-                                            TtsEngine.speakerId,
-                                            TtsEngine.speed,
-                                            TtsEngine.volume
+                                            TtsEngine.speakerId.value,
+                                            TtsEngine.speed.value,
+                                            TtsEngine.volume.value
                                         )
                                     },
                                     valueRange = 0.2F..5.0F,
@@ -468,7 +468,7 @@ class MainActivity : ComponentActivity() {
                                                 CoroutineScope(Dispatchers.IO).launch {
                                                     for (samples in samplesChannel) {
                                                         for (i in samples.indices) {
-                                                            samples[i] *= TtsEngine.volume
+                                                            samples[i] *= TtsEngine.volume.value
                                                         }
                                                         track.write(
                                                             samples,
@@ -482,8 +482,8 @@ class MainActivity : ComponentActivity() {
                                                 CoroutineScope(Dispatchers.Default).launch {
                                                     TtsEngine.tts!!.generateWithCallback(
                                                         text = sampleText,
-                                                        sid = TtsEngine.speakerId,
-                                                        speed = TtsEngine.speed,
+                                                        sid = TtsEngine.speakerId.value,
+                                                        speed = TtsEngine.speed.value,
                                                         callback = ::callback,
                                                     )
                                                 }.start()
@@ -523,9 +523,8 @@ class MainActivity : ComponentActivity() {
     private fun deleteLang(currentLanguage: String?) {
         TtsEngine.tts = null //reset TtsEngine to make sure a new voice is loaded at next start
         val country: String
-        val languages = langDB.allInstalledLanguages
-        val language = languages.first { it.lang == currentLanguage }
-        country = language.country
+        val allLanguages = langDB.allInstalledLanguages
+        country = allLanguages.first { it.lang == currentLanguage }.country
 
         val subdirectoryName = currentLanguage + country
         val subdirectory = File(getExternalFilesDir(null), subdirectoryName)

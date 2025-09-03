@@ -19,27 +19,9 @@ object TtsEngine {
     var lang: String? = ""
     var country: String? = ""
 
-    val volumeState: MutableState<Float> = mutableFloatStateOf(1.0F)
-    val speedState: MutableState<Float> = mutableFloatStateOf(1.0F)
-    val speakerIdState: MutableState<Int> = mutableIntStateOf(0)
-
-    var volume: Float
-        get() = volumeState.value
-        set(value) {
-            volumeState.value = value
-        }
-
-    var speed: Float
-        get() = speedState.value
-        set(value) {
-            speedState.value = value
-        }
-
-    var speakerId: Int
-        get() = speakerIdState.value
-        set(value) {
-            speakerIdState.value = value
-        }
+    var volume: MutableState<Float> = mutableFloatStateOf(1.0F)
+    var speed: MutableState<Float> = mutableFloatStateOf(1.0F)
+    var speakerId: MutableState<Int> = mutableIntStateOf(0)
 
     private var modelDir: String? = null
     private var modelName: String? = null
@@ -67,8 +49,8 @@ object TtsEngine {
     fun getAvailableLanguages(context: Context): ArrayList<String> {
         val langCodes = java.util.ArrayList<String>()
         val db = LangDB.getInstance(context)
-        val languages = db.allInstalledLanguages
-        for (language in languages) {
+        val allLanguages = db.allInstalledLanguages
+        for (language in allLanguages) {
             langCodes.add(language.lang)
         }
         return langCodes
@@ -80,19 +62,19 @@ object TtsEngine {
         }
     }
 
-    private fun initTts(context: Context, language: String) {
-        Log.i(TAG, "Init Next-gen Kaldi TTS: " + language)
-        lang = language
+    private fun initTts(context: Context, lang: String) {
+        Log.i(TAG, "Init Next-gen Kaldi TTS: " + lang)
+        this.lang = lang
         PreferenceHelper(context).setCurrentLanguage(lang!!)
         val externalFilesDir = context.getExternalFilesDir(null)!!.absolutePath
 
         val db = LangDB.getInstance(context)
-        val languages = db.allInstalledLanguages
-        val language = languages.first{it.lang == lang}
-        speed = language.speed
-        speakerId = language.sid
-        country = language.country
-        volume = language.volume
+        val allLanguages = db.allInstalledLanguages
+        val currentLanguage = allLanguages.first{it.lang == lang}
+        speed.value = currentLanguage.speed
+        speakerId.value = currentLanguage.sid
+        country = currentLanguage.country
+        volume.value = currentLanguage.volume
 
 
         modelDir = "$externalFilesDir/$lang$country"
