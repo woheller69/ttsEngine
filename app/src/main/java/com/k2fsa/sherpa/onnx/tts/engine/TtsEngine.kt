@@ -16,10 +16,6 @@ object TtsEngine {
     var tts: OfflineTts? = null
 
     // https://en.wikipedia.org/wiki/ISO_639-3
-    // Example:
-    // eng for English,
-    // deu for German
-    // cmn for Mandarin
     var lang: String? = ""
     var country: String? = ""
 
@@ -58,23 +54,7 @@ object TtsEngine {
     private var assets: AssetManager? = null
 
     init {
-        // The purpose of such a design is to make the CI test easier
-        // Please see
-        // https://github.com/k2-fsa/sherpa-onnx/blob/master/scripts/apk/generate-tts-apk-script.py
-        //
-        // For VITS -- begin
         modelName = "model.onnx"
-        // For VITS -- end
-
-        // For Matcha -- begin
-        acousticModelName = null
-        vocoder = null
-        // For Matcha -- end
-
-        // For Kokoro -- begin
-        voices = null
-        // For Kokoro -- end
-
         modelDir = "modelDir"
         ruleFsts = null
         ruleFars = null
@@ -82,82 +62,6 @@ object TtsEngine {
         dataDir = "espeak-ng-data"
         dictDir = null
         lang = ""
-
-        // Please enable one and only one of the examples below
-
-        // Example 1:
-        // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-vctk.tar.bz2
-        // modelDir = "vits-vctk"
-        // modelName = "vits-vctk.onnx"
-        // lexicon = "lexicon.txt"
-        // lang = "eng"
-
-        // Example 2:
-        // https://github.com/k2-fsa/sherpa-onnx/releases/tag/tts-models
-        // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-piper-en_US-amy-low.tar.bz2
-        // modelDir = "vits-piper-en_US-amy-low"
-        // modelName = "en_US-amy-low.onnx"
-        // dataDir = "vits-piper-en_US-amy-low/espeak-ng-data"
-        // lang = "eng"
-
-        // Example 3:
-        // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-icefall-zh-aishell3.tar.bz2
-        // modelDir = "vits-icefall-zh-aishell3"
-        // modelName = "model.onnx"
-        // ruleFars = "vits-icefall-zh-aishell3/rule.far"
-        // lexicon = "lexicon.txt"
-        // lang = "zho"
-
-        // Example 4:
-        // https://k2-fsa.github.io/sherpa/onnx/tts/pretrained_models/vits.html#csukuangfj-vits-zh-hf-fanchen-c-chinese-187-speakers
-        // modelDir = "vits-zh-hf-fanchen-C"
-        // modelName = "vits-zh-hf-fanchen-C.onnx"
-        // lexicon = "lexicon.txt"
-        // dictDir = "vits-zh-hf-fanchen-C/dict"
-        // lang = "zho"
-
-        // Example 5:
-        // https://github.com/k2-fsa/sherpa-onnx/releases/download/tts-models/vits-coqui-de-css10.tar.bz2
-        // This model does not need lexicon or dataDir
-        // modelDir = "vits-coqui-de-css10"
-        // modelName = "model.onnx"
-        // lang = "deu"
-
-        // Example 6
-        // vits-melo-tts-zh_en
-        // https://k2-fsa.github.io/sherpa/onnx/tts/pretrained_models/vits.html#vits-melo-tts-zh-en-chinese-english-1-speaker
-        // modelDir = "vits-melo-tts-zh_en"
-        // modelName = "model.onnx"
-        // lexicon = "lexicon.txt"
-        // dictDir = "vits-melo-tts-zh_en/dict"
-        // lang = "zho"
-
-        // Example 7
-        // matcha-icefall-zh-baker
-        // https://k2-fsa.github.io/sherpa/onnx/tts/pretrained_models/matcha.html#matcha-icefall-zh-baker-chinese-1-female-speaker
-        // modelDir = "matcha-icefall-zh-baker"
-        // acousticModelName = "model-steps-3.onnx"
-        // vocoder = "hifigan_v2.onnx"
-        // lexicon = "lexicon.txt"
-        // dictDir = "matcha-icefall-zh-baker/dict"
-        // lang = "zho"
-
-        // Example 8
-        // matcha-icefall-en_US-ljspeech
-        // https://k2-fsa.github.io/sherpa/onnx/tts/pretrained_models/matcha.html#matcha-icefall-en-us-ljspeech-american-english-1-female-speaker
-        // modelDir = "matcha-icefall-en_US-ljspeech"
-        // acousticModelName = "model-steps-3.onnx"
-        // vocoder = "hifigan_v2.onnx"
-        // dataDir = "matcha-icefall-en_US-ljspeech/espeak-ng-data"
-        // lang = "eng"
-
-        // Example 9
-        // kokoro-en-v0_19
-        // modelDir = "kokoro-en-v0_19"
-        // modelName = "model.onnx"
-        // voices = "voices.bin"
-        // dataDir = "kokoro-en-v0_19/espeak-ng-data"
-        // lang = "eng"
     }
 
     fun getAvailableLanguages(context: Context): ArrayList<String> {
