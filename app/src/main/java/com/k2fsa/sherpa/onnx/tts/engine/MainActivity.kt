@@ -63,6 +63,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
+import org.woheller69.freeDroidWarn.FreeDroidWarn
 import java.io.File
 
 const val TAG = "sherpa-onnx-tts-engine"
@@ -101,6 +102,7 @@ class MainActivity : ComponentActivity() {
             initAudioTrack()
             setupDisplay(langDB, preferenceHelper)
             ThemeUtil.setStatusBarAppearance(this)
+            FreeDroidWarn.showWarningOnUpgrade(this, BuildConfig.VERSION_CODE)
             if (GithubStar.shouldShowStarDialog(this)) GithubStar.starDialog(
                 this,
                 "https://github.com/woheller69/ttsengine"

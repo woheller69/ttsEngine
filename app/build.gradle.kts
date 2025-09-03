@@ -11,8 +11,8 @@ android {
         applicationId = "org.woheller69.ttsengine"
         minSdk = 29
         targetSdk = 35
-        versionCode = 25
-        versionName = "2.5"
+        versionCode = 26
+        versionName = "2.6"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -71,4 +71,5 @@ dependencies {
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.github.k2-fsa:sherpa-onnx:v1.10.42")
     implementation("androidx.preference:preference:1.2.1")
+    implementation("com.github.woheller69:FreeDroidWarn:V1.3")
 }
