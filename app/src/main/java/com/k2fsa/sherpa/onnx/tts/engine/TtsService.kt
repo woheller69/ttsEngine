@@ -74,11 +74,10 @@ class TtsService : TextToSpeechService() {
         var pitch = 100f
 
         val preferenceHelper = PreferenceHelper(this)
-        val volume = TtsEngine.volume
 
         if (preferenceHelper.applySystemSpeed()){
             pitch = request.pitch * 1.0f
-            TtsEngine.speed = request.speechRate / pitch  //divide by pitch to compensate for pitch adjustment performed in ttsCallback
+            TtsEngine.speed.value = request.speechRate / pitch  //divide by pitch to compensate for pitch adjustment performed in ttsCallback
         }         // request.speechRate: System does not memorize different speeds for different languages
 
         val text = request.charSequenceText.toString()
@@ -107,14 +106,14 @@ class TtsService : TextToSpeechService() {
                 val newSamples = FloatArray(newSampleCount)
 
                 for (i in 0 until newSampleCount) {
-                    newSamples[i] = floatSamples[(i * speedFactor).toInt()] * volume
+                    newSamples[i] = floatSamples[(i * speedFactor).toInt()] * TtsEngine.volume.value
                 }
                 // Convert the modified FloatArray to ByteArray
                 samples = floatArrayToByteArray(newSamples)
             } else {
                 // Convert FloatArray to ByteArray
                 for (i in floatSamples.indices) {
-                    floatSamples[i] *= volume
+                    floatSamples[i] *= TtsEngine.volume.value
                 }
                 samples = floatArrayToByteArray(floatSamples)
             }
@@ -135,8 +134,8 @@ class TtsService : TextToSpeechService() {
         //Log.i(TAG, "text: $text")
         tts.generateWithCallback(
             text = text,
-            sid = TtsEngine.speakerId,
-            speed = TtsEngine.speed,
+            sid = TtsEngine.speakerId.value,
+            speed = TtsEngine.speed.value,
             callback = ttsCallback,
         )
 
