@@ -71,6 +71,10 @@ fun getSampleText(lang: String): String {
                 "Ovo je mehanizam za pretvaranje teksta u govor koji koristi Kaldi sljedeće generacije"
         }
 
+        "hin" -> {
+            text = "यह एक अगली पीढ़ी के काल्डी एप्लिकेशन है, जो लिखित शब्दों और वाक्यांशों को बोली मे परिवर्तित करता है"
+        }
+
         "hun" -> {
             text = "Ez egy szövegfelolvasó motor a következő generációs kaldi használatával"
         }

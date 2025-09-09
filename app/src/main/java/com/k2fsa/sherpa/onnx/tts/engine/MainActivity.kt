@@ -523,7 +523,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun deleteLang(currentLanguage: String?) {
-        TtsEngine.tts = null //reset TtsEngine to make sure a new voice is loaded at next start
+
+        // Clear current TTS instance
+        TtsEngine.tts = null
+        // Remove from internal cache
+        TtsEngine.removeLanguageFromCache(currentLanguage!!)
+
         val country: String
         val allLanguages = langDB.allInstalledLanguages
         country = allLanguages.first { it.lang == currentLanguage }.country
