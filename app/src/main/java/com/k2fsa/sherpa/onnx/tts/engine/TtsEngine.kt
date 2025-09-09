@@ -13,6 +13,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 
 object TtsEngine {
+    private val ttsCache = mutableMapOf<String, OfflineTts>()
     var tts: OfflineTts? = null
 
     // https://en.wikipedia.org/wiki/ISO_639-3
@@ -23,28 +24,15 @@ object TtsEngine {
     var speed: MutableState<Float> = mutableFloatStateOf(1.0F)
     var speakerId: MutableState<Int> = mutableIntStateOf(0)
 
-    private var modelDir: String? = null
-    private var modelName: String? = null
+    private var modelName: String = "model.onnx"
     private var acousticModelName: String? = null // for matcha tts
     private var vocoder: String? = null // for matcha tts
     private var voices: String? = null // for kokoro
     private var ruleFsts: String? = null
     private var ruleFars: String? = null
     private var lexicon: String? = null
-    private var dataDir: String? = null
+    private var dataDir: String = "espeak-ng-data"
     private var dictDir: String? = null
-    private var assets: AssetManager? = null
-
-    init {
-        modelName = "model.onnx"
-        modelDir = "modelDir"
-        ruleFsts = null
-        ruleFars = null
-        lexicon = null
-        dataDir = "espeak-ng-data"
-        dictDir = null
-        lang = ""
-    }
 
     fun getAvailableLanguages(context: Context): ArrayList<String> {
         val langCodes = java.util.ArrayList<String>()
@@ -58,28 +46,41 @@ object TtsEngine {
 
     fun createTts(context: Context, language: String) {
         if (tts == null || lang != language) {
-            initTts(context, language)
+            if (ttsCache.containsKey(language)) {
+                Log.i(TAG, "From TTS cache: " + language)
+                tts = ttsCache[language]
+                loadLanguageSettings(context, language)
+            } else {
+                initTts(context, language)
+            }
         }
     }
 
+    private fun loadLanguageSettings(context: Context, language: String) {
+        val db = LangDB.getInstance(context)
+        val currentLanguage = db.allInstalledLanguages.first { it.lang == language }
+        this.lang = language
+        this.country = currentLanguage.country
+        this.speed.value = currentLanguage.speed
+        this.speakerId.value = currentLanguage.sid
+        this.volume.value = currentLanguage.volume
+        PreferenceHelper(context).setCurrentLanguage(language)
+    }
+
+    fun removeLanguageFromCache(language: String) {
+        ttsCache.remove(language)
+        Log.i(TAG, "Removed TTS cache for: $language")
+        Log.i(TAG, "TTS cache size:"+ ttsCache.size)
+    }
+
     private fun initTts(context: Context, lang: String) {
-        Log.i(TAG, "Init Next-gen Kaldi TTS: " + lang)
-        this.lang = lang
-        PreferenceHelper(context).setCurrentLanguage(lang!!)
+        Log.i(TAG, "Add to TTS cache: " + lang)
+
+        loadLanguageSettings(context, lang)
+
         val externalFilesDir = context.getExternalFilesDir(null)!!.absolutePath
 
-        val db = LangDB.getInstance(context)
-        val allLanguages = db.allInstalledLanguages
-        val currentLanguage = allLanguages.first{it.lang == lang}
-        speed.value = currentLanguage.speed
-        speakerId.value = currentLanguage.sid
-        country = currentLanguage.country
-        volume.value = currentLanguage.volume
-
-
-        modelDir = "$externalFilesDir/$lang$country"
-
-        assets = context.assets
+        val modelDir = "$externalFilesDir/$lang$country"
 
         var newDataDir = ""
         if (dataDir != null) {
@@ -110,6 +111,8 @@ object TtsEngine {
         )
 
         tts = OfflineTts(assetManager = null, config = configDebugOff)
+        ttsCache[lang] = tts!!
+        Log.i(TAG, "TTS cache size:"+ ttsCache.size)
     }
 
     private fun copyDataDir(context: Context, dataDir: String): String {
