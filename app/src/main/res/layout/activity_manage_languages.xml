@@ -139,7 +139,34 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        <!-- Imported voices section -->
+<TextView
+    android:id="@+id/imported_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:text="Imported voices (tap to activate, long-press to delete)"
+    android:textStyle="bold"
+    android:textSize="16sp" />
 
-    </LinearLayout>
+<Button
+    android:id="@+id/button_import_local"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:text="Import local voice"
+    android:backgroundTint="@color/primaryDark"
+    android:textColor="@color/white" />
+
+<ListView
+    android:id="@+id/imported_list"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="10dp"
+    android:dividerHeight="1dp" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
