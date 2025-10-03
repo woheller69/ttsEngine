@@ -8,11 +8,11 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "org.woheller69.ttsengine"
+        applicationId = "com.embanaphe.sherpatts"   // unique fork ID
         minSdk = 29
         targetSdk = 35
-        versionCode = 27
-        versionName = "2.7"
+        versionCode = 10001
+        versionName = "local-fork-1"
 
         vectorDrawables {
             useSupportLibrary = true
@@ -58,7 +58,6 @@ android {
 }
 
 dependencies {
-
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.2")
