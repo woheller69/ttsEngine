@@ -18,4 +18,5 @@
     <string name="error_download">Ошибка при скачивании</string>
     <string name="volume">Объем</string>
     <string name="apply_system_speed">Применить системные настройки (скорость / шаг винта) в качестве общесистемного двигателя TTS</string>
+    <string name="one_model_per_language">Только 1 модель на язык!</string>
 </resources>
