@@ -3,6 +3,9 @@
     <string-array name="piper_models">
         <item>ar_JO-kareem-low</item>
         <item>ar_JO-kareem-medium</item>
+        <item>ar_JO-SA_dii-high</item>
+        <item>ar_JO-SA_miro-high</item>
+        <item>ar_JO-SA_miro_V2-high</item>
         <item>ca_ES-upc_ona-medium</item>
         <item>ca_ES-upc_ona-x_low</item>
         <item>ca_ES-upc_pau-x_low</item>
