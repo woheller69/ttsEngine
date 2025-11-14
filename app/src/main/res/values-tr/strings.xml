@@ -18,4 +18,5 @@
     <string name="dialog_StarOnGitHub">Bu uygulamayı beğendiniz mi? Lütfen GitHub\'da bir yıldız verin veya geliştiriciye PayPal aracılığıyla bir kahve ısmarlayın.</string>
     <string name="apply_system_speed">Sistem genelinde TTS motoru olarak kullanılmak üzere sistem ayarlarını (hız/perde) uygulayın</string>
     <string name="volume">Ses seviyesi</string>
+    <string name="one_model_per_language">Her dil için sadece 1 model!</string>
 </resources>
