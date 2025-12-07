@@ -15,33 +15,38 @@ public class Migrate {
         File sdcardDataFolder = context.getExternalFilesDir(null);
         File lang = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/lang");
         if (lang.exists()) { //move to new directory structure
-            String language = readLanguageFromFile(context);
+            String[] model = readLanguageFromFile(context);
             File modelDirFolder = new File(sdcardDataFolder.getAbsolutePath(),"modelDir");
-            File langFolder = new File(sdcardDataFolder.getAbsolutePath(),language);
+            File langFolder = new File(sdcardDataFolder.getAbsolutePath(),model[0]);
             modelDirFolder.renameTo(langFolder);
             PreferenceHelper preferenceHelper = new PreferenceHelper(context);
-            preferenceHelper.setCurrentLanguage(language);
+            preferenceHelper.setCurrentLanguage(model[0]);
             LangDB langDB = LangDB.getInstance(context);
-            langDB.addLanguage("???",language, "", 0, 1.0f, 1.0f, "vits-piper");
+            langDB.addLanguage(model[1], model[0], "", 0, 1.0f, 1.0f, "vits-piper");
         }
     }
 
-    public static String readLanguageFromFile(Context context){
-        StringBuilder text = new StringBuilder();
+    public static String[] readLanguageFromFile(Context context) {
         File sdcardDataFolder = context.getExternalFilesDir(null);
         File langFile = new File(sdcardDataFolder.getAbsolutePath(), "modelDir/lang");
-        if (!langFile.exists()) return "eng";
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(langFile));
-            String line;
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
+
+        // Default fallback values
+        String languageCode = "eng";
+        String languageName = "???";
+
+        try (BufferedReader br = new BufferedReader(new FileReader(langFile))) {
+            String line1 = br.readLine(); // language code
+            String line2 = br.readLine(); // language name
+
+            if (line1 != null) {
+                languageCode = line1.trim();
             }
-            br.close();
+            if (line2 != null) {
+                languageName = line2.trim();
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return text.toString().trim();
+        return new String[]{languageCode, languageName};
     }
 }
