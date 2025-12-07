@@ -28,6 +28,17 @@ Please note that this is the only instance where internet permission is required
 Once the model is downloaded, text-to-speech works entirely offline, ensuring your privacy and convenience.
 Voices can be tested [here](https://huggingface.co/spaces/k2-fsa/text-to-speech/).
 
+## Sideloading other models
+
+You can install other Piper models per adb. Depending on your Android version it may also work via "normal" USB connection.
+Create ```modelDir``` in ```sdcard/Android/data/org.woheller69.ttsengine/files```
+and put 3 files there.
+```model.onnx```
+```tokens.txt```
+```lang```  which in the 1st line contains the 3 letter code e.g. ```eng``` and in the 2nd line contains the model name
+
+At next start the app will migrate it to the new directory structure and add it to installed languages.
+
 ## Contribute
 For translations use https://toolate.othing.xyz/projects/sherpatts/
 
