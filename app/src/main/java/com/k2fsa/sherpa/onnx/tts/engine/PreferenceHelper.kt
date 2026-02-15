@@ -9,6 +9,7 @@ class PreferenceHelper(context: Context) {
     private val SID_KEY = "speaker_id"
     private val INIT_KEY = "init_espeak"
     private val USE_SYSTEM_SPEED = "apply_system_speed"
+    private val STRIP_SSML = "strip_ssml"
     private val CURRENT_LANGUAGE = "current_language"
     private val VOLUME = "volume"
 
@@ -43,6 +44,16 @@ class PreferenceHelper(context: Context) {
 
     fun applySystemSpeed(): Boolean {
         return sharedPreferences.getBoolean(USE_SYSTEM_SPEED, false)
+    }
+
+    fun setStripSSML(stripSSML: Boolean){
+        val editor = sharedPreferences.edit()
+        editor.putBoolean(STRIP_SSML, stripSSML)
+        editor.apply()
+    }
+
+    fun stripSSML(): Boolean {
+        return sharedPreferences.getBoolean(STRIP_SSML, false)
     }
 
     fun getVolume(): Float{

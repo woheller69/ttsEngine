@@ -72,4 +72,5 @@ dependencies {
     implementation("com.github.k2-fsa:sherpa-onnx:v1.10.42")
     implementation("androidx.preference:preference:1.2.1")
     implementation("com.github.woheller69:FreeDroidWarn:+")
+    implementation("org.jsoup:jsoup:1.22.1")
 }

@@ -238,6 +238,33 @@ class MainActivity : ComponentActivity() {
                             item { Spacer(modifier = Modifier.height(10.dp)) }
 
                             item {
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                    var stripSSML by remember {
+                                        mutableStateOf(
+                                            preferenceHelper.stripSSML()
+                                        )
+                                    }
+                                    Checkbox(
+                                        checked = stripSSML,
+                                        onCheckedChange = { isChecked ->
+                                            preferenceHelper.setStripSSML(isChecked)
+                                            stripSSML = isChecked
+                                        },
+                                        colors = CheckboxDefaults.colors(
+                                            checkedColor = colorResource(R.color.primaryDark)
+                                        )
+                                    )
+                                    Text(
+                                        getString(R.string.strip_ssml)
+                                    )
+                                }
+                            }
+
+                            item { Spacer(modifier = Modifier.height(10.dp)) }
+
+                            item {
                                 Box(modifier = Modifier.fillMaxWidth()) {
                                     var expanded by remember { mutableStateOf(false) }
                                     ExposedDropdownMenuBox(
@@ -480,6 +507,8 @@ class MainActivity : ComponentActivity() {
                                                         )
                                                     }
                                                 }
+
+                                                if (preferenceHelper.stripSSML()) sampleText = TtsEngine.stripSsmlTags(sampleText)
 
                                                 CoroutineScope(Dispatchers.Default).launch {
                                                     TtsEngine.tts!!.generateWithCallback(

@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import com.k2fsa.sherpa.onnx.OfflineTts
 import com.k2fsa.sherpa.onnx.getOfflineTtsConfig
+import org.jsoup.Jsoup
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -42,6 +43,10 @@ object TtsEngine {
             langCodes.add(language.lang)
         }
         return langCodes
+    }
+
+    fun stripSsmlTags(text: String): String {
+        return Jsoup.parse(text).text().trim()
     }
 
     fun createTts(context: Context, language: String) {
