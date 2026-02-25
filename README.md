@@ -42,6 +42,8 @@ and put 3 files there.
 
 At next start the app will migrate it to the new directory structure and add it to installed languages.
 
+Make sure to convert the model as described here: https://k2-fsa.github.io/sherpa/onnx/tts/piper.html
+
 ## Contribute
 For translations use https://toolate.othing.xyz/projects/sherpatts/
 
