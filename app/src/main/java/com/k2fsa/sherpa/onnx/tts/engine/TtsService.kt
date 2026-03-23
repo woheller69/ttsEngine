@@ -82,7 +82,7 @@ class TtsService : TextToSpeechService() {
 
         var text = request.charSequenceText.toString()
 
-        if (preferenceHelper.stripSSML()) text = TtsEngine.stripSsmlTags(text)
+        if (preferenceHelper.getStripSSML()) text = TtsEngine.stripSsmlTags(text)
 
         val ret = onIsLanguageAvailable(language, country, variant)
         if (ret == TextToSpeech.LANG_NOT_SUPPORTED) {

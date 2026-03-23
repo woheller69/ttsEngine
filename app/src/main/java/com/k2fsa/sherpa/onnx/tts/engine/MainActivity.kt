@@ -243,7 +243,7 @@ class MainActivity : ComponentActivity() {
                                 ) {
                                     var stripSSML by remember {
                                         mutableStateOf(
-                                            preferenceHelper.stripSSML()
+                                            preferenceHelper.getStripSSML()
                                         )
                                     }
                                     Checkbox(
@@ -508,7 +508,7 @@ class MainActivity : ComponentActivity() {
                                                     }
                                                 }
 
-                                                if (preferenceHelper.stripSSML()) sampleText = TtsEngine.stripSsmlTags(sampleText)
+                                                if (preferenceHelper.getStripSSML()) sampleText = TtsEngine.stripSsmlTags(sampleText)
 
                                                 CoroutineScope(Dispatchers.Default).launch {
                                                     TtsEngine.tts!!.generateWithCallback(

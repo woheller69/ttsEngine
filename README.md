@@ -47,6 +47,7 @@ This work is licensed under GPLv3 license, © woheller69
 
 - This app is based on the [Sherpa ONNX Project](https://github.com/k2-fsa/sherpa-onnx), published under Apache-2.0 license
 - It uses data from [eSpeak NG](https://github.com/espeak-ng/espeak-ng), published under GPLv3 license
+- It uses [jsoup](https://github.com/jhy/jsoup), published under MIT license
 - At first start it downloads and installs a Piper or Coqui voice model from Hugging Face. 
 
 # OTHER APPS

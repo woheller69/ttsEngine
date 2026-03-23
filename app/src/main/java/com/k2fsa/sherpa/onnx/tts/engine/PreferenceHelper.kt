@@ -52,7 +52,7 @@ class PreferenceHelper(context: Context) {
         editor.apply()
     }
 
-    fun stripSSML(): Boolean {
+    fun getStripSSML(): Boolean {
         return sharedPreferences.getBoolean(STRIP_SSML, false)
     }
 
