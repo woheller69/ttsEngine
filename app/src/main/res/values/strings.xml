@@ -19,4 +19,5 @@
     <string name="apply_system_speed">Apply system settings (speed / pitch) for use as system-wide TTS engine</string>
     <string name="volume">Volume</string>
     <string name="one_model_per_language">Only 1 model per language!</string>
+    <string name="strip_ssml">Strip SSML tags (beta)</string>
 </resources>
