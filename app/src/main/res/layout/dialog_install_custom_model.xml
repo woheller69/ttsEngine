@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/enter_language_code"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextLangCode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g. eng"
+        android:inputType="text"
+        android:maxLines="1"
+        android:ems="10"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Model Name"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextModelName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="e.g., English Male Voice"
+        android:inputType="text"
+        android:maxLines="1"
+        android:ems="10"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/buttonSelectModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_model_file"
+        android:backgroundTint="@color/primaryDark"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/buttonSelectTokens"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/select_tokens_file"
+        android:backgroundTint="@color/primaryDark"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp" />
+
+    <Button
+        android:id="@+id/buttonInstall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/primaryDark"
+        android:text="@android:string/ok"
+        android:textStyle="bold" />
+
+</LinearLayout>
