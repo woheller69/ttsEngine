@@ -87,6 +87,20 @@
                     android:textColor="@color/white"
                     android:onClick="startMain"/>
 
+                <Button
+                    android:id="@+id/button_install_from_sd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/install_from_sd"
+                    android:visibility="visible"
+                    android:backgroundTint="@color/primaryDark"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textAllCaps="true"
+                    android:onClick="installFromSD"/>
+
             </LinearLayout>
 
             <LinearLayout
