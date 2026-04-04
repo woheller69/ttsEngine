@@ -21,17 +21,13 @@ SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses v
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/) [<img src="https://www.openapk.net/images/openapk-badge.png" height="75">]( https://www.openapk.net/ttsengine/org.woheller69.ttsengine/)
 
-## Initial Setup
-
-Upon launching SherpaTTS for the first time, the app will download your preferred voice model from Hugging Face. 
-Please note that this is the only instance where internet permission is required. 
-Once the model is downloaded, text-to-speech works entirely offline, ensuring your privacy and convenience.
-Voices can be tested [here](https://huggingface.co/spaces/k2-fsa/text-to-speech/).
-
 ## Installing Voice Models
 
 ### From Hugging Face
 The app provides a built-in model downloader that lets you install Piper and Coqui voice models directly from the "Manage Languages" screen. Simply select a language and the app will download and install the model automatically.
+Please note that this is the only instance where internet permission is required.
+Once the model is downloaded, text-to-speech works entirely offline, ensuring your privacy and convenience.
+Voices can be tested [here](https://huggingface.co/spaces/k2-fsa/text-to-speech/).
 
 ### From SD Card (Sideloading)
 You can install custom Piper models directly from your device storage:
