@@ -20,4 +20,13 @@
     <string name="volume">Hangerő</string>
     <string name="one_model_per_language">Nyelvenként csak 1 modell lehetséges!</string>
     <string name="strip_ssml">SSML-címkék eltávolítása (béta)</string>
+    <string name="install_from_sd">Piper modell telepítése SD-kártyáról</string>
+    <string name="enter_language_code">3 betűs ISO 639-2 kód</string>
+    <string name="enter_model_name">Adja meg a modell nevét</string>
+    <string name="select_model_file">model.onnx fájl kiválasztása</string>
+    <string name="select_tokens_file">tokens.txt fájl kiválasztása</string>
+    <string name="cancel">Mégse</string>
+    <string name="language_code_error">Érvénytelen nyelvkód. Adjon meg egy 3 betűs kódot.</string>
+    <string name="language_already_installed">A nyelv már telepítve van</string>
+    <string name="error_copying_files">Hiba a fájlok másolásakor</string>
 </resources>
