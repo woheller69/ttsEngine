@@ -113,7 +113,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         val selectTokensBtn = dialogView.findViewById<Button>(R.id.buttonSelectTokens)
         val installBtn = dialogView.findViewById<Button>(R.id.buttonInstall)
 
-        // Initialize button text/visibility (optional styling)
+        // Initialize button text/visibility 
         selectModelBtn.setOnClickListener {
             modelPickerLauncher.launch(arrayOf("application/octet-stream"))
         }
@@ -219,7 +219,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
         }
     }
 
-    // Register for file pickers (instead of using onActivityResult)
+    // Register for file pickers 
     private val modelPickerLauncher = registerForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
