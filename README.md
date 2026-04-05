@@ -21,28 +21,42 @@ SherpaTTS is an Android Text-to-Speech engine based on Next-gen Kaldi. It uses v
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" height="75">](https://f-droid.org/de/packages/org.woheller69.ttsengine/) [<img src="https://www.openapk.net/images/openapk-badge.png" height="75">]( https://www.openapk.net/ttsengine/org.woheller69.ttsengine/)
 
-## Initial Setup
+## Installing Voice Models
 
-Upon launching SherpaTTS for the first time, the app will download your preferred voice model from Hugging Face. 
-Please note that this is the only instance where internet permission is required. 
+### From Hugging Face
+The app provides a built-in model downloader that lets you install Piper and Coqui voice models directly from the "Manage Languages" screen. Simply select a language and the app will download and install the model automatically.
+Please note that this is the only instance where internet permission is required.
 Once the model is downloaded, text-to-speech works entirely offline, ensuring your privacy and convenience.
 Voices can be tested [here](https://huggingface.co/spaces/k2-fsa/text-to-speech/).
 
-## Sideloading other models
+### From SD Card (Sideloading)
+You can install custom Piper models directly from your device storage:
 
-You can install other Piper models per adb. Depending on your Android version it may also work via "normal" USB connection.
-Create ```modelDir``` in ```sdcard/Android/data/org.woheller69.ttsengine/files```
-and put 3 files there.
+1. Open the app and go to "Manage Languages"
+2. Tap "Install from SD Card"
+3. Enter a 3-letter language code (e.g., `eng`, `deu`, `fra`)
+4. Enter a model name (this will be displayed in the language list)
+5. Select your model file (`.onnx` format)
+6. Select your tokens file (`.txt` format)
+7. Tap "OK"
 
-* ```model.onnx```
+**Requirements:**
+- The model file must be in `.onnx` format (make sure the model has been converted a described here: [Sherpa ONNX conversion](https://k2-fsa.github.io/sherpa/onnx/tts/piper.html))
+- The tokens file must contain the vocabulary mapping (typically `tokens.txt`)
 
-* ```tokens.txt```
+### Via ADB (Alternative Method)
+You can also install models via ADB:
+1. Create a directory: `modelDir` in `sdcard/Android/data/org.woheller69.ttsengine/files`
+2. Place 3 files there:
+   - `model.onnx` - The converted model file
+   - `tokens.txt` - The vocabulary file
+   - `lang` - A text file with:
+     - Line 1: 3-letter language code (e.g., `eng`)
+     - Line 2: Model name
 
-* ```lang```  which in the 1st line contains the 3 letter code e.g. ```eng``` and in the 2nd line contains the model name
+At next start, the app will migrate it to the new directory structure and add it to installed languages.
 
-At next start the app will migrate it to the new directory structure and add it to installed languages.
-
-Make sure to convert the model as described here: https://k2-fsa.github.io/sherpa/onnx/tts/piper.html
+Make sure the model has been converted a described here: [Sherpa ONNX conversion](https://k2-fsa.github.io/sherpa/onnx/tts/piper.html)
 
 ## Contribute
 For translations use https://toolate.othing.xyz/projects/sherpatts/
