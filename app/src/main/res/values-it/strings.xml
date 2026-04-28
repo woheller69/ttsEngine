@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="start_main">AVVIA</string>
     <string name="error_download">Errore durante lo scaricamento</string>
@@ -16,4 +17,5 @@
     <string name="piper_models">Modelli Piper</string>
     <string name="coqui_models">Modelli Coqui</string>
     <string name="apply_system_speed">Applicare le impostazioni di sistema (velocità/tono) per l\'utilizzo come motore TTS a livello di sistema</string>
+    <string name="volume">Volume</string>
 </resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_language">إضافة لغة</string>
+    <string name="delete_language">حذف اللغة</string>
+    <string name="piper_models">نماذج Piper</string>
+    <string name="coqui_models">نماذج Coqui</string>
+    <string name="volume">مستوى الصوت</string>
+    <string name="apply_system_speed">تطبيق إعدادات النظام (السرعة / النبرة) للاستخدام كمحرك تحويل نص إلى كلام على مستوى النظام</string>
+    <string name="start_main">ابدأ</string>
+    <string name="error_download">خطأ في التنزيل</string>
+    <string name="dialog_StarOnGitHub">هل أعجبك هذا التطبيق؟ يرجى منح نجمة على GitHub أو شراء قهوة للمطور عبر PayPal.</string>
+    <string name="dialog_Later_button">لاحقًا</string>
+    <string name="play">تشغيل</string>
+    <string name="stop">إيقاف</string>
+    <string name="speed">السرعة</string>
+    <string name="speaker_id">معرف المتحدث:</string>
+    <string name="language_id">اللغة </string>
+    <string name="input">النص المراد إنشاؤه</string>
+    <string name="download_language">تنزيل اللغة</string>
+    <string name="test_languages">تجربة النماذج</string>
+</resources>

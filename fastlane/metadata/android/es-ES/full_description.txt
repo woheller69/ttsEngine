@@ -1,0 +1,4 @@
+SherpaTTS es un motor de texto a voz para Android, basado en la Next-gen Kaldi y que utiliza voces de Piper o Coqui.
+Al abrir la aplicación por primera vez, se descargará tu modelo de voz preferido desde Hugging Face.
+Ten en cuenta que esta es la única ocasión en la que se requiere acceso a internet.
+Una vez descargado el modelo, la conversión de texto a voz funciona completamente sin conexión, garantizando tu privacidad y comodidad.

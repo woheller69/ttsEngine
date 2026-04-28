@@ -17,4 +17,16 @@
     <string name="piper_models">Modely Piper</string>
     <string name="coqui_models">Modely Coqui</string>
     <string name="apply_system_speed">Použít systémová nastavení (rychlost / výška) pro použití jako systémový modul TTS</string>
+    <string name="volume">Objem</string>
+    <string name="one_model_per_language">Pouze 1 model na jazyk!</string>
+    <string name="strip_ssml">Odstranit značky SSML (beta)</string>
+    <string name="install_from_sd">Instalovat model Piper z SD karty</string>
+    <string name="enter_language_code">Třípísmenný kód ISO 639-2</string>
+    <string name="enter_model_name">Zadejte název modelu</string>
+    <string name="select_model_file">Vyberte soubor model.onnx</string>
+    <string name="select_tokens_file">Vyberte soubor tokens.txt</string>
+    <string name="cancel">Zrušit</string>
+    <string name="language_code_error">Neplatný kód jazyka. Zadejte prosím třípísmenný kód.</string>
+    <string name="language_already_installed">Jazyk je již nainstalován</string>
+    <string name="error_copying_files">Chyba při kopírování souborů</string>
 </resources>

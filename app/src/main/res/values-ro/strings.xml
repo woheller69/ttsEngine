@@ -18,4 +18,16 @@
     <string name="coqui_models">Modele ”Coqui”</string>
     <string name="app_name">Sintetizator vorbire SherpaTTS</string>
     <string name="apply_system_speed">Aplică setările sistemului (ritmul vorbirii/înălțime) pentru utilizarea ca motor TTS la nivel de sistem</string>
+    <string name="volume">Volumul</string>
+    <string name="one_model_per_language">Doar 1 model pentru o limbă!</string>
+    <string name="install_from_sd">Instalează modelul Piper de pe cardul SD</string>
+    <string name="enter_model_name">Introdu numele modelului</string>
+    <string name="select_model_file">Selectează fișierul model.onnx</string>
+    <string name="select_tokens_file">Selectează fișierul tokens.txt</string>
+    <string name="cancel">Anulare</string>
+    <string name="language_code_error">Codul limbii nu este valabil. Introdu un cod de 3 litere.</string>
+    <string name="language_already_installed">Limba este deja instalată</string>
+    <string name="error_copying_files">Eroare la copierea fișierelor</string>
+    <string name="strip_ssml">Dezgolește etichete SSML (beta)</string>
+    <string name="enter_language_code">Codul ISO 639-2 cu 3 litere</string>
 </resources>
