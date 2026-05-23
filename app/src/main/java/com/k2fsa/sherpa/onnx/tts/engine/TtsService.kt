@@ -15,8 +15,13 @@ class TtsService : TextToSpeechService() {
         Log.i(TAG, "onCreate tts service")
         super.onCreate()
 
-        // see https://github.com/Miserlou/Android-SDK-Samples/blob/master/TtsEngine/src/com/example/android/ttsengine/RobotSpeakTtsService.java#L68
-        onLoadLanguage(TtsEngine.lang, "", "")
+        // Cold-started service (e.g. after device reboot) has no warm singleton —
+        // TtsEngine.lang is "" because MainActivity never ran. Load from the
+        // persisted preference so the engine is ready before the first synth.
+        val saved = PreferenceHelper(this).getCurrentLanguage().orEmpty()
+        if (saved.isNotEmpty()) {
+            onLoadLanguage(saved, "", "")
+        }
     }
 
     override fun onDestroy() {
