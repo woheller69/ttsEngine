@@ -1,7 +1,5 @@
 package com.k2fsa.sherpa.onnx.tts.engine
 
-import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.media.AudioFormat
 import android.speech.tts.SynthesisCallback
 import android.speech.tts.SynthesisRequest
@@ -50,10 +48,11 @@ class TtsService : TextToSpeechService() {
         val lang = _lang ?: ""
         Migrate.renameModelFolder(this)   //Rename model folder if "old" structure
         val preferenceHelper = PreferenceHelper(this)
-        return if (preferenceHelper.getCurrentLanguage().equals("")){  //Download model first if no model is installed
-            val intent = Intent(this, MainActivity::class.java)
-            intent.addFlags(FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
+        return if (preferenceHelper.getCurrentLanguage().equals("")) {
+            // No model installed. Don't try to startActivity from a background
+            // service — banned on API 29+ (minSdk=29) and dangerous UX in a car.
+            // LANG_MISSING_DATA is the framework's standard signal; the system
+            // then routes the user via the INSTALL_TTS_DATA intent.
             TextToSpeech.LANG_MISSING_DATA
         } else {
             if (TtsEngine.getAvailableLanguages(this).contains(lang)) {
