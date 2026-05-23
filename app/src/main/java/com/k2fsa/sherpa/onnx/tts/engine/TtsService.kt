@@ -39,7 +39,13 @@ class TtsService : TextToSpeechService() {
     }
 
     override fun onGetLanguage(): Array<String> {  //returns language currently being used
-        return arrayOf(TtsEngine.lang!!, "", "")
+        // Fall back to the persisted language if the singleton is cold, so the
+        // framework sees a real default voice instead of "" — empty values can
+        // cause clients to skip setLanguage() and never trigger an engine load.
+        val lang = TtsEngine.lang.takeUnless { it.isNullOrEmpty() }
+            ?: PreferenceHelper(this).getCurrentLanguage().orEmpty()
+        val country = TtsEngine.country.orEmpty()
+        return arrayOf(lang, country, "")
     }
 
     // https://developer.android.com/reference/kotlin/android/speech/tts/TextToSpeechService#onLoadLanguage(kotlin.String,%20kotlin.String,%20kotlin.String)
