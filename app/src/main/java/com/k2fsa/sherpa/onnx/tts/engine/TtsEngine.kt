@@ -15,6 +15,7 @@ import java.io.IOException
 
 object TtsEngine {
     private val ttsCache = mutableMapOf<String, OfflineTts>()
+    @Volatile
     var tts: OfflineTts? = null
 
     // https://en.wikipedia.org/wiki/ISO_639-3

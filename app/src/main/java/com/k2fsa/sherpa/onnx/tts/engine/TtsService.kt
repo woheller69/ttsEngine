@@ -69,7 +69,22 @@ class TtsService : TextToSpeechService() {
     override fun onStop() {}
 
     override fun onSynthesizeText(request: SynthesisRequest?, callback: SynthesisCallback?) {
-        if (TtsEngine.tts == null || request == null || callback == null) {
+        if (request == null || callback == null) {
+            return
+        }
+        if (TtsEngine.tts == null) {
+            // Last-chance lazy init: if onCreate's load failed (e.g. mismatched
+            // default locale) or was never reached, recover from the persisted
+            // language so the client gets audio instead of a silent timeout.
+            val saved = PreferenceHelper(this).getCurrentLanguage().orEmpty()
+            if (saved.isNotEmpty()) {
+                onLoadLanguage(saved, "", "")
+            }
+        }
+        if (TtsEngine.tts == null) {
+            // Signal failure to the client — silently returning would hang
+            // callers that wait for callback.start/done/error.
+            callback.error()
             return
         }
         val language = request.language
