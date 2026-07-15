@@ -70,6 +70,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
             binding!!.buttonTestVoices.visibility = View.GONE
             binding!!.piperHeader.visibility = View.GONE
             binding!!.coquiHeader.visibility = View.GONE
+            binding!!.buttonInstallFromSd.visibility = View.GONE
             binding!!.downloadSize.setText("")
             Downloader.downloadModels(this, binding, model, lang, country, type)
         }
@@ -86,6 +87,7 @@ class ManageLanguagesActivity  : AppCompatActivity() {
             binding!!.buttonTestVoices.visibility = View.GONE
             binding!!.piperHeader.visibility = View.GONE
             binding!!.coquiHeader.visibility = View.GONE
+            binding!!.buttonInstallFromSd.visibility = View.GONE
             binding!!.downloadSize.setText("")
             Downloader.downloadModels(this, binding, model, lang, country, type)
         }

@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.k2fsa.sherpa.onnx.tts.engine.databinding.ActivityManageLanguagesBinding;
 
@@ -28,14 +29,36 @@ public class Downloader {
     static int tokensSize = 0;
 
     public static void downloadModels(final Activity activity, ActivityManageLanguagesBinding binding, String model, String lang, String country, String type) {
-        String modelName="";
+        String modelName = "";
         if (type.equals("vits-piper")) modelName = model + ".onnx";
         else if (type.equals("vits-coqui")) modelName = "model.onnx";
 
-        String onnxModelUrl = "https://huggingface.co/csukuangfj/"+ type + "-" + model + "/resolve/main/" + modelName;
-        String tokensUrl = "https://huggingface.co/csukuangfj/" + type + "-" + model + "/resolve/main/tokens.txt";
+        // 🔍 Try both repos: csukuangfj → csukuangfj2
+        String[] repos = {"csukuangfj", "csukuangfj2"};
+        String baseUrl = "";
+        String repoUsed = "";
+        String testUrl;
 
-        File directory = new File(activity.getExternalFilesDir(null)+ "/" + lang + country + "/");
+        for (String repo : repos) {
+            testUrl = "https://huggingface.co/" + repo + "/" + type + "-" + model + "/resolve/main/" + modelName; //check if the model exists
+
+            if (repoExists(testUrl)) {
+                repoUsed = repo;
+                baseUrl = "https://huggingface.co/" + repo + "/" + type + "-" + model + "/resolve/main/";
+                break;
+            }
+        }
+
+        if (repoUsed.isEmpty()) {
+            Log.e("TTS Engine", "Model not found in any repo: " + type + "-" + model);
+            activity.runOnUiThread(() -> Toast.makeText(activity, "Model not found", Toast.LENGTH_SHORT).show());
+            return;
+        }
+
+        String onnxModelUrl = baseUrl + modelName;
+        String tokensUrl = baseUrl + tokens;
+
+        File directory = new File(activity.getExternalFilesDir(null) + "/" + lang + country + "/");
         if (!directory.exists() && !directory.mkdirs()) {
             Log.e("TTS Engine", "Failed to make directory: " + directory);
             return;
@@ -47,7 +70,7 @@ public class Downloader {
         if (onnxModelFile.exists()) onnxModelFile.delete();
         if (!onnxModelFile.exists()) {
             onnxModelFinished = false;
-            Log.d("TTS Engine", "onnx model file does not exist");
+            Log.d("TTS Engine", "onnx model file does not exist, downloading from " + repoUsed);
             Thread thread = new Thread(() -> {
                 try {
                     URL url;
@@ -110,7 +133,7 @@ public class Downloader {
         if (tokensFile.exists()) tokensFile.delete();
         if (!tokensFile.exists()) {
             tokensFinished = false;
-            Log.d("TTS Engine", "tokens file does not exist");
+            Log.d("TTS Engine", "tokens file does not exist, downloading from " + repoUsed);
             Thread thread = new Thread(() -> {
                 try {
                     URL url = new URL(tokensUrl);
@@ -167,4 +190,33 @@ public class Downloader {
             thread.start();
         }
     }
+
+    private static boolean repoExists(String urlStr) {
+        AtomicInteger size = new AtomicInteger(-1); // init to -1 to detect "never set"
+
+        Thread test = new Thread(() -> {
+            try {
+                URL url = new URL(urlStr);
+                URLConnection ucon = url.openConnection();
+                ucon.setConnectTimeout(10_000);
+                ucon.setReadTimeout(5_000);
+                size.set(ucon.getContentLength());
+            } catch (IOException e) {
+                Log.w("RepoCheck", "Error checking URL", e);
+                size.set(-2); // mark as error
+            }
+        });
+
+        test.start();
+        try {
+            test.join(); // ⚠️ CRITICAL: WAIT for the thread to finish!
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // restore interrupt status
+            return false;
+        }
+
+        int finalSize = size.get();
+        return finalSize > 100_000;
+     }
+
 }
