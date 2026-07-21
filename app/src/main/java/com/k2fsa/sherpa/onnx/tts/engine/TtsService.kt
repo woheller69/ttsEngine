@@ -7,13 +7,25 @@ import android.speech.tts.SynthesisRequest
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeechService
 import android.util.Log
+import java.io.ByteArrayOutputStream
 
 
 class TtsService : TextToSpeechService() {
 
+    // How much audio to accumulate before calling callback.start(), so the
+    // system AudioTrack isn't left draining an empty buffer while the model
+    // computes the first chunk. Without this, the first inference call
+    // (slower than steady-state, since onnxruntime warms up its execution
+    // graph on first use) races the AudioTrack and causes an audible
+    // crackle/underrun at the start of every utterance. See issue #90 for
+    // the same root cause manifesting as a clipped first word instead.
+    private val PRE_ROLL_MS = 300
+
     // Member variables to hold state for the callback
     private var currentPitch = 100f
     private var currentSynthesisCallback: SynthesisCallback? = null
+    private var preRollBuffer: ByteArrayOutputStream? = null
+    private var preRollThresholdBytes = 0
 
     override fun onCreate() {
         Log.i(TAG, "onCreate tts service")
@@ -97,10 +109,10 @@ class TtsService : TextToSpeechService() {
 
 
         val tts = TtsEngine.tts!!
-
-        callback.start(tts.sampleRate(), AudioFormat.ENCODING_PCM_16BIT, 1)
+        val sampleRate = tts.sampleRate()
 
         if (text.isBlank() || text.isEmpty()) {
+            callback.start(sampleRate, AudioFormat.ENCODING_PCM_16BIT, 1)
             callback.done()
             return
         }
@@ -108,6 +120,8 @@ class TtsService : TextToSpeechService() {
         // Store state in member variables so the function reference can access them
         currentPitch = pitch
         currentSynthesisCallback = callback
+        preRollBuffer = ByteArrayOutputStream()
+        preRollThresholdBytes = sampleRate * 2 * PRE_ROLL_MS / 1000  // 16-bit mono PCM
 
         // FIX: Use a function reference (::ttsCallback) instead of an inline lambda.
         // This forces the Kotlin compiler to generate the correct JNI signature: ([F)Ljava/lang/Integer;
@@ -116,6 +130,10 @@ class TtsService : TextToSpeechService() {
             config = GenerationConfig(sid = TtsEngine.speakerId.value, speed = TtsEngine.speed.value),
             callback = ::ttsCallback,
         )
+
+        // Short utterances may finish generating before the pre-roll threshold is
+        // ever reached; flush whatever was buffered so playback still starts.
+        flushPreRoll(callback, sampleRate)
 
         callback.done()
 
@@ -150,6 +168,31 @@ class TtsService : TextToSpeechService() {
             samples = floatArrayToByteArray(floatSamples)
         }
 
+        val buffer = preRollBuffer
+        if (buffer != null) {
+            buffer.write(samples)
+            if (buffer.size() >= preRollThresholdBytes) {
+                flushPreRoll(cb, TtsEngine.tts!!.sampleRate())
+            }
+        } else {
+            writeAudio(cb, samples)
+        }
+
+        // 1 means to continue
+        // 0 means to stop
+        return 1
+    }
+
+    // Calls callback.start() (if not already called for this utterance) and flushes
+    // whatever has been buffered so far. After this, ttsCallback streams directly.
+    private fun flushPreRoll(cb: SynthesisCallback, sampleRate: Int) {
+        val buffer = preRollBuffer ?: return
+        preRollBuffer = null
+        cb.start(sampleRate, AudioFormat.ENCODING_PCM_16BIT, 1)
+        writeAudio(cb, buffer.toByteArray())
+    }
+
+    private fun writeAudio(cb: SynthesisCallback, samples: ByteArray) {
         val maxBufferSize: Int = cb.maxBufferSize
         var offset = 0
         while (offset < samples.size) {
@@ -157,10 +200,6 @@ class TtsService : TextToSpeechService() {
             cb.audioAvailable(samples, offset, bytesToWrite)
             offset += bytesToWrite
         }
-
-        // 1 means to continue
-        // 0 means to stop
-        return 1
     }
 
     private fun floatArrayToByteArray(audio: FloatArray): ByteArray {
